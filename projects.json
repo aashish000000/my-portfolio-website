@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "title": "Collaborative Expense Splitter",
+    "description": "A full-stack web app for group expense management with user auth, group creation, and a live group chat via WebSockets.",
+    "imageUrl": "img/gemini_image.jpg",
+    "githubUrl": "https://github.com/aashish000000/Expense-Splitter",
+    "technologies": ["Node.js", "Express", "WebSockets", "JavaScript"]
+  },
+  {
+    "id": 2,
+    "title": "Python Stock Price Viewer",
+    "description": "A desktop app using Python and Tkinter that fetches and displays real-time and historical stock price data from the Alpha Vantage API.",
+    "imageUrl": "img/Gemini_Generated_Image_84haia84haia84ha.jpg",
+    "githubUrl": "https://github.com/aashish000000/CS230-Stock_Price",
+    "technologies": ["Python", "Tkinter", "API"]
+  },
+  {
+    "id": 3,
+    "title": "Full-Stack Online Bookstore",
+    "description": "A dynamic e-commerce site with user registration, product browsing, and a functional shopping cart.",
+    "imageUrl": "img/book_image.jpg",
+    "githubUrl": "#",
+    "technologies": ["PHP", "MySQL", "JavaScript"]
+  }
+]
+

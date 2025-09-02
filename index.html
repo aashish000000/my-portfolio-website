@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aashish Joshi - Portfolio</title>
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="The professional portfolio for Aashish Joshi, a Computer Science student and aspiring full-stack developer.">
+    <meta name="keywords" content="Aashish Joshi, portfolio, full-stack developer, software engineer, computer science, web developer">
+    <meta name="author" content="Aashish Joshi">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="cursor-trail"></div>
+
+    <header id="header" class="fixed top-0 left-0 right-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#home" class="text-2xl font-bold hero-name-gradient interactive-element">AASHISH</a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#home" class="nav-link interactive-element">Home</a>
+                <a href="#about" class="nav-link interactive-element">About</a>
+                <a href="#projects" class="nav-link interactive-element">Projects</a>
+                <a href="#technologies" class="nav-link interactive-element">Technologies</a>
+                <a href="#experience" class="nav-link interactive-element">Experience</a>
+                <a href="#favorites" class="nav-link interactive-element">Favorites</a>
+                <a href="#contact" class="nav-link interactive-element">Contact</a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none z-50 interactive-element">
+                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden">
+            <a href="#home" class="mobile-nav-link interactive-element">Home</a>
+            <a href="#about" class="mobile-nav-link interactive-element">About</a>
+            <a href="#projects" class="mobile-nav-link interactive-element">Projects</a>
+            <a href="#technologies" class="mobile-nav-link interactive-element">Technologies</a>
+            <a href="#experience" class="mobile-nav-link interactive-element">Experience</a>
+            <a href="#favorites" class="mobile-nav-link interactive-element">Favorites</a>
+            <a href="#contact" class="mobile-nav-link interactive-element">Contact</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="min-h-screen flex items-center justify-center text-center relative overflow-hidden">
+             <div class="stars"></div>
+             <div class="twinkling"></div>
+            <div class="container mx-auto px-6 z-10">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-4 hero-text-shadow">
+                    Hi, I'm <span class="hero-name-gradient">Aashish Joshi</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-slate-300 font-medium mb-6">
+                    <span id="typing-effect" class="typing-text"></span>
+                </p>
+                <p class="max-w-3xl mx-auto text-slate-400 mb-8">
+                    A proactive Computer Science junior passionate about building innovative solutions and solving complex problems with code.
+                </p>
+                <a href="myresume.pdf" download="Aashish_Joshi_Resume.pdf" class="cta-button interactive-element">
+                    Download Resume
+                </a>
+            </div>
+        </section>
+
+        <section id="about" class="py-24 animated-section">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title">About Me</h2>
+                <div class="grid md:grid-cols-2 gap-16 items-center">
+                    <div class="text-slate-300 space-y-4">
+                        <p>
+                            As a Computer Science student at New Jersey City University, I'm deeply immersed in the world of technology. My journey is fueled by a passion for creating elegant, efficient full-stack applications and a relentless curiosity for learning new things.
+                        </p>
+                        <p>
+                            I thrive on turning complex problems into simple, beautiful, and intuitive designs. I am always striving to improve my skills and stay up-to-date with the latest technologies. This mindset is what I bring to every project I tackle.
+                        </p>
+                        <a href="#contact" class="cta-button-secondary mt-4 inline-block interactive-element">Let's Connect</a>
+                    </div>
+                    <div class="about-card-container">
+                        <div id="frontend-card" class="about-card glass-card interactive-element">
+                            <div class="about-card-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" /></svg></div>
+                            <h3 class="about-card-title">Frontend Development</h3>
+                            <p class="about-card-text">HTML, CSS, JavaScript</p>
+                        </div>
+                         <div id="backend-card" class="about-card glass-card interactive-element">
+                            <div class="about-card-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" /></svg></div>
+                            <h3 class="about-card-title">Backend Development</h3>
+                            <p class="about-card-text">Node.js, Express, PHP, Python</p>
+                        </div>
+                        <div id="db-card" class="about-card glass-card interactive-element">
+                            <div class="about-card-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375" /></svg></div>
+                            <h3 class="about-card-title">Databases</h3>
+                            <p class="about-card-text">MySQL, NeDB</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="projects" class="py-24 animated-section">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title">Live GitHub Projects</h2>
+                <div id="projects-loader" class="text-center">
+                     <svg class="animate-spin h-8 w-8 text-cyan-400 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </div>
+                <p id="projects-error" class="text-center text-red-500 font-medium hidden">Failed to load projects. Please try again later.</p>
+                <div id="project-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Projects will be dynamically loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <section id="technologies" class="py-24 animated-section">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title">Technologies</h2>
+                <p class="text-center max-w-3xl mx-auto text-slate-400 mb-12">I have experience with a range of modern web development technologies, covering frontend, backend, databases, and more.</p>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="glass-card interactive-element"><h3 class="tech-title">LANGUAGES</h3><p class="tech-list">Python, Java, JavaScript, C++, PHP, SQL, HTML, CSS</p></div>
+                    <div class="glass-card interactive-element"><h3 class="tech-title">FRAMEWORKS / LIBRARIES</h3><p class="tech-list">Node.js, Express.js, Tkinter, Axios</p></div>
+                    <div class="glass-card interactive-element"><h3 class="tech-title">DATABASES</h3><p class="tech-list">MySQL, NeDB, MongoDB</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="py-24 animated-section">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title">Experience & Involvement</h2>
+                <div class="relative max-w-4xl mx-auto">
+                    <!-- The Timeline Line -->
+                    <div class="timeline-line"></div>
+
+                    <!-- Timeline Item: Technical Mentor -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content right glass-card">
+                            <h3 class="font-bold text-lg text-white">Technical Mentor, Robotics Club</h3>
+                            <p class="text-slate-300">Caldwell University</p>
+                            <p class="text-slate-400 text-sm mt-1">Spring 2024</p>
+                            <p class="text-slate-400 text-left mt-3 text-sm">Mentored junior members on microcontroller programming (Raspberry Pi, STM32) and robot assembly for a competitive event.</p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item: Student Assistant -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content left glass-card">
+                            <h3 class="font-bold text-lg text-white">Student Assistant</h3>
+                            <p class="text-slate-300">Caldwell University</p>
+                            <p class="text-slate-400 text-sm mt-1">Sep 2023 - May 2024</p>
+                            <p class="text-slate-400 text-left mt-3 text-sm">Provided academic and technical support, tutoring students in full-stack concepts and resolving hardware/software issues in CS labs.</p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item: Red Cross -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content right glass-card">
+                            <h3 class="font-bold text-lg text-white">Disaster Response Team Member</h3>
+                            <p class="text-slate-300">Red Cross Society, Nepal</p>
+                            <p class="text-slate-400 text-sm mt-1">2022 - 2023</p>
+                            <p class="text-slate-400 text-left mt-3 text-sm">Provided critical disaster relief during major earthquakes and floods, assisting in coordinating aid and setting up temporary shelters.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Timeline Item: AI Club President -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content left glass-card">
+                            <h3 class="font-bold text-lg text-white">President, AI Club</h3>
+                            <p class="text-slate-300">Liverpool College, Kathmandu</p>
+                            <p class="text-slate-400 text-sm mt-1">2021 - 2022</p>
+                            <p class="text-slate-400 text-left mt-3 text-sm">Designed and developed a competitive robotics project, leading the team to meet all competition requirements.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="favorites" class="py-24 animated-section">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title">Favorites</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="flip-card-container interactive-element">
+                        <div class="flip-card">
+                            <div class="flip-card-front">
+                                <img src="img/Lin_Dan.jpg" alt="Lin Dan playing badminton" class="object-cover w-full h-full"/>
+                            </div>
+                            <div class="flip-card-back">
+                                <h3 class="hobby-title">Badminton</h3>
+                                <p class="hobby-text">Favorite Player: Lin Dan, a true legend of the sport.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card-container interactive-element">
+                        <div class="flip-card">
+                            <div class="flip-card-front">
+                                <img src="img/jon_jones.png" alt="Jon Jones in the octagon" class="object-cover w-full h-full"/>
+                            </div>
+                            <div class="flip-card-back">
+                                <h3 class="hobby-title">MMA</h3>
+                                <p class="hobby-text">Favorite Fighter: Jon Jones, known for his incredible skill and dominance.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card-container interactive-element">
+                        <div class="flip-card">
+                            <div class="flip-card-front">
+                                <img src="img/Walter_white.jpg" alt="Bryan Cranston as Walter White" class="object-cover w-full h-full"/>
+                            </div>
+                            <div class="flip-card-back">
+                                <h3 class="hobby-title">Favorite Series</h3>
+                                <p class="hobby-text">Breaking Bad, a masterpiece of storytelling. Favorite Actor: Bryan Cranston.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-24 text-center animated-section">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title">Get In Touch</h2>
+                <p class="max-w-2xl mx-auto text-slate-400 mb-8">I'm actively seeking new opportunities and my inbox is always open. Whether you have a question, a proposal, or just want to say hi, I'll get back to you!</p>
+                
+                <form id="contact-form" class="max-w-xl mx-auto text-left space-y-4">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-slate-300 mb-1">Your Name</label>
+                        <input type="text" id="name" name="name" required class="contact-input">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-slate-300 mb-1">Your Email</label>
+                        <input type="email" id="email" name="email" required class="contact-input">
+                    </div>
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-slate-300 mb-1">Your Message</label>
+                        <textarea id="message" name="message" rows="4" required class="contact-input"></textarea>
+                    </div>
+                    <div class="text-center pt-2">
+                        <button type="submit" class="cta-button interactive-element w-full md:w-auto">Send Message</button>
+                    </div>
+                </form>
+                <p id="form-response" class="form-response mt-4"></p>
+
+                <div class="flex justify-center space-x-6 mt-12">
+                    <!-- Social Icons -->
+                    <a href="https://github.com/aashish000000" target="_blank" class="social-link interactive-element" aria-label="GitHub Profile"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+                    <a href="https://linkedin.com/in/aa-joshi" target="_blank" class="social-link interactive-element" aria-label="LinkedIn Profile"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>LinkedIn</title><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg></a>
+                    <a href="https://www.instagram.com/__aashishthegreat/" target="_blank" class="social-link interactive-element" aria-label="Instagram Profile"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Instagram</title><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.784.297-1.457.717-2.126 1.387C1.344 2.687.924 3.36.627 4.144c-.297.765-.497 1.635-.558 2.913C.015 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.26 2.148.558 2.913.297.784.717 1.457 1.387 2.126.67.67 1.343 1.09 2.126 1.387.765.297 1.635.497 2.913.558C8.333 23.985 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.26 2.913-.558.784-.297 1.457-.717 2.126-1.387.67-.67 1.09-1.343 1.387-2.126.297-.765.497-1.635.558-2.913.057-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.26-2.148-.558-2.913-.297-.784-.717-1.457-1.387-2.126C21.313 1.344 20.64.924 19.856.627c-.765-.297-1.635-.497-2.913-.558C15.667.015 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.06 1.17-.249 1.805-.413 2.227-.217.562-.477.96-.896 1.382-.42.419-.819.679-1.381.896-.422.164-1.057.36-2.227.413-1.266.057-1.646.07-4.85.07s-3.585-.015-4.85-.074c-1.17-.06-1.805-.249-2.227-.413-.562-.217-.96-.477-1.382-.896-.419-.42-.679-.819-.896-1.381-.164-.422-.36-1.057-.413-2.227-.057-1.266-.07-1.646-.07-4.85s.015-3.585.074-4.85c.06-1.17.249 1.805.413 2.227.217-.562.477.96.896 1.382.42-.419.819.679-1.381-.896.422-.164 1.057.36 2.227-.413 1.266-.057 1.646-.07 4.85-.07zM12 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.441 1.441 1.441 1.441-.645 1.441-1.441-.645-1.44-1.441-1.44z"/></svg></a>
+                    <a href="https://www.facebook.com/aashishthegreat1" target="_blank" class="social-link interactive-element" aria-label="Facebook Profile"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Facebook</title><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center py-6">
+        <p class="text-slate-500 text-sm">&copy; <span id="year"></span> Aashish Joshi. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
