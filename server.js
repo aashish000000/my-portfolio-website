@@ -5,19 +5,35 @@ require('dotenv').config();
 const express = require('express');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
-const bodyParser = require('body-parser');
+const compression = require('compression');
 const path = require('path');
 const axios = require('axios');
 
 // Initialize the Express app
 const app = express();
 const PORT = process.env.PORT || 3000;
+const PROJECT_CACHE_TTL = 1000 * 60 * 10; // 10 minutes
+const STATIC_CACHE_MAX_AGE = 1000 * 60 * 60 * 24 * 7; // 7 days
+let projectCache = { data: null, expiresAt: 0 };
 
 // --- Middleware ---
 app.use(cors());
-app.use(bodyParser.json());
-app.use(express.static(__dirname)); 
-app.use('/img', express.static(path.join(__dirname, 'img')));
+app.use(compression());
+app.use(express.json());
+app.set('etag', 'strong');
+app.use(
+    express.static(__dirname, {
+        maxAge: STATIC_CACHE_MAX_AGE,
+        etag: true,
+        lastModified: true,
+        setHeaders: (res, filePath) => {
+            if (filePath.endsWith('.html')) {
+                res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+            }
+        }
+    })
+);
+app.use('/img', express.static(path.join(__dirname, 'img'), { maxAge: STATIC_CACHE_MAX_AGE }));
 
 
 // --- API & Page Routes ---
@@ -30,6 +46,11 @@ app.get('/', (req, res) => {
 // GitHub Projects API Endpoint
 app.get('/api/github-projects', async (req, res) => {
     try {
+        if (projectCache.data && projectCache.expiresAt > Date.now()) {
+            res.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=60');
+            return res.json(projectCache.data);
+        }
+
         const githubToken = process.env.GITHUB_TOKEN;
         const username = 'aashish000000'; // Your GitHub username
 
@@ -60,6 +81,12 @@ app.get('/api/github-projects', async (req, res) => {
                 createdAt: repo.created_at,
             }));
 
+        projectCache = {
+            data: projects,
+            expiresAt: Date.now() + PROJECT_CACHE_TTL
+        };
+
+        res.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=60');
         res.json(projects);
 
     } catch (error) {
