@@ -11,11 +11,13 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://aashish-portfolio-backend.onrender.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preload" href="style.css" as="style">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body data-api-base="https://aashish-portfolio-backend.onrender.com">
     <div id="cursor-trail"></div>
 
     <header id="header" class="fixed top-0 left-0 right-0 z-50">
@@ -188,7 +190,7 @@
                     <div class="flip-card-container interactive-element">
                         <div class="flip-card">
                             <div class="flip-card-front">
-                                <img src="img/Lin_Dan.jpg" alt="Lin Dan playing badminton" class="object-cover w-full h-full"/>
+                                <img src="img/Lin_Dan.jpg" alt="Lin Dan playing badminton" class="object-cover w-full h-full" loading="lazy" decoding="async"/>
                             </div>
                             <div class="flip-card-back">
                                 <h3 class="hobby-title">Badminton</h3>
@@ -199,7 +201,7 @@
                     <div class="flip-card-container interactive-element">
                         <div class="flip-card">
                             <div class="flip-card-front">
-                                <img src="img/jon_jones.png" alt="Jon Jones in the octagon" class="object-cover w-full h-full"/>
+                                <img src="img/jon_jones.png" alt="Jon Jones in the octagon" class="object-cover w-full h-full" loading="lazy" decoding="async"/>
                             </div>
                             <div class="flip-card-back">
                                 <h3 class="hobby-title">MMA</h3>
@@ -210,7 +212,7 @@
                     <div class="flip-card-container interactive-element">
                         <div class="flip-card">
                             <div class="flip-card-front">
-                                <img src="img/Walter_white.jpg" alt="Bryan Cranston as Walter White" class="object-cover w-full h-full"/>
+                                <img src="img/Walter_white.jpg" alt="Bryan Cranston as Walter White" class="object-cover w-full h-full" loading="lazy" decoding="async"/>
                             </div>
                             <div class="flip-card-back">
                                 <h3 class="hobby-title">Favorite Series</h3>
@@ -261,7 +263,7 @@
         <p class="text-slate-500 text-sm">&copy; <span id="year"></span> Aashish Joshi. All Rights Reserved.</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script type="module" src="script.js" defer></script>
 </body>
 </html>
 
