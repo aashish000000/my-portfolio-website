@@ -9,6 +9,7 @@ const compression = require('compression');
 const path = require('path');
 const fs = require('fs/promises');
 const axios = require('axios');
+const fs = require('fs/promises');
 
 // Initialize the Express app
 const app = express();
@@ -141,7 +142,6 @@ app.get('/api/github-projects', async (req, res) => {
         res.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=60');
         res.set('X-Data-Source', source);
         res.json(projects);
-
     } catch (error) {
         console.error('Error fetching GitHub projects:', error.message);
         res.status(500).json({ message: 'Failed to fetch projects from GitHub or local cache.' });
@@ -176,8 +176,121 @@ app.post('/api/send', (req, res) => {
 
 
 // --- Start the Server ---
-app.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}`);
-    console.log('View your live portfolio at: http://localhost:3000');
-});
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Server is listening on port ${PORT}`);
+        console.log('View your live portfolio at: http://localhost:3000');
+    });
+}
+
+module.exports = app;
+
+async function getProjectListing() {
+    if (projectCache.data && projectCache.expiresAt > Date.now()) {
+        return projectCache.data;
+    }
+
+    const projects = await fetchProjectsWithFallback();
+    projectCache = {
+        data: projects,
+        expiresAt: Date.now() + PROJECT_CACHE_TTL
+    };
+
+    return projects;
+}
+
+async function fetchProjectsWithFallback() {
+    const githubToken = process.env.GITHUB_TOKEN;
+    let projects = [];
+
+    if (githubToken) {
+        try {
+            projects = await fetchProjectsFromGitHub(githubToken);
+        } catch (error) {
+            console.warn('GitHub API request failed, attempting fallback data:', error.message);
+        }
+    } else {
+        console.warn('GitHub token not configured; attempting to serve cached or local project data.');
+    }
+
+    if (!projects.length) {
+        projects = await readLocalProjectsFallback();
+    }
+
+    if (!projects.length) {
+        throw new Error('Unable to load projects from GitHub or local fallback.');
+    }
+
+    return projects;
+}
+
+async function fetchProjectsFromGitHub(githubToken) {
+    const response = await axios.get(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&direction=desc`, {
+        headers: {
+            'Authorization': `token ${githubToken}`,
+            'Accept': 'application/vnd.github+json',
+            'User-Agent': 'portfolio-backend'
+        },
+        timeout: GITHUB_REQUEST_TIMEOUT
+    });
+
+    const repos = Array.isArray(response.data) ? response.data : [];
+    const filteredRepos = PINNED_REPO_SET.size
+        ? repos.filter((repo) => repo?.name && PINNED_REPO_SET.has(repo.name.toLowerCase()))
+        : repos;
+
+    return filteredRepos.map((repo) => ({
+        id: repo.id,
+        title: repo.name ? repo.name.replace(/[-_]/g, ' ') : 'Untitled project',
+        description: repo.description || 'No description provided on GitHub.',
+        githubUrl: repo.html_url,
+        stars: repo.stargazers_count ?? 0,
+        language: repo.language,
+        createdAt: repo.created_at || null,
+    }));
+}
+
+async function readLocalProjectsFallback() {
+    try {
+        const raw = await fs.readFile(PROJECTS_FALLBACK_PATH, 'utf-8');
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) {
+            throw new Error('projects.json must contain an array of projects.');
+        }
+
+        const normalizedProjects = parsed.map((project, index) => ({
+            id: project.id ?? `local-${index}`,
+            title: project.title || `Project ${index + 1}`,
+            description: project.description || 'No description provided.',
+            githubUrl: project.githubUrl || '#',
+            stars: typeof project.stars === 'number' ? project.stars : 0,
+            language: project.language || (Array.isArray(project.technologies) ? project.technologies[0] : null),
+            createdAt: project.createdAt || null,
+        }));
+
+        const filteredProjects = filterProjectsByPinned(normalizedProjects);
+        return filteredProjects.length ? filteredProjects : normalizedProjects;
+    } catch (error) {
+        console.error('Failed to load fallback projects file:', error.message);
+        return [];
+    }
+}
+
+function filterProjectsByPinned(projects = []) {
+    if (!PINNED_REPO_SET.size) {
+        return projects;
+    }
+    return projects.filter((project) => {
+        const repoName = extractRepoNameFromUrl(project.githubUrl);
+        return repoName && PINNED_REPO_SET.has(repoName);
+    });
+}
+
+function extractRepoNameFromUrl(url = '') {
+    if (!url) return '';
+    const trimmed = url.trim();
+    if (!trimmed) return '';
+    const parts = trimmed.split('/').filter(Boolean);
+    return parts.length ? parts[parts.length - 1].toLowerCase() : '';
+}
 
