@@ -7,23 +7,13 @@ const nodemailer = require('nodemailer');
 const cors = require('cors');
 const compression = require('compression');
 const path = require('path');
-const fs = require('fs/promises');
 const axios = require('axios');
-const fs = require('fs/promises');
 
 // Initialize the Express app
 const app = express();
 const PORT = process.env.PORT || 3000;
 const PROJECT_CACHE_TTL = 1000 * 60 * 10; // 10 minutes
 const STATIC_CACHE_MAX_AGE = 1000 * 60 * 60 * 24 * 7; // 7 days
-const PROJECTS_FILE_PATH = path.join(__dirname, 'projects.json');
-const DEFAULT_PINNED_REPOS = ['Expense-Splitter', 'CS230-Stock_Price'];
-const pinnedRepos = (process.env.PINNED_REPOS || '')
-    .split(',')
-    .map((repo) => repo.trim())
-    .filter(Boolean);
-const PINNED_REPO_LIST = pinnedRepos.length ? pinnedRepos : DEFAULT_PINNED_REPOS;
-const GITHUB_USERNAME = process.env.GITHUB_USERNAME || 'aashish000000';
 let projectCache = { data: null, expiresAt: 0 };
 
 // --- Middleware ---
@@ -53,77 +43,6 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Normalize project payloads to the shape required by the UI
-function normalizeProject(project) {
-    const fallbackTitle = 'Untitled Project';
-    const inlineTitle = project.title || null;
-    const repoName = project.name || null;
-    const title = inlineTitle || (repoName ? repoName.replace(/[-_]/g, ' ') : fallbackTitle);
-
-    return {
-        id: project.id ?? project.githubUrl ?? project.html_url ?? title,
-        title,
-        description: project.description || 'No description provided on GitHub.',
-        githubUrl: project.githubUrl || project.html_url || '#',
-        stars: typeof project.stars === 'number'
-            ? project.stars
-            : (project.stargazers_count ?? 0),
-        language: project.language
-            || (Array.isArray(project.technologies) ? project.technologies[0] : null)
-            || 'N/A',
-        createdAt: project.createdAt || project.created_at || null,
-    };
-}
-
-async function fetchProjectsFromGitHub() {
-    const requestOptions = {};
-    if (process.env.GITHUB_TOKEN) {
-        requestOptions.headers = {
-            Authorization: `token ${process.env.GITHUB_TOKEN}`,
-        };
-    }
-
-    const { data } = await axios.get(
-        `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&direction=desc`,
-        requestOptions
-    );
-
-    const filteredRepos = PINNED_REPO_LIST.length
-        ? data.filter((repo) => PINNED_REPO_LIST.includes(repo.name))
-        : data;
-
-    if (!filteredRepos.length) {
-        throw new Error('No matching repositories found for the configured pinned list.');
-    }
-
-    return filteredRepos.map(normalizeProject);
-}
-
-async function fetchProjectsFromDisk() {
-    const raw = await fs.readFile(PROJECTS_FILE_PATH, 'utf-8');
-    const parsed = JSON.parse(raw);
-
-    if (!Array.isArray(parsed)) {
-        throw new Error('projects.json is not an array.');
-    }
-
-    return parsed.map(normalizeProject);
-}
-
-async function loadProjects() {
-    try {
-        const projects = await fetchProjectsFromGitHub();
-        return { projects, source: 'github' };
-    } catch (githubError) {
-        console.warn('GitHub fetch failed, falling back to local projects:', githubError.message);
-        const projects = await fetchProjectsFromDisk();
-        if (!projects.length) {
-            throw new Error('Local projects fallback returned no entries.');
-        }
-        return { projects, source: 'local' };
-    }
-}
-
 // GitHub Projects API Endpoint
 app.get('/api/github-projects', async (req, res) => {
     try {
@@ -132,7 +51,54 @@ app.get('/api/github-projects', async (req, res) => {
             return res.json(projectCache.data);
         }
 
-        const { projects, source } = await loadProjects();
+        const githubToken = process.env.GITHUB_TOKEN;
+        const username = 'aashish000000'; // Your GitHub username
+
+        // ** UPDATED: Define which specific repositories you want to show **
+        const pinnedRepos = ['Expense-Splitter', 'CS230-Stock_Price'];
+
+        // If no GitHub token, fall back to local projects.json
+        if (!githubToken) {
+            console.log('No GitHub token configured. Using local projects.json');
+            const fs = require('fs');
+            const localProjects = JSON.parse(fs.readFileSync(path.join(__dirname, 'projects.json'), 'utf8'));
+            const projects = localProjects.map(p => ({
+                id: p.id,
+                title: p.title,
+                description: p.description,
+                githubUrl: p.githubUrl,
+                stars: 0,
+                language: p.technologies?.[0] || 'JavaScript',
+            }));
+            
+            projectCache = {
+                data: projects,
+                expiresAt: Date.now() + PROJECT_CACHE_TTL
+            };
+            
+            res.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=60');
+            return res.json(projects);
+        }
+
+        const response = await axios.get(`https://api.github.com/users/${username}/repos?sort=updated&direction=desc`, {
+            headers: {
+                'Authorization': `token ${githubToken}`
+            }
+        });
+
+        // Filter and map the data to a clean format
+        const projects = response.data
+            // ** UPDATED: The filter now only includes repos from your pinnedRepos list **
+            .filter(repo => pinnedRepos.includes(repo.name))
+            .map(repo => ({
+                id: repo.id,
+                title: repo.name.replace(/[-_]/g, ' '), // Make title readable
+                description: repo.description || 'No description provided on GitHub.', // Add a fallback
+                githubUrl: repo.html_url,
+                stars: repo.stargazers_count,
+                language: repo.language,
+                createdAt: repo.created_at,
+            }));
 
         projectCache = {
             data: projects,
@@ -140,11 +106,28 @@ app.get('/api/github-projects', async (req, res) => {
         };
 
         res.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=60');
-        res.set('X-Data-Source', source);
         res.json(projects);
+
     } catch (error) {
         console.error('Error fetching GitHub projects:', error.message);
-        res.status(500).json({ message: 'Failed to fetch projects from GitHub or local cache.' });
+        // Fall back to local projects.json on any error
+        try {
+            const fs = require('fs');
+            const localProjects = JSON.parse(fs.readFileSync(path.join(__dirname, 'projects.json'), 'utf8'));
+            const projects = localProjects.map(p => ({
+                id: p.id,
+                title: p.title,
+                description: p.description,
+                githubUrl: p.githubUrl,
+                stars: 0,
+                language: p.technologies?.[0] || 'JavaScript',
+            }));
+            res.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=60');
+            return res.json(projects);
+        } catch (fallbackError) {
+            console.error('Fallback to projects.json also failed:', fallbackError.message);
+            res.status(500).json({ message: 'Failed to fetch projects.' });
+        }
     }
 });
 
@@ -176,121 +159,8 @@ app.post('/api/send', (req, res) => {
 
 
 // --- Start the Server ---
-if (require.main === module) {
-    app.listen(PORT, () => {
-        console.log(`Server is listening on port ${PORT}`);
-        console.log('View your live portfolio at: http://localhost:3000');
-    });
-}
-
-module.exports = app;
-
-async function getProjectListing() {
-    if (projectCache.data && projectCache.expiresAt > Date.now()) {
-        return projectCache.data;
-    }
-
-    const projects = await fetchProjectsWithFallback();
-    projectCache = {
-        data: projects,
-        expiresAt: Date.now() + PROJECT_CACHE_TTL
-    };
-
-    return projects;
-}
-
-async function fetchProjectsWithFallback() {
-    const githubToken = process.env.GITHUB_TOKEN;
-    let projects = [];
-
-    if (githubToken) {
-        try {
-            projects = await fetchProjectsFromGitHub(githubToken);
-        } catch (error) {
-            console.warn('GitHub API request failed, attempting fallback data:', error.message);
-        }
-    } else {
-        console.warn('GitHub token not configured; attempting to serve cached or local project data.');
-    }
-
-    if (!projects.length) {
-        projects = await readLocalProjectsFallback();
-    }
-
-    if (!projects.length) {
-        throw new Error('Unable to load projects from GitHub or local fallback.');
-    }
-
-    return projects;
-}
-
-async function fetchProjectsFromGitHub(githubToken) {
-    const response = await axios.get(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&direction=desc`, {
-        headers: {
-            'Authorization': `token ${githubToken}`,
-            'Accept': 'application/vnd.github+json',
-            'User-Agent': 'portfolio-backend'
-        },
-        timeout: GITHUB_REQUEST_TIMEOUT
-    });
-
-    const repos = Array.isArray(response.data) ? response.data : [];
-    const filteredRepos = PINNED_REPO_SET.size
-        ? repos.filter((repo) => repo?.name && PINNED_REPO_SET.has(repo.name.toLowerCase()))
-        : repos;
-
-    return filteredRepos.map((repo) => ({
-        id: repo.id,
-        title: repo.name ? repo.name.replace(/[-_]/g, ' ') : 'Untitled project',
-        description: repo.description || 'No description provided on GitHub.',
-        githubUrl: repo.html_url,
-        stars: repo.stargazers_count ?? 0,
-        language: repo.language,
-        createdAt: repo.created_at || null,
-    }));
-}
-
-async function readLocalProjectsFallback() {
-    try {
-        const raw = await fs.readFile(PROJECTS_FALLBACK_PATH, 'utf-8');
-        const parsed = JSON.parse(raw);
-        if (!Array.isArray(parsed)) {
-            throw new Error('projects.json must contain an array of projects.');
-        }
-
-        const normalizedProjects = parsed.map((project, index) => ({
-            id: project.id ?? `local-${index}`,
-            title: project.title || `Project ${index + 1}`,
-            description: project.description || 'No description provided.',
-            githubUrl: project.githubUrl || '#',
-            stars: typeof project.stars === 'number' ? project.stars : 0,
-            language: project.language || (Array.isArray(project.technologies) ? project.technologies[0] : null),
-            createdAt: project.createdAt || null,
-        }));
-
-        const filteredProjects = filterProjectsByPinned(normalizedProjects);
-        return filteredProjects.length ? filteredProjects : normalizedProjects;
-    } catch (error) {
-        console.error('Failed to load fallback projects file:', error.message);
-        return [];
-    }
-}
-
-function filterProjectsByPinned(projects = []) {
-    if (!PINNED_REPO_SET.size) {
-        return projects;
-    }
-    return projects.filter((project) => {
-        const repoName = extractRepoNameFromUrl(project.githubUrl);
-        return repoName && PINNED_REPO_SET.has(repoName);
-    });
-}
-
-function extractRepoNameFromUrl(url = '') {
-    if (!url) return '';
-    const trimmed = url.trim();
-    if (!trimmed) return '';
-    const parts = trimmed.split('/').filter(Boolean);
-    return parts.length ? parts[parts.length - 1].toLowerCase() : '';
-}
+app.listen(PORT, () => {
+    console.log(`Server is listening on port ${PORT}`);
+    console.log('View your live portfolio at: http://localhost:3000');
+});
 
