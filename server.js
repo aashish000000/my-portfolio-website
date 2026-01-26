@@ -1,7 +1,17 @@
-// Load environment variables from .env file
+/**
+ * Portfolio Website Backend Server
+ * ================================
+ * Express server handling:
+ *  - Static file serving with caching
+ *  - GitHub API integration for live projects
+ *  - Contact form email delivery via Nodemailer
+ * 
+ * @author Aashish Joshi
+ * @version 1.0.0
+ */
+
 require('dotenv').config();
 
-// Import necessary modules
 const express = require('express');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
@@ -9,41 +19,66 @@ const compression = require('compression');
 const path = require('path');
 const axios = require('axios');
 
-// Initialize the Express app
+// =====================
+// Server Configuration
+// =====================
+
 const app = express();
 const PORT = process.env.PORT || 3000;
-const PROJECT_CACHE_TTL = 1000 * 60 * 10; // 10 minutes
-const STATIC_CACHE_MAX_AGE = 1000 * 60 * 60 * 24 * 7; // 7 days
+
+/** Cache TTL for GitHub projects (10 minutes) */
+const PROJECT_CACHE_TTL = 1000 * 60 * 10;
+
+/** Max-age for static assets (7 days) */
+const STATIC_CACHE_MAX_AGE = 1000 * 60 * 60 * 24 * 7;
+
+/** In-memory cache for GitHub projects */
 let projectCache = { data: null, expiresAt: 0 };
 
-// --- Middleware ---
-app.use(cors());
-app.use(compression());
-app.use(express.json());
-app.set('etag', 'strong');
+// ==============
+// Middleware
+// ==============
+
+app.use(cors());                     // Enable CORS for all origins
+app.use(compression());               // Gzip compression for responses
+app.use(express.json());              // Parse JSON request bodies
+app.set('etag', 'strong');            // Strong ETag for cache validation
+
+// Static file serving with optimized caching
 app.use(
     express.static(__dirname, {
         maxAge: STATIC_CACHE_MAX_AGE,
         etag: true,
         lastModified: true,
         setHeaders: (res, filePath) => {
+            // HTML files should always be revalidated
             if (filePath.endsWith('.html')) {
                 res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
             }
         }
     })
 );
+
+// Image assets with long cache duration
 app.use('/img', express.static(path.join(__dirname, 'img'), { maxAge: STATIC_CACHE_MAX_AGE }));
 
 
-// --- API & Page Routes ---
+// ================
+// API Routes
+// ================
 
-// Root Route
+/**
+ * Root Route - Serves the main portfolio page
+ */
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// GitHub Projects API Endpoint
+/**
+ * GET /api/github-projects
+ * Fetches pinned GitHub repositories with caching
+ * Falls back to projects.json if GitHub API fails
+ */
 app.get('/api/github-projects', async (req, res) => {
     try {
         if (projectCache.data && projectCache.expiresAt > Date.now()) {
@@ -132,22 +167,37 @@ app.get('/api/github-projects', async (req, res) => {
 });
 
 
-// Contact form submission endpoint
+/**
+ * POST /api/send
+ * Handles contact form submissions via Nodemailer
+ * Requires EMAIL_USER and EMAIL_PASS environment variables
+ */
 app.post('/api/send', (req, res) => {
     const { name, email, message } = req.body;
+
+    // Validate server configuration
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
         return res.status(500).json({ message: 'Server configuration error.' });
     }
+
+    // Configure Gmail transporter
     const transporter = nodemailer.createTransport({
         service: 'gmail',
-        auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS
+        },
     });
+
+    // Compose email
     const mailOptions = {
         from: `"${name}" <${email}>`,
         to: process.env.EMAIL_USER,
         subject: `New Portfolio Contact from ${name}`,
         text: `You have a new message from:\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
     };
+
+    // Send email
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.error('--- NODEMAILER ERROR ---', error);
@@ -157,10 +207,13 @@ app.post('/api/send', (req, res) => {
     });
 });
 
+// ================
+// Start Server
+// ================
 
-// --- Start the Server ---
 app.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}`);
-    console.log('View your live portfolio at: http://localhost:3000');
+    console.log(`\n🚀 Portfolio server running!`);
+    console.log(`   Local:   http://localhost:${PORT}`);
+    console.log(`   Network: Check your IP for external access\n`);
 });
 

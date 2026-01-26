@@ -1,12 +1,41 @@
+/**
+ * Portfolio Website - Stylesheet
+ * ==============================
+ * Modern dark theme with glassmorphism effects
+ * 
+ * Table of Contents:
+ *  1. CSS Variables
+ *  2. Base Styles
+ *  3. Cursor Trail
+ *  4. Header & Navigation
+ *  5. Hero Section
+ *  6. Buttons
+ *  7. Cards
+ *  8. About Section
+ *  9. Projects Section
+ * 10. Favorites (Flip Cards)
+ * 11. Technologies
+ * 12. Timeline (Experience)
+ * 13. Contact Section
+ * 14. Animations
+ * 15. Accessibility
+ * 
+ * @author Aashish Joshi
+ */
+
+/* =========================
+   1. CSS Variables
+   ========================= */
+
 :root {
-    --color-bg: #0f172a; /* Slate 900 */
-    --color-primary: #22d3ee; /* Cyan 400 */
-    --color-secondary: #818cf8; /* Indigo 400 */
-    --color-text-main: #e2e8f0; /* Slate 200 */
-    --color-text-muted: #94a3b8; /* Slate 400 */
+    --color-bg: #0f172a;            /* Slate 900 */
+    --color-primary: #22d3ee;        /* Cyan 400 */
+    --color-secondary: #818cf8;      /* Indigo 400 */
+    --color-text-main: #e2e8f0;      /* Slate 200 */
+    --color-text-muted: #94a3b8;     /* Slate 400 */
     --color-border: rgba(100, 116, 139, 0.2);
-    --color-card-bg: rgba(30, 41, 59, 0.5); /* Slate 800 with alpha */
-    --hover-glow: rgba(34, 211, 238, 0.2); /* Cyan glow */
+    --color-card-bg: rgba(30, 41, 59, 0.5);  /* Slate 800 with alpha */
+    --hover-glow: rgba(34, 211, 238, 0.2);   /* Cyan glow */
 }
 
 /* Base and Tailwind setup */

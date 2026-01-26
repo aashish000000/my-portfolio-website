@@ -1,13 +1,28 @@
 {
   "name": "portfolio-website",
   "version": "1.0.0",
-  "description": "A personal portfolio website with a Node.js backend.",
+  "description": "Aashish Joshi's personal portfolio - a modern, animated website showcasing projects, skills, and experience.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "node server.js"
   },
-  "author": "Aashish Joshi",
+  "keywords": [
+    "portfolio",
+    "personal-website",
+    "fullstack",
+    "nodejs",
+    "express"
+  ],
+  "author": "Aashish Joshi <aashish@example.com> (https://github.com/aashish000000)",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aashish000000/portfolio-website"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "axios": "^1.7.2",
     "compression": "^1.8.1",

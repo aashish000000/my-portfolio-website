@@ -1,9 +1,30 @@
+/**
+ * Portfolio Website - Client-Side JavaScript
+ * ===========================================
+ * Handles all interactive features:
+ *  - Cursor trail effect
+ *  - Typing animation
+ *  - Scroll-based animations
+ *  - GitHub projects loading
+ *  - Contact form submission
+ * 
+ * @author Aashish Joshi
+ */
+
+// ========================
+// User Preference Detection
+// ========================
+
+/** Detects if user prefers reduced motion */
 const reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+/** Runtime preferences object */
 const runtimePrefs = {
     reduceMotion: reduceMotionQuery.matches,
     saveData: navigator.connection?.saveData ?? false,
 };
 
+// Listen for preference changes
 if (reduceMotionQuery.addEventListener) {
     reduceMotionQuery.addEventListener('change', (event) => {
         runtimePrefs.reduceMotion = event.matches;
@@ -15,6 +36,11 @@ if (reduceMotionQuery.addEventListener) {
     });
 }
 
+// ========================
+// API Configuration
+// ========================
+
+/** API base URLs - supports local and remote backends */
 const apiBases = (() => {
     const inlineBase = (document.body?.dataset?.apiBase || '').trim();
     if (inlineBase) {
@@ -23,14 +49,26 @@ const apiBases = (() => {
     return [''];
 })();
 
+// ========================
+// State Flags
+// ========================
+
 let projectsLoaded = false;
 let contactFormInitialized = false;
+
+// ========================
+// Initialization
+// ========================
 
 document.addEventListener('DOMContentLoaded', () => {
     initCore(runtimePrefs);
     setupLazyFeatures(runtimePrefs);
 });
 
+/**
+ * Initializes core features immediately on page load
+ * @param {Object} prefs - User preferences (reduceMotion, saveData)
+ */
 function initCore(prefs) {
     initCursorTrail(prefs);
     initHeaderScroll();
@@ -41,8 +79,14 @@ function initCore(prefs) {
     updateYear();
 }
 
+/**
+ * Sets up lazy-loaded features using IntersectionObserver
+ * Features initialize only when their section enters the viewport
+ * @param {Object} prefs - User preferences
+ */
 function setupLazyFeatures(prefs) {
     const registry = new WeakMap();
+    
     const observer = new IntersectionObserver((entries, obs) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
@@ -55,6 +99,7 @@ function setupLazyFeatures(prefs) {
         });
     }, { rootMargin: '200px 0px', threshold: 0.1 });
 
+    // Helper to register sections for lazy loading
     const register = (id, callback) => {
         const section = document.getElementById(id);
         if (!section) return;
@@ -62,11 +107,20 @@ function setupLazyFeatures(prefs) {
         observer.observe(section);
     };
 
+    // Register lazy-loaded sections
     register('about', () => initAboutCards(prefs));
     register('projects', () => initProjectsSection(prefs));
     register('contact', () => initContactForm());
 }
 
+// ========================
+// UI Features
+// ========================
+
+/**
+ * Creates a glowing cursor trail effect
+ * Uses requestAnimationFrame for smooth performance
+ */
 function initCursorTrail({ reduceMotion }) {
     const cursorTrail = document.getElementById('cursor-trail');
     if (!cursorTrail || reduceMotion) return;
@@ -138,16 +192,22 @@ function initNavHighlighting() {
     sections.forEach((section) => observer.observe(section));
 }
 
+/**
+ * Typewriter effect for hero section
+ * Cycles through profession titles with typing/deleting animation
+ */
 function initTypingEffect({ reduceMotion }) {
     const typingElement = document.getElementById('typing-effect');
     if (!typingElement) return;
 
+    // Customize these to change the displayed titles
     const words = [
         'Computer Science Student',
         'Aspiring Software Developer',
         'Full-Stack Enthusiast'
     ];
 
+    // Skip animation if user prefers reduced motion
     if (reduceMotion) {
         typingElement.textContent = words[0];
         return;
@@ -173,8 +233,8 @@ function initTypingEffect({ reduceMotion }) {
         }
 
         const reachedWordEnd = !isDeleting && charIndex === currentWord.length;
-        const baseDelay = isDeleting ? 75 : 150;
-        const delay = reachedWordEnd ? 1500 : baseDelay;
+        const baseDelay = isDeleting ? 75 : 150;  // Faster when deleting
+        const delay = reachedWordEnd ? 1500 : baseDelay;  // Pause at end of word
         setTimeout(type, delay);
     };
 
@@ -234,6 +294,14 @@ function initAboutCards({ reduceMotion }) {
     });
 }
 
+// ========================
+// GitHub Projects
+// ========================
+
+/**
+ * Initializes the GitHub projects section
+ * Respects saveData preference and provides retry functionality
+ */
 function initProjectsSection(prefs) {
     if (projectsLoaded) return;
     projectsLoaded = true;
@@ -330,6 +398,14 @@ function displayProjects(projects, projectGrid, projectsLoader) {
     projectGrid.appendChild(fragment);
 }
 
+// ========================
+// Contact Form
+// ========================
+
+/**
+ * Initializes the contact form with submission handling
+ * Shows loading state and displays success/error messages
+ */
 function initContactForm() {
     if (contactFormInitialized) return;
     const contactForm = document.getElementById('contact-form');
@@ -375,6 +451,11 @@ function initContactForm() {
     });
 }
 
+// ========================
+// Utility Functions
+// ========================
+
+/** Updates the footer year to current year */
 function updateYear() {
     const yearSpan = document.getElementById('year');
     if (yearSpan) {
@@ -382,6 +463,13 @@ function updateYear() {
     }
 }
 
+/**
+ * Fetches JSON with fallback to multiple API bases
+ * Tries local first, then remote backend
+ * @param {string} path - API endpoint path
+ * @param {Object} options - Fetch options
+ * @returns {Promise<Object>} - JSON response
+ */
 async function fetchJsonWithFallback(path, options = {}) {
     let lastError = null;
 
