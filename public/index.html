@@ -14,8 +14,8 @@
     <link rel="preconnect" href="https://aashish-portfolio-backend.onrender.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preload" href="style.css" as="style">
-    <link rel="stylesheet" href="style.css">
+    <link rel="preload" href="assets/css/style.css" as="style">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body data-api-base="https://aashish-portfolio-backend.onrender.com">
     <div id="cursor-trail"></div>
@@ -55,15 +55,24 @@
                 <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-4 hero-text-shadow">
                     Hi, I'm <span class="hero-name-gradient">Aashish Joshi</span>
                 </h1>
-                <p class="text-xl md:text-2xl text-slate-300 font-medium mb-6">
+                <div class="hero-badges mb-6">
+                    <span class="pill">Based in New Jersey</span>
+                    <span class="pill pill-ghost">Open to internships</span>
+                </div>
+                <p class="text-xl md:text-2xl text-slate-300 font-medium mb-4">
                     <span id="typing-effect" class="typing-text"></span>
                 </p>
-                <p class="max-w-3xl mx-auto text-slate-400 mb-8">
-                    A proactive Computer Science junior passionate about building innovative solutions and solving complex problems with code.
+                <p class="max-w-3xl mx-auto text-slate-300 leading-relaxed mb-8">
+                    I design and build reliable web experiences with a systems mindset—balancing sharp UI craft, thoughtful architecture, and measured delivery.
                 </p>
-                <a href="Aashish_Resume.pdf" download="Aashish_Resume.pdf" class="cta-button interactive-element">
-                    Download Resume
-                </a>
+                <div class="hero-actions flex flex-col md:flex-row gap-4 justify-center">
+                    <a href="assets/docs/Aashish_Resume.pdf" download="Aashish_Resume.pdf" class="cta-button interactive-element">
+                        Download Resume
+                    </a>
+                    <a href="#projects" class="cta-button-secondary interactive-element">
+                        View Projects
+                    </a>
+                </div>
             </div>
         </section>
 
@@ -73,10 +82,10 @@
                 <div class="grid md:grid-cols-2 gap-16 items-center">
                     <div class="text-slate-300 space-y-4">
                         <p>
-                            As a Computer Science student at New Jersey City University, I'm deeply immersed in the world of technology. My journey is fueled by a passion for creating elegant, efficient full-stack applications and a relentless curiosity for learning new things.
+                            I'm a Computer Science junior at New Jersey City University focused on building performant, resilient products. I enjoy translating ambiguous ideas into clear architecture and polished user flows.
                         </p>
                         <p>
-                            I thrive on turning complex problems into simple, beautiful, and intuitive designs. I am always striving to improve my skills and stay up-to-date with the latest technologies. This mindset is what I bring to every project I tackle.
+                            Recent work spans full-stack web apps, lightweight APIs, and data-driven features. I'm intentional about accessibility, design systems, and measurable impact.
                         </p>
                         <a href="#contact" class="cta-button-secondary mt-4 inline-block interactive-element">Let's Connect</a>
                     </div>
@@ -104,6 +113,7 @@
         <section id="projects" class="py-24 animated-section">
             <div class="container mx-auto px-6">
                 <h2 class="section-title">Live GitHub Projects</h2>
+                <p class="section-subtitle">Lean, shippable work that highlights my build quality, documentation, and design sense.</p>
                 <div id="projects-loader" class="text-center">
                      <svg class="animate-spin h-8 w-8 text-cyan-400 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -190,7 +200,7 @@
                     <div class="flip-card-container interactive-element">
                         <div class="flip-card">
                             <div class="flip-card-front">
-                                <img src="img/Lin_Dan.jpg" alt="Lin Dan playing badminton" class="object-cover w-full h-full" loading="lazy" decoding="async"/>
+                                <img src="assets/img/Lin_Dan.jpg" alt="Lin Dan playing badminton" class="object-cover w-full h-full"/>
                             </div>
                             <div class="flip-card-back">
                                 <h3 class="hobby-title">Badminton</h3>
@@ -201,7 +211,7 @@
                     <div class="flip-card-container interactive-element">
                         <div class="flip-card">
                             <div class="flip-card-front">
-                                <img src="img/jon_jones.png" alt="Jon Jones in the octagon" class="object-cover w-full h-full" loading="lazy" decoding="async"/>
+                                <img src="assets/img/jon_jones.png" alt="Jon Jones in the octagon" class="object-cover w-full h-full"/>
                             </div>
                             <div class="flip-card-back">
                                 <h3 class="hobby-title">MMA</h3>
@@ -212,7 +222,7 @@
                     <div class="flip-card-container interactive-element">
                         <div class="flip-card">
                             <div class="flip-card-front">
-                                <img src="img/Walter_white.jpg" alt="Bryan Cranston as Walter White" class="object-cover w-full h-full" loading="lazy" decoding="async"/>
+                                <img src="assets/img/Walter_white.jpg" alt="Bryan Cranston as Walter White" class="object-cover w-full h-full"/>
                             </div>
                             <div class="flip-card-back">
                                 <h3 class="hobby-title">Favorite Series</h3>
@@ -263,7 +273,7 @@
         <p class="text-slate-500 text-sm">&copy; <span id="year"></span> Aashish Joshi. All Rights Reserved.</p>
     </footer>
 
-    <script type="module" src="script.js" defer></script>
+    <script type="module" src="assets/js/script.js" defer></script>
 </body>
 </html>
 

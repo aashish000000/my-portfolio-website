@@ -25,6 +25,9 @@ const axios = require('axios');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const PUBLIC_DIR = path.join(__dirname, 'public');
+const DATA_DIR = path.join(__dirname, 'data');
+const PROJECTS_PATH = path.join(DATA_DIR, 'projects.json');
 
 /** Cache TTL for GitHub projects (10 minutes) */
 const PROJECT_CACHE_TTL = 1000 * 60 * 10;
@@ -46,7 +49,7 @@ app.set('etag', 'strong');            // Strong ETag for cache validation
 
 // Static file serving with optimized caching
 app.use(
-    express.static(__dirname, {
+    express.static(PUBLIC_DIR, {
         maxAge: STATIC_CACHE_MAX_AGE,
         etag: true,
         lastModified: true,
@@ -60,7 +63,7 @@ app.use(
 );
 
 // Image assets with long cache duration
-app.use('/img', express.static(path.join(__dirname, 'img'), { maxAge: STATIC_CACHE_MAX_AGE }));
+app.use('/assets/img', express.static(path.join(PUBLIC_DIR, 'assets', 'img'), { maxAge: STATIC_CACHE_MAX_AGE }));
 
 
 // ================
@@ -71,7 +74,7 @@ app.use('/img', express.static(path.join(__dirname, 'img'), { maxAge: STATIC_CAC
  * Root Route - Serves the main portfolio page
  */
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
 });
 
 /**
@@ -90,13 +93,13 @@ app.get('/api/github-projects', async (req, res) => {
         const username = 'aashish000000'; // Your GitHub username
 
         // ** UPDATED: Define which specific repositories you want to show **
-        const pinnedRepos = ['Expense-Splitter', 'CS230-Stock_Price'];
+        const pinnedRepos = ['final-project-calorie-calculator', 'Calorie_Calculator', 'Expense-Splitter', 'CS230-Stock_Price'];
 
         // If no GitHub token, fall back to local projects.json
         if (!githubToken) {
             console.log('No GitHub token configured. Using local projects.json');
             const fs = require('fs');
-            const localProjects = JSON.parse(fs.readFileSync(path.join(__dirname, 'projects.json'), 'utf8'));
+            const localProjects = JSON.parse(fs.readFileSync(PROJECTS_PATH, 'utf8'));
             const projects = localProjects.map(p => ({
                 id: p.id,
                 title: p.title,
@@ -148,7 +151,7 @@ app.get('/api/github-projects', async (req, res) => {
         // Fall back to local projects.json on any error
         try {
             const fs = require('fs');
-            const localProjects = JSON.parse(fs.readFileSync(path.join(__dirname, 'projects.json'), 'utf8'));
+            const localProjects = JSON.parse(fs.readFileSync(PROJECTS_PATH, 'utf8'));
             const projects = localProjects.map(p => ({
                 id: p.id,
                 title: p.title,
