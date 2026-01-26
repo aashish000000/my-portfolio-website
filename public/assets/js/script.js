@@ -335,9 +335,27 @@ async function loadProjects(projectGrid, projectsLoader, projectsError) {
     }
 
     try {
-        const projects = await fetchJsonWithFallback('/api/github-projects', {
-            credentials: 'same-origin'
-        });
+        // Try API first, then fall back to static projects.json
+        let projects;
+        try {
+            projects = await fetchJsonWithFallback('/api/github-projects', {
+                credentials: 'same-origin'
+            });
+        } catch (apiError) {
+            console.log('API unavailable, loading static projects.json');
+            const response = await fetch('/projects.json');
+            if (!response.ok) throw new Error('Failed to load projects');
+            const staticProjects = await response.json();
+            // Transform static projects to match API format
+            projects = staticProjects.map(p => ({
+                id: p.id,
+                title: p.title,
+                description: p.description,
+                githubUrl: p.githubUrl,
+                stars: 0,
+                language: p.technologies?.[0] || 'JavaScript'
+            }));
+        }
         displayProjects(projects, projectGrid, projectsLoader);
     } catch (error) {
         console.error('Failed to load projects:', error);
