@@ -124,6 +124,7 @@ function initTyping() {
     if (!el) return;
 
     const words = [
+        'NJCU Summer Intern',
         'Computer Science Student',
         'Aspiring Software Engineer',
         'Full-Stack Developer',
