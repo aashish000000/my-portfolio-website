@@ -11,8 +11,9 @@
     <meta property="og:description" content="CS @ NJCU · Summer '26 undergraduate intern — building performant, reliable web experiences with a systems mindset.">
     <meta property="og:type" content="website">
 
-    <link rel="icon" href="/assets/img/aashish-avatar.png" type="image/png" sizes="32x32">
-    <link rel="apple-touch-icon" href="/assets/img/aashish-avatar.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/aashish-avatar.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/img/aashish-avatar.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/aashish-avatar.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,8 +26,11 @@
     <!-- ==================== NAVIGATION ==================== -->
     <header id="header">
         <nav class="nav-container">
-            <a href="#home" class="nav-logo" aria-label="Home">
-                <img src="/assets/img/aashish-avatar.png" alt="" width="40" height="40" class="nav-logo-img" decoding="async">
+            <a href="#home" class="nav-brand" aria-label="Home">
+                <span class="nav-logo" aria-hidden="true">
+                    <img src="/assets/img/aashish-avatar.png" alt="" class="nav-logo-img" width="96" height="96" decoding="async" fetchpriority="high">
+                </span>
+                <span class="nav-brand-text">Aashish</span>
             </a>
             <ul class="nav-links" role="list">
                 <li><a href="#about" class="nav-link">About</a></li>
@@ -435,7 +439,9 @@
         <div class="container">
             <div class="footer-inner">
                 <a href="#home" class="footer-brand" aria-label="Back to top">
-                    <img src="/assets/img/aashish-avatar.png" alt="" width="36" height="36" class="footer-brand-img" decoding="async">
+                    <span class="footer-brand-frame" aria-hidden="true">
+                        <img src="/assets/img/aashish-avatar.png" alt="" class="footer-brand-img" width="96" height="96" decoding="async">
+                    </span>
                 </a>
                 <p class="footer-copy">&copy; <span id="year"></span> Aashish Joshi. Crafted with care.</p>
                 <a href="/assets/docs/Aashish_Resume.pdf" download="Aashish_Resume.pdf" class="btn btn-ghost btn-sm">Download Resume</a>

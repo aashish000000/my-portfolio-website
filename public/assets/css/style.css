@@ -157,32 +157,66 @@ input, textarea { font-family: inherit; }
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 0 var(--gutter);
-    height: 64px;
+    min-height: 64px;
+    height: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 32px;
+    gap: clamp(16px, 3vw, 32px);
 }
 
-/* Logo — square avatar */
+/* Brand lockup: photo + name — aligned with nav row */
+.nav-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity var(--t);
+}
+.nav-brand:hover {
+    opacity: 0.95;
+}
+
+.nav-brand-text {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text-1);
+    line-height: 1;
+}
+
+/* Logo — square avatar (fixed size; never shrinks in flex) */
 .nav-logo {
     flex-shrink: 0;
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
-    transition: opacity var(--t), transform var(--t);
+    background: var(--surface-2);
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.12),
+        0 0 0 1px rgba(108, 142, 255, 0.15) inset,
+        0 4px 14px rgba(0, 0, 0, 0.35);
+    transition: transform var(--t) var(--ease), box-shadow var(--t);
 }
-.nav-logo:hover {
-    opacity: 0.92;
-    transform: scale(1.03);
+.nav-brand:hover .nav-logo {
+    transform: scale(1.02);
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.18),
+        0 0 20px rgba(108, 142, 255, 0.12),
+        0 6px 18px rgba(0, 0, 0, 0.4);
 }
+
 .nav-logo-img {
-    width: 100%;
-    height: 100%;
+    width: 48px;
+    height: 48px;
+    max-width: none;
     object-fit: cover;
-    object-position: center 20%;
+    object-position: center 22%;
     display: block;
 }
 
@@ -360,13 +394,13 @@ input, textarea { font-family: inherit; }
    6. Hero
    ---------------------------------------------------------------- */
 .hero {
-    min-height: 100vh;
+    min-height: 100svh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     position: relative;
-    padding: 128px var(--gutter) 96px;
+    padding: 104px var(--gutter) 88px;
 }
 
 /* Background layers */
@@ -1275,25 +1309,37 @@ footer {
 }
 
 .footer-brand {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 9px;
-    overflow: hidden;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
     transition: opacity var(--t), transform var(--t);
 }
 .footer-brand:hover {
-    opacity: 0.85;
-    transform: scale(1.03);
+    opacity: 0.9;
+    transform: scale(1.04);
 }
+
+.footer-brand-frame {
+    display: block;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--surface-2);
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        0 3px 12px rgba(0, 0, 0, 0.3);
+}
+
 .footer-brand-img {
-    width: 100%;
-    height: 100%;
+    width: 40px;
+    height: 40px;
+    max-width: none;
     object-fit: cover;
-    object-position: center 20%;
+    object-position: center 22%;
     display: block;
 }
 
@@ -1362,6 +1408,17 @@ footer {
     .nav-links, .nav-cta { display: none; }
     #mobile-menu-button { display: flex; }
 
+    .nav-brand-text {
+        font-size: 15px;
+    }
+    .nav-logo,
+    .nav-logo-img {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
     /* Hero */
     .hero-title { font-size: clamp(60px, 18vw, 100px); }
 
@@ -1389,7 +1446,18 @@ footer {
 }
 
 @media (max-width: 480px) {
-    .hero { padding: 100px 16px 72px; }
+    .hero { padding: 92px 16px 72px; }
+
+    .nav-brand-text {
+        display: none;
+    }
+    .nav-logo,
+    .nav-logo-img {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        min-height: 48px;
+    }
     .hero-actions { flex-direction: column; align-items: center; }
     .btn { max-width: 280px; width: 100%; }
     .contact-form-wrap { padding: 24px; }
