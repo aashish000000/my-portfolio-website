@@ -29,8 +29,11 @@ reduceMotionMQ.addEventListener?.('change', (e) => {
 // API Config
 // ─────────────────────────────────────────────
 
-const API_BASE = (document.body?.dataset?.apiBase || '').trim();
-const API_BASES = API_BASE ? ['', API_BASE] : [''];
+const API_BASE = (document.body?.dataset?.apiBase || '').trim().replace(/\/+$/, '');
+/** Same host as the Express app (local dev). Static hosts (Netlify) must call the backend URL first — never same-origin /api (wrong origin / HTML 200). */
+const IS_LOCAL_API = /^localhost$|^127\.0\.0\.1$/i.test(window.location.hostname || '');
+const API_BASES =
+    !API_BASE ? [''] : IS_LOCAL_API ? ['', API_BASE] : [API_BASE];
 
 // ─────────────────────────────────────────────
 // State
@@ -431,7 +434,10 @@ async function jsonFetch(path, options = {}) {
                 throw new Error(msg);
             }
 
-            return isJson ? res.json() : {};
+            if (!isJson) {
+                throw new Error('Invalid response from server.');
+            }
+            return res.json();
         } catch (err) {
             lastErr = err;
         }

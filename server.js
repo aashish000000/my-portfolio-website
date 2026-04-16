@@ -178,6 +178,10 @@ app.get('/api/github-projects', async (req, res) => {
 app.post('/api/send', (req, res) => {
     const { name, email, message } = req.body;
 
+    if (!name?.trim() || !email?.trim() || !message?.trim()) {
+        return res.status(400).json({ message: 'Please fill in all fields.' });
+    }
+
     // Validate server configuration
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
         return res.status(500).json({ message: 'Server configuration error.' });
@@ -192,9 +196,10 @@ app.post('/api/send', (req, res) => {
         },
     });
 
-    // Compose email
+    // From must be the authenticated Gmail user (Gmail rejects spoofed From). Use Reply-To for the visitor.
     const mailOptions = {
-        from: `"${name}" <${email}>`,
+        from: `"Portfolio contact" <${process.env.EMAIL_USER}>`,
+        replyTo: `"${name.replace(/"/g, '')}" <${email}>`,
         to: process.env.EMAIL_USER,
         subject: `New Portfolio Contact from ${name}`,
         text: `You have a new message from:\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
