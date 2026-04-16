@@ -166,64 +166,21 @@ input, textarea { font-family: inherit; }
     gap: clamp(16px, 3vw, 32px);
 }
 
-/* Brand lockup: photo + name — aligned with nav row */
-.nav-brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    flex: 0 1 auto;
-    min-width: 0;
-    max-width: 100%;
-    text-decoration: none;
-    color: inherit;
+/* Logo — text mark (photo only in favicon / tab) */
+.nav-logo {
+    flex-shrink: 0;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     transition: opacity var(--t);
-}
-.nav-brand:hover {
-    opacity: 0.95;
-}
-
-.nav-brand-text {
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    color: var(--text-1);
     line-height: 1;
 }
-
-/* Logo — square avatar (fixed size; intrinsic image width must not expand flex — min-width:0 + hard box) */
-.nav-logo {
-    flex: 0 0 48px;
-    width: 48px;
-    height: 48px;
-    min-width: 0;
-    max-width: 48px;
-    max-height: 48px;
-    border-radius: 14px;
-    overflow: hidden;
-    background: var(--surface-2);
-    contain: strict;
-    box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.12),
-        0 0 0 1px rgba(108, 142, 255, 0.15) inset,
-        0 4px 14px rgba(0, 0, 0, 0.35);
-    transition: transform var(--t) var(--ease), box-shadow var(--t);
-}
-.nav-brand:hover .nav-logo {
-    transform: scale(1.02);
-    box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.18),
-        0 0 20px rgba(108, 142, 255, 0.12),
-        0 6px 18px rgba(0, 0, 0, 0.4);
-}
-
-.nav-logo-img {
-    width: 100%;
-    height: 100%;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: cover;
-    object-position: center 22%;
-    display: block;
+.nav-logo:hover {
+    opacity: 0.85;
 }
 
 /* Desktop links */
@@ -1315,42 +1272,17 @@ footer {
 }
 
 .footer-brand {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    font-size: 16px;
+    font-weight: 800;
     flex-shrink: 0;
-    transition: opacity var(--t), transform var(--t);
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: opacity var(--t);
 }
 .footer-brand:hover {
-    opacity: 0.9;
-    transform: scale(1.04);
-}
-
-.footer-brand-frame {
-    display: block;
-    flex: 0 0 40px;
-    width: 40px;
-    height: 40px;
-    min-width: 0;
-    max-width: 40px;
-    max-height: 40px;
-    border-radius: 12px;
-    overflow: hidden;
-    background: var(--surface-2);
-    contain: strict;
-    box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.1),
-        0 3px 12px rgba(0, 0, 0, 0.3);
-}
-
-.footer-brand-img {
-    width: 100%;
-    height: 100%;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: cover;
-    object-position: center 22%;
-    display: block;
+    opacity: 0.75;
 }
 
 .footer-copy {
@@ -1418,17 +1350,6 @@ footer {
     .nav-links, .nav-cta { display: none; }
     #mobile-menu-button { display: flex; }
 
-    .nav-brand-text {
-        font-size: 15px;
-    }
-    .nav-logo {
-        flex: 0 0 44px;
-        width: 44px;
-        height: 44px;
-        max-width: 44px;
-        max-height: 44px;
-    }
-
     /* Hero */
     .hero-title { font-size: clamp(60px, 18vw, 100px); }
 
@@ -1458,16 +1379,6 @@ footer {
 @media (max-width: 480px) {
     .hero { padding: 92px 16px 72px; }
 
-    .nav-brand-text {
-        display: none;
-    }
-    .nav-logo {
-        flex: 0 0 48px;
-        width: 48px;
-        height: 48px;
-        max-width: 48px;
-        max-height: 48px;
-    }
     .hero-actions { flex-direction: column; align-items: center; }
     .btn { max-width: 280px; width: 100%; }
     .contact-form-wrap { padding: 24px; }
