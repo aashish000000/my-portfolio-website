@@ -1,19 +1,10 @@
 [build]
   publish = "public"
 
-# Offer resume PDF as a download (optional; main fix is correct filename on disk)
-[[headers]]
-  for = "/assets/docs/*.pdf"
-  [headers.values]
-    Content-Disposition = "attachment"
-
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
 
-# SPA fallback: Netlify still serves real files (e.g. PDFs) first; this only applies when no file matches
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# No /* → index.html catch-all: this site is static; that rule can return HTML for asset URLs
+# and break PDFs and caching. Real files under public/ are served normally.
