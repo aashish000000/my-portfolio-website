@@ -7,6 +7,7 @@
  *  - Scroll-triggered section reveals
  *  - GitHub projects loading with static fallback
  *  - Contact form submission
+ *  - Dark / light theme toggle (persisted)
  *
  * @author Aashish Joshi
  */
@@ -50,12 +51,42 @@ document.addEventListener('DOMContentLoaded', () => {
     // Signal to CSS that JS is running — enables reveal animations
     document.body.classList.add('js-ready');
 
+    initTheme();
     initNav();
     initTyping();
     initReveal();
     updateFooterYear();
     setupLazyInit();
 });
+
+// ─────────────────────────────────────────────
+// Theme (dark / light)
+// ─────────────────────────────────────────────
+
+function initTheme() {
+    const root = document.documentElement;
+    const btn = document.getElementById('theme-toggle');
+    const saved = localStorage.getItem('portfolio-theme');
+    if (saved === 'light' || saved === 'dark') {
+        root.setAttribute('data-theme', saved);
+    }
+
+    const syncLabel = () => {
+        const t = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        btn?.setAttribute(
+            'aria-label',
+            t === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
+        );
+    };
+    syncLabel();
+
+    btn?.addEventListener('click', () => {
+        const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        root.setAttribute('data-theme', next);
+        localStorage.setItem('portfolio-theme', next);
+        syncLabel();
+    });
+}
 
 // ─────────────────────────────────────────────
 // Navigation

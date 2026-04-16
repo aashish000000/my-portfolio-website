@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,8 +32,17 @@
                 <li><a href="#projects" class="nav-link">Work</a></li>
                 <li><a href="#technologies" class="nav-link">Stack</a></li>
                 <li><a href="#experience" class="nav-link">Experience</a></li>
+                <li><a href="#notes" class="nav-link">Notes</a></li>
                 <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
+            <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch to light theme" title="Theme">
+                <span class="theme-toggle-icon theme-toggle-moon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+                </span>
+                <span class="theme-toggle-icon theme-toggle-sun" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+                </span>
+            </button>
             <a href="/assets/docs/Aashish_Resume.pdf" download="Aashish_Resume.pdf" class="nav-cta">Resume ↓</a>
             <button id="mobile-menu-button" aria-label="Toggle navigation menu" aria-expanded="false">
                 <span></span>
@@ -45,6 +54,7 @@
             <a href="#projects" class="mobile-nav-link">Work</a>
             <a href="#technologies" class="mobile-nav-link">Stack</a>
             <a href="#experience" class="mobile-nav-link">Experience</a>
+            <a href="#notes" class="mobile-nav-link">Notes</a>
             <a href="#contact" class="mobile-nav-link">Contact</a>
         </div>
     </header>
@@ -100,6 +110,12 @@
                 </div>
 
                 <div class="bento-grid">
+                    <div class="bento-card bento-portrait">
+                        <div class="about-headshot-wrap">
+                            <img src="/assets/img/aashish-avatar.jpg" alt="Aashish Joshi" class="about-headshot" width="400" height="400" loading="lazy" decoding="async">
+                        </div>
+                        <p class="about-headshot-caption">Aashish Joshi · CS @ NJCU</p>
+                    </div>
                     <!-- Bio card (wide) -->
                     <div class="bento-card bento-bio">
                         <div class="bento-label">Who I Am</div>
@@ -362,6 +378,34 @@
             </div>
         </section>
 
+        <!-- ==================== NOTES ==================== -->
+        <section id="notes" class="section reveal">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">Notes</span>
+                    <h2 class="section-title">Short technical notes.</h2>
+                    <p class="section-subtitle">Quick writeups on things I have hit in the wild—APIs, CSS layout, and shipping a portfolio that actually sends mail.</p>
+                </div>
+                <div class="notes-grid">
+                    <article class="note-card">
+                        <span class="note-meta">APIs · Reliability</span>
+                        <h3 class="note-title">Graceful degradation for GitHub-powered project grids</h3>
+                        <p class="note-excerpt">When the GitHub API is rate-limited or a token is missing, the UI should not go blank. I cache responses and fall back to a static <code>projects.json</code> so the page still tells a story.</p>
+                    </article>
+                    <article class="note-card">
+                        <span class="note-meta">CSS · Layout</span>
+                        <h3 class="note-title">When flex items refuse to shrink</h3>
+                        <p class="note-excerpt">A large intrinsic image width can force a flex row wider than the viewport. Setting <code>min-width: 0</code> on the flex child and a fixed box with <code>overflow: hidden</code> plus <code>object-fit: cover</code> keeps avatars predictable.</p>
+                    </article>
+                    <article class="note-card">
+                        <span class="note-meta">Email · Backend</span>
+                        <h3 class="note-title">Nodemailer and Gmail without spoofing</h3>
+                        <p class="note-excerpt">Gmail expects the authenticated account in <code>From</code>. I send from my inbox address and put the visitor on <code>Reply-To</code> so messages land reliably and “Reply” still goes to them.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
         <!-- ==================== CONTACT ==================== -->
         <section id="contact" class="section reveal">
             <div class="container">
@@ -370,6 +414,15 @@
                         <span class="section-eyebrow">Contact</span>
                         <h2 class="section-title">Let's work<br>together.</h2>
                         <p class="section-subtitle">I'm actively seeking new opportunities. Whether you have a question, a proposal, or just want to say hi — I'll get back to you!</p>
+
+                        <div class="contact-book-row">
+                            <!-- Replace href with your Calendly link -->
+                            <a href="https://calendly.com/aashish000000" target="_blank" rel="noopener noreferrer" class="btn btn-primary contact-book-btn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                                Book a call
+                            </a>
+                            <span class="contact-book-hint">15–30 min · Calendly</span>
+                        </div>
 
                         <div class="contact-socials">
                             <a href="https://github.com/aashish000000" target="_blank" rel="noopener noreferrer" class="social-row" aria-label="GitHub Profile">
