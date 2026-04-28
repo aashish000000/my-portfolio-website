@@ -214,6 +214,14 @@ input, textarea { font-family: inherit; }
     gap: clamp(16px, 3vw, 32px);
 }
 
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    min-width: 0;
+}
+
 /* Logo — text mark (photo only in favicon / tab) */
 .nav-logo {
     flex-shrink: 0;
