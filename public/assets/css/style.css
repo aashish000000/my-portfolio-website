@@ -1594,7 +1594,15 @@ footer {
     :root { --section-y: 80px; --gutter: 20px; }
 
     /* Nav */
-    .nav-links, .nav-cta { display: none; }
+    .nav-links { display: none; }
+    .nav-cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 7px 12px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
     #mobile-menu-button { display: flex; }
     .theme-toggle { width: 38px; height: 38px; }
 
@@ -1641,6 +1649,10 @@ footer {
 
     .contact-book-row { justify-content: center; text-align: center; }
     .contact-book-hint { width: 100%; }
+
+    /* Keep header actions fitting on small phones */
+    .nav-container { gap: 12px; }
+    .nav-cta { padding: 7px 10px; }
 }
 
 /* ----------------------------------------------------------------
