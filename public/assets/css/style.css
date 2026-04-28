@@ -457,18 +457,6 @@ input, textarea { font-family: inherit; }
     z-index: 0;   /* explicitly keep behind content */
 }
 
-.hero-mesh-corner {
-    position: absolute;
-    top: -84px;
-    left: -110px;
-    width: min(640px, 82vw);
-    height: auto;
-    opacity: 0.62;
-    transform: rotate(-6deg);
-    mix-blend-mode: screen;
-    filter: saturate(1.15) contrast(1.05);
-}
-
 .hero-glow {
     position: absolute;
     border-radius: 50%;
@@ -1679,13 +1667,6 @@ footer {
     /* Keep header actions fitting on small phones */
     .nav-container { gap: 12px; }
     .nav-cta { padding: 7px 10px; }
-
-    .hero-mesh-corner {
-        top: -60px;
-        left: -120px;
-        width: 92vw;
-        opacity: 0.52;
-    }
 }
 
 /* ----------------------------------------------------------------
