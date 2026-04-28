@@ -1212,6 +1212,13 @@ input, textarea { font-family: inherit; }
 }
 .favorite-card:hover .favorite-overlay { opacity: 1; }
 
+/* Touch devices don't have hover — keep overlay visible */
+@media (hover: none) and (pointer: coarse) {
+    .favorite-overlay { opacity: 1; }
+    .favorite-card:hover { transform: none; }
+    .favorite-card:hover .favorite-media img { transform: none; }
+}
+
 .fav-tag {
     font-size: 10px;
     font-weight: 700;
