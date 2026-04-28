@@ -51,7 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Signal to CSS that JS is running — enables reveal animations
     document.body.classList.add('js-ready');
 
-    initTheme();
     initNav();
     initResumeLinks();
     initTyping();
