@@ -1638,6 +1638,9 @@ footer {
     .btn { max-width: 280px; width: 100%; }
     .contact-form-wrap { padding: 24px; }
     .hero-badge { font-size: 12px; padding: 7px 16px; }
+
+    .contact-book-row { justify-content: center; text-align: center; }
+    .contact-book-hint { width: 100%; }
 }
 
 /* ----------------------------------------------------------------
