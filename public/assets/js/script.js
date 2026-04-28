@@ -53,11 +53,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initTheme();
     initNav();
+    initResumeLinks();
     initTyping();
     initReveal();
     updateFooterYear();
     setupLazyInit();
 });
+
+function initResumeLinks() {
+    const resumePath = 'assets/docs/Aashish_Resume.pdf';
+    const anchors = document.querySelectorAll('a[data-resume-link]');
+    if (!anchors.length) return;
+
+    const path = window.location.pathname || '/';
+    const basePath = path.endsWith('/') ? path : `${path}/`;
+    const href = `${window.location.origin}${basePath}${resumePath}`;
+
+    anchors.forEach(a => a.setAttribute('href', href));
+}
 
 // ─────────────────────────────────────────────
 // Theme (dark / light)
