@@ -429,7 +429,7 @@ function initContactForm() {
                 body: JSON.stringify(payload),
                 credentials: 'same-origin',
             });
-            responseEl.textContent = result?.message || 'Message sent! I'll be in touch soon.';
+            responseEl.textContent = result?.message || 'Message sent! I\'ll be in touch soon.';
             responseEl.classList.add('success');
             form.reset();
         } catch (err) {
