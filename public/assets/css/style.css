@@ -1421,6 +1421,17 @@ body::after {
     --ss-dim: #8a9aa3;
     --ss-ring: rgba(77, 184, 255, 0.32);
     --ss-ring-soft: rgba(77, 184, 255, 0.12);
+    --ss-tick: rgba(77, 184, 255, 0.42);
+    --ss-tick-hot: rgba(154, 212, 255, 0.75);
+    --ss-label-bg: rgba(3, 5, 10, 0.78);
+    --ss-label-border: rgba(77, 184, 255, 0.28);
+    --ss-pop-bg: rgba(5, 8, 12, 0.92);
+    --ss-pop-border: rgba(77, 184, 255, 0.35);
+    --ss-toggle-bg: rgba(8, 12, 18, 0.75);
+    --ss-chip-bg: rgba(77, 184, 255, 0.06);
+    --ss-meter-track: rgba(77, 184, 255, 0.12);
+    --ss-star: rgba(255, 255, 255, 0.55);
+    --ss-star-jade: rgba(77, 184, 255, 0.55);
     position: relative;
     min-height: 100vh;
     min-height: 100dvh;
@@ -1434,6 +1445,32 @@ body::after {
         radial-gradient(ellipse 45% 35% at 15% 20%, rgba(80, 140, 255, 0.08), transparent 50%),
         radial-gradient(ellipse 40% 30% at 85% 75%, rgba(77, 184, 255, 0.06), transparent 50%),
         var(--ss-ink);
+    transition: background 0.5s, color 0.5s;
+}
+
+/* Day Stack Orbit — pale ion sky instead of carbon abyss */
+[data-theme="day"] .solar-section {
+    --ss-ink: #E8F1F8;
+    --ss-text: #0B1220;
+    --ss-dim: #4A5A72;
+    --ss-ring: rgba(11, 111, 168, 0.42);
+    --ss-ring-soft: rgba(11, 111, 168, 0.16);
+    --ss-tick: rgba(11, 111, 168, 0.55);
+    --ss-tick-hot: rgba(15, 134, 199, 0.9);
+    --ss-label-bg: rgba(255, 255, 255, 0.86);
+    --ss-label-border: rgba(11, 111, 168, 0.3);
+    --ss-pop-bg: rgba(255, 255, 255, 0.94);
+    --ss-pop-border: rgba(11, 111, 168, 0.32);
+    --ss-toggle-bg: rgba(255, 255, 255, 0.82);
+    --ss-chip-bg: rgba(11, 111, 168, 0.08);
+    --ss-meter-track: rgba(11, 111, 168, 0.14);
+    --ss-star: rgba(11, 111, 168, 0.28);
+    --ss-star-jade: rgba(15, 134, 199, 0.35);
+    background:
+        radial-gradient(ellipse 70% 55% at 50% 48%, rgba(11, 111, 168, 0.12), transparent 58%),
+        radial-gradient(ellipse 45% 35% at 18% 18%, rgba(77, 184, 255, 0.14), transparent 52%),
+        radial-gradient(ellipse 40% 30% at 86% 78%, rgba(11, 111, 168, 0.1), transparent 50%),
+        linear-gradient(180deg, #F4F8FC 0%, var(--ss-ink) 55%, #DDE8F2 100%);
 }
 
 /* Sabin-like slow entrance when scrolled into view */
@@ -1500,21 +1537,24 @@ body::after {
     pointer-events: none;
     opacity: 0.9;
     background-image:
-        radial-gradient(1.5px 1.5px at 8% 12%, rgba(255,255,255,0.7), transparent),
-        radial-gradient(1px 1px at 18% 40%, rgba(255,255,255,0.45), transparent),
-        radial-gradient(1.5px 1.5px at 32% 16%, rgba(77,184,255,0.7), transparent),
-        radial-gradient(1px 1px at 48% 28%, rgba(255,255,255,0.4), transparent),
-        radial-gradient(2px 2px at 62% 10%, rgba(255,255,255,0.65), transparent),
-        radial-gradient(1px 1px at 74% 36%, rgba(255,255,255,0.4), transparent),
-        radial-gradient(1.5px 1.5px at 88% 22%, rgba(154,212,255,0.55), transparent),
-        radial-gradient(1px 1px at 12% 68%, rgba(255,255,255,0.45), transparent),
-        radial-gradient(1.5px 1.5px at 28% 82%, rgba(77,184,255,0.5), transparent),
-        radial-gradient(1px 1px at 44% 74%, rgba(255,255,255,0.35), transparent),
-        radial-gradient(2px 2px at 66% 88%, rgba(255,255,255,0.55), transparent),
-        radial-gradient(1px 1px at 82% 70%, rgba(255,255,255,0.4), transparent),
-        radial-gradient(1.5px 1.5px at 94% 58%, rgba(255,255,255,0.5), transparent),
-        radial-gradient(1px 1px at 54% 52%, rgba(255,255,255,0.28), transparent);
+        radial-gradient(1.5px 1.5px at 8% 12%, var(--ss-star), transparent),
+        radial-gradient(1px 1px at 18% 40%, var(--ss-star), transparent),
+        radial-gradient(1.5px 1.5px at 32% 16%, var(--ss-star-jade), transparent),
+        radial-gradient(1px 1px at 48% 28%, var(--ss-star), transparent),
+        radial-gradient(2px 2px at 62% 10%, var(--ss-star), transparent),
+        radial-gradient(1px 1px at 74% 36%, var(--ss-star), transparent),
+        radial-gradient(1.5px 1.5px at 88% 22%, var(--ss-star-jade), transparent),
+        radial-gradient(1px 1px at 12% 68%, var(--ss-star), transparent),
+        radial-gradient(1.5px 1.5px at 28% 82%, var(--ss-star-jade), transparent),
+        radial-gradient(1px 1px at 44% 74%, var(--ss-star), transparent),
+        radial-gradient(2px 2px at 66% 88%, var(--ss-star), transparent),
+        radial-gradient(1px 1px at 82% 70%, var(--ss-star), transparent),
+        radial-gradient(1.5px 1.5px at 94% 58%, var(--ss-star), transparent),
+        radial-gradient(1px 1px at 54% 52%, var(--ss-star), transparent);
     animation: starTwinkle 7s ease-in-out infinite alternate;
+}
+[data-theme="day"] .solar-section.is-lit .solar-stars {
+    opacity: 0.55;
 }
 @keyframes starTwinkle {
     from { opacity: 0.55; }
@@ -1575,6 +1615,9 @@ body::after {
     background: radial-gradient(circle, rgba(77,184,255,0.1), transparent 62%);
     pointer-events: none;
 }
+[data-theme="day"] .solar-system::before {
+    background: radial-gradient(circle, rgba(11, 111, 168, 0.14), transparent 62%);
+}
 
 .sun {
     position: absolute;
@@ -1600,6 +1643,12 @@ body::after {
         0 0 180px rgba(77, 184, 255, 0.28);
     animation: sunPulse 4.5s ease-in-out infinite;
 }
+[data-theme="day"] .sun-core {
+    box-shadow:
+        0 0 40px rgba(11, 111, 168, 0.35),
+        0 0 90px rgba(77, 184, 255, 0.28),
+        0 0 140px rgba(11, 111, 168, 0.18);
+}
 .sun-flare,
 .sun-flare-2 {
     position: absolute;
@@ -1612,6 +1661,12 @@ body::after {
     inset: -38%;
     border-color: rgba(154, 212, 255, 0.22);
     animation-delay: 1.4s;
+}
+[data-theme="day"] .sun-flare {
+    border-color: rgba(11, 111, 168, 0.35);
+}
+[data-theme="day"] .sun-flare-2 {
+    border-color: rgba(11, 111, 168, 0.22);
 }
 .sun strong {
     position: relative;
@@ -1673,7 +1728,7 @@ body::after {
 }
 .orbit-glow-path {
     fill: none;
-    stroke: rgba(77, 184, 255, 0.08);
+    stroke: var(--ss-ring-soft);
     stroke-width: 3;
     vector-effect: non-scaling-stroke;
     filter: blur(0.5px);
@@ -1681,7 +1736,7 @@ body::after {
 }
 .orbit-dash-path {
     fill: none;
-    stroke: rgba(77, 184, 255, 0.28);
+    stroke: var(--ss-ring);
     stroke-width: 1.15;
     stroke-dasharray: 5 11;
     stroke-linecap: round;
@@ -1690,7 +1745,7 @@ body::after {
 }
 .orbit-tick-path {
     fill: none;
-    stroke: rgba(77, 184, 255, 0.42);
+    stroke: var(--ss-tick);
     stroke-width: 1.4;
     stroke-dasharray: 1.2 28;
     stroke-linecap: round;
@@ -1698,15 +1753,15 @@ body::after {
     transition: stroke 0.35s;
 }
 .orbit-ring.is-hot .orbit-glow-path {
-    stroke: rgba(77, 184, 255, 0.2);
+    stroke: color-mix(in srgb, var(--ss-ring) 65%, transparent);
 }
 .orbit-ring.is-hot .orbit-dash-path {
-    stroke: rgba(77, 184, 255, 0.55);
+    stroke: color-mix(in srgb, var(--ss-tick) 90%, white 10%);
     stroke-width: 1.45;
     stroke-dasharray: 6 9;
 }
 .orbit-ring.is-hot .orbit-tick-path {
-    stroke: rgba(127, 245, 203, 0.7);
+    stroke: var(--ss-tick-hot);
 }
 .planet.is-paused,
 .planet:hover,
@@ -1782,11 +1837,11 @@ body::after {
     white-space: nowrap;
     padding: 7px 12px;
     border-radius: 999px;
-    background: rgba(3, 5, 10, 0.78);
-    border: 1px solid rgba(77, 184, 255, 0.28);
+    background: var(--ss-label-bg);
+    border: 1px solid var(--ss-label-border);
     backdrop-filter: blur(8px);
     opacity: 0.92;
-    transition: opacity 0.25s, border-color 0.25s, color 0.25s, box-shadow 0.25s;
+    transition: opacity 0.25s, border-color 0.25s, color 0.25s, box-shadow 0.25s, background 0.35s;
 }
 .planet:hover .planet-body,
 .planet[aria-pressed="true"] .planet-body {
@@ -1800,8 +1855,12 @@ body::after {
 .planet[aria-pressed="true"] .planet-label {
     opacity: 1;
     color: var(--jade-light);
-    border-color: rgba(77, 184, 255, 0.55);
-    box-shadow: 0 0 18px rgba(77, 184, 255, 0.2);
+    border-color: color-mix(in srgb, var(--jade) 55%, transparent);
+    box-shadow: 0 0 18px color-mix(in srgb, var(--jade) 22%, transparent);
+}
+[data-theme="day"] .planet:hover .planet-label,
+[data-theme="day"] .planet[aria-pressed="true"] .planet-label {
+    color: var(--jade-dark);
 }
 
 .planet-mercury { --p-size: 18px; --p-grad: radial-gradient(circle at 30% 30%, #d8fff0, #4DB8FF 70%, #1A7AB8); --p-glow: rgba(77,184,255,0.6); }
@@ -1822,13 +1881,16 @@ body::after {
     width: min(360px, calc(100% - 28px));
     padding: 18px 18px 14px;
     border-radius: 14px;
-    border: 1px solid rgba(77, 184, 255, 0.35);
-    background: rgba(5, 8, 12, 0.92);
+    border: 1px solid var(--ss-pop-border);
+    background: var(--ss-pop-bg);
     backdrop-filter: blur(14px);
     box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45), 0 0 40px rgba(77, 184, 255, 0.1);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.28s var(--ease), transform 0.28s var(--ease);
+    transition: opacity 0.28s var(--ease), transform 0.28s var(--ease), background 0.35s, border-color 0.35s, box-shadow 0.35s;
+}
+[data-theme="day"] .planet-pop {
+    box-shadow: 0 18px 44px rgba(10, 18, 32, 0.14), 0 0 28px rgba(11, 111, 168, 0.08);
 }
 .planet-pop.is-open {
     opacity: 1;
@@ -1860,9 +1922,9 @@ body::after {
     width: 32px;
     height: 32px;
     border-radius: 8px;
-    border: 1px solid rgba(77, 184, 255, 0.25);
+    border: 1px solid var(--ss-label-border);
     background: transparent;
-    color: var(--text-dim);
+    color: var(--ss-dim);
     font-size: 13px;
     flex-shrink: 0;
     transition: color 0.2s, border-color 0.2s, background 0.2s;
@@ -1870,14 +1932,14 @@ body::after {
 .planet-pop-close:hover {
     color: var(--jade);
     border-color: var(--jade);
-    background: rgba(77, 184, 255, 0.08);
+    background: var(--ss-chip-bg);
 }
 .planet-pop-level {
     font-family: var(--font-mono);
     font-size: 11px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--text-dim);
+    color: var(--ss-dim);
     margin-bottom: 12px;
 }
 .planet-pop-chips {
@@ -1887,14 +1949,14 @@ body::after {
     margin-bottom: 14px;
 }
 .planet-pop-chips .chip {
-    background: rgba(77, 184, 255, 0.06);
-    border-color: rgba(77, 184, 255, 0.28);
+    background: var(--ss-chip-bg);
+    border-color: var(--ss-label-border);
     color: var(--ss-text, var(--text));
 }
 .planet-pop-meter {
     height: 4px;
     border-radius: 999px;
-    background: rgba(77, 184, 255, 0.12);
+    background: var(--ss-meter-track);
     overflow: hidden;
     margin-bottom: 10px;
 }
@@ -1909,12 +1971,19 @@ body::after {
 }
 .planet-pop-hint {
     font-size: 11px;
-    color: rgba(122, 138, 146, 0.85);
+    color: var(--ss-dim);
+    opacity: 0.85;
 }
 
 .solar-section .view-toggle {
-    background: rgba(8, 12, 18, 0.75);
-    border-color: rgba(77, 184, 255, 0.28);
+    background: var(--ss-toggle-bg);
+    border-color: var(--ss-label-border);
+}
+[data-theme="day"] .solar-section .view-toggle-btn {
+    color: var(--ss-dim);
+}
+[data-theme="day"] .solar-section .view-toggle-btn.active {
+    color: #F5FBFF;
 }
 
 .stack-grid {
