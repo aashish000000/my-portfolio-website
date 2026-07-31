@@ -1,216 +1,161 @@
-# 🚀 Aashish Joshi — Portfolio Website
+# Aashish Joshi — Portfolio Website
 
-A modern, animated personal portfolio showcasing my projects, skills, and experience as a full-stack developer.
+Personal portfolio with an immersive terminal/solar-system UI (obsidian + electric jade). Live sites:
 
-![Portfolio Preview](img/gemini_image.png)
+| Host | URL |
+|------|-----|
+| **Custom domain** | [aashishthegreat.com](https://aashishthegreat.com) *(DNS propagating)* |
+| **Netlify** | [aashishthegreat-portfolio.netlify.app](https://aashishthegreat-portfolio.netlify.app) |
+| **Vercel** | [my-portfolio-website-inky-two.vercel.app](https://my-portfolio-website-inky-two.vercel.app) |
 
 ---
 
-## ✨ Features
+## Features
 
 | Feature | Description |
 |---------|-------------|
-| **Animated Hero Section** | Dynamic starfield background with typing effect |
-| **Live GitHub Projects** | Fetches and displays pinned repositories in real-time |
-| **Interactive Cards** | 3D tilt effect on about cards, flip cards for favorites |
-| **Contact Form** | Server-side email handling via Nodemailer |
-| **Responsive Design** | Mobile-first approach with smooth transitions |
-| **Accessibility** | Respects `prefers-reduced-motion` user preference |
-| **Performance Optimized** | Lazy loading, caching, and compression |
+| Terminal hero | Boot sequence, typing intro, custom cursor |
+| Tools of the Trade | Full-viewport solar system with elliptical orbits |
+| Featured projects | Curated list from `public/projects.json` (MoodRing, Calorie Calculator, Expense Splitter) |
+| Experience / education | Timeline and cards |
+| Theme toggle | Light / dark |
+| Contact form | Works when Express backend is running (`EMAIL_*` env) |
+| Responsive + a11y | Mobile layout; respects `prefers-reduced-motion` |
 
 ---
 
-## 📁 Project Structure
+## Project structure
 
 ```
-portfolio-website/
-├── index.html          # Main HTML entry point
-├── style.css           # Custom styles & animations
-├── script.js           # Client-side JavaScript (modular)
-├── server.js           # Express backend (API + static serving)
-├── projects.json       # Fallback project data
-├── myresume.pdf        # Downloadable resume
-├── package.json        # Node.js dependencies
-├── .gitignore          # Git ignore rules
-├── .env                # Environment variables (not committed)
-└── img/                # Image assets
-    ├── book_image.png
-    ├── gemini_image.png
-    ├── jon_jones.png
-    ├── Lin_Dan.jpg
-    └── Walter_white.jpg
+my-portfolio-website/
+├── public/                 # Static site (Netlify publish root)
+│   ├── index.html
+│   ├── projects.json       # Featured projects (frontend source of truth)
+│   └── assets/
+│       ├── css/style.css
+│       ├── js/script.js
+│       ├── img/
+│       └── docs/           # Resume PDF
+├── data/projects.json      # Express API fallback (keep in sync with public/)
+├── server.js               # Express: static + /api/github-projects + /api/send
+├── netlify.toml            # Netlify: publish public/, cache headers
+├── package.json
+├── .env.example
+└── AGENTS.md               # Cursor Cloud / agent notes
 ```
 
 ---
 
-## 🛠️ Tech Stack
+## Tech stack
 
-### Frontend
-- **HTML5** — Semantic markup
-- **CSS3** — Custom properties, animations, glassmorphism
-- **Tailwind CSS** — Utility classes via CDN
-- **Vanilla JavaScript** — ES6+ modules
-
-### Backend
-- **Node.js** + **Express** — Server & API routes
-- **Nodemailer** — Contact form email delivery
-- **Axios** — GitHub API requests
-- **Compression** — Gzip for faster responses
+- **Frontend:** HTML, CSS (custom properties), vanilla JS (ES modules)
+- **Backend (optional for static hosts):** Node.js ≥18, Express, Nodemailer, Axios
+- **Deploy:** Netlify (static `public/`), Vercel, or Render/Node for contact API
 
 ---
 
-## 🚀 Getting Started
+## Getting started
 
 ### Prerequisites
-- [Node.js](https://nodejs.org/) v18+ installed
-- GitHub personal access token (optional, for live projects)
-- Gmail app password (optional, for contact form)
 
-### Installation
+- Node.js v18+
+- Optional: Gmail app password for the contact form
+- Optional: GitHub token if you want live `/api/github-projects` instead of JSON fallback
+
+### Install & run (local Express)
 
 ```bash
-# Clone the repository
-git clone https://github.com/aashish000000/portfolio-website.git
-cd portfolio-website
-
-# Install dependencies
+git clone https://github.com/aashish000000/my-portfolio-website.git
+cd my-portfolio-website
 npm install
+cp .env.example .env   # fill EMAIL_USER / EMAIL_PASS if you need contact form
+npm start              # same as npm run dev → http://localhost:3000
 ```
 
-### Environment Variables
-
-Create a `.env` file in the root directory:
+### Environment variables
 
 ```env
-# Server
 PORT=3000
-
-# GitHub API (optional - falls back to projects.json)
-GITHUB_TOKEN=your_github_personal_access_token
-
-# Email (required for contact form)
 EMAIL_USER=your.email@gmail.com
 EMAIL_PASS=your_gmail_app_password
+GITHUB_TOKEN=optional_github_pat
 ```
 
-> **Note:** For Gmail, you need to generate an [App Password](https://support.google.com/accounts/answer/185833) with 2FA enabled.
-
-### Run Locally
-
-```bash
-# Start the server
-npm start
-
-# Open in browser
-# http://localhost:3000
-```
+Gmail needs an [App Password](https://support.google.com/accounts/answer/185833) with 2FA enabled.
 
 ---
 
-## 📡 API Endpoints
+## API endpoints (Express only)
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| `GET` | `/` | Serves the main portfolio page |
-| `GET` | `/api/github-projects` | Returns pinned GitHub repositories |
-| `POST` | `/api/send` | Handles contact form submissions |
+| `GET` | `/` | Portfolio (`public/`) |
+| `GET` | `/api/github-projects` | Pinned repos (falls back to `data/projects.json`) |
+| `POST` | `/api/send` | Contact form (needs `EMAIL_USER` + `EMAIL_PASS`) |
 
-### Example: GitHub Projects Response
+On **Netlify/Vercel static**, there is no Express process: the UI loads `/projects.json` directly. Contact form needs a serverless function or a separate Node host to work in production.
 
-```json
-[
-  {
-    "id": 123456789,
-    "title": "Expense Splitter",
-    "description": "A full-stack web app for group expense management...",
-    "githubUrl": "https://github.com/aashish000000/Expense-Splitter",
-    "stars": 5,
-    "language": "JavaScript"
-  }
-]
-```
+Pinned repo names for the API live in `server.js` (`pinnedRepos`). Keep `public/projects.json` and `data/projects.json` aligned when editing featured projects.
 
 ---
 
-## 🎨 Customization
+## Customization
 
-### Pinned Repositories
+### Featured projects
 
-Edit the `pinnedRepos` array in `server.js` to display specific projects:
+Edit both (keep identical):
 
-```javascript
-const pinnedRepos = ['Expense-Splitter', 'CS230-Stock_Price', 'your-repo-name'];
-```
+- `public/projects.json` — what the live static site shows
+- `data/projects.json` — Express fallback
 
-### Color Scheme
+Also update `pinnedRepos` in `server.js` if you use the GitHub API path.
 
-Modify CSS variables in `style.css`:
+### Theme / motion
 
-```css
-:root {
-    --color-bg: #0f172a;       /* Background */
-    --color-primary: #22d3ee;  /* Accent (cyan) */
-    --color-secondary: #818cf8; /* Secondary (indigo) */
-}
-```
-
-### Typing Animation Words
-
-Update the `words` array in `script.js`:
-
-```javascript
-const words = [
-    'Computer Science Student',
-    'Aspiring Software Developer',
-    'Full-Stack Enthusiast'
-];
-```
+CSS variables and layout live in `public/assets/css/style.css`. Client behavior is in `public/assets/js/script.js`.
 
 ---
 
-## 🌐 Deployment
+## Deployment
 
-### Render (Recommended)
+### Netlify (primary custom-domain host)
 
-1. Push code to GitHub
-2. Connect repository to [Render](https://render.com)
-3. Set environment variables in Render dashboard
-4. Deploy as a **Web Service** with:
-   - Build Command: `npm install`
-   - Start Command: `npm start`
+1. Connect this GitHub repo in [Netlify](https://app.netlify.com).
+2. Publish directory: `public` (already set in `netlify.toml`).
+3. Build command: none required (`netlify.toml` uses a no-op echo).
+4. Attach custom domain `aashishthegreat.com` + `www`.
 
-### Vercel / Netlify (Static Only)
+**DNS (Domain.com / Network Solutions → Advanced DNS):**
 
-For static deployment without the backend:
-- Remove server dependencies
-- Update `index.html` to use static `projects.json`
+| Type | Name | Value |
+|------|------|--------|
+| A | `@` | `75.2.60.5` |
+| CNAME | `www` | `aashishthegreat-portfolio.netlify.app` |
 
----
+Allow time for apex propagation; Netlify issues HTTPS once DNS is correct.
 
-## 📄 License
+Site admin: [aashishthegreat-portfolio](https://app.netlify.com/projects/aashishthegreat-portfolio)
 
-This project is licensed under the **ISC License**.
+### Vercel
 
----
+Import the repo; serve `public/` as the static root (or use the Express entry if you enable the Node server).
 
-## 🤝 Connect With Me
+### Render / any Node host (contact form + API)
 
-<p align="center">
-  <a href="https://github.com/aashish000000">
-    <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
-  </a>
-  <a href="https://linkedin.com/in/aa-joshi">
-    <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn">
-  </a>
-  <a href="https://www.instagram.com/__aashishthegreat/">
-    <img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram">
-  </a>
-</p>
+- Build: `npm install`
+- Start: `npm start`
+- Set `EMAIL_USER`, `EMAIL_PASS`, optional `GITHUB_TOKEN`
 
 ---
 
-<p align="center">
-  <strong>Made with ❤️ by Aashish Joshi</strong><br>
-  <sub>© 2025 All Rights Reserved</sub>
-</p>
+## License
 
+ISC
+
+---
+
+## Connect
+
+- [GitHub](https://github.com/aashish000000)
+- [LinkedIn](https://linkedin.com/in/aa-joshi)
+- [Instagram](https://www.instagram.com/__aashishthegreat/)
