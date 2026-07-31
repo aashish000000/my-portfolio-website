@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initResumeLinks();
     initReveals();
     initMetrics();
+    initExperience();
     initTerminal();
     initSolarSystem();
     updateFooterYear();
@@ -36,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ─────────────────────────────────────────────
-// Page loader
+// Page loader — cycle greetings over ~4s
 // ─────────────────────────────────────────────
 
 function initLoader() {
@@ -50,34 +51,55 @@ function initLoader() {
     const greetings = [
         { text: 'नमस्ते', lang: 'Nepali' },
         { text: 'Hello', lang: 'English' },
-        { text: 'Namaste', lang: 'Hindi' },
-        { text: 'Welcome', lang: 'English' },
+        { text: 'नमस्कार', lang: 'Hindi' },
+        { text: 'Hola', lang: 'Spanish' },
+        { text: '你好', lang: 'Chinese' },
+        { text: 'سلام', lang: 'Urdu' },
+        { text: 'Bonjour', lang: 'French' },
+        { text: 'Ciao', lang: 'Italian' },
+        { text: 'こんにちは', lang: 'Japanese' },
+        { text: '안녕하세요', lang: 'Korean' },
+        { text: 'Olá', lang: 'Portuguese' },
+        { text: 'مرحبا', lang: 'Arabic' },
     ];
 
-    let progress = 0;
+    const DURATION = prefs.reduceMotion ? 400 : 4000;
+    const stepMs = DURATION / greetings.length;
     let greetIdx = 0;
+    const started = performance.now();
+
+    if (hello) hello.textContent = greetings[0].text;
+    if (lang) lang.textContent = greetings[0].lang;
 
     const greetTimer = setInterval(() => {
-        greetIdx = (greetIdx + 1) % greetings.length;
-        if (hello) hello.textContent = greetings[greetIdx].text;
+        greetIdx = Math.min(greetIdx + 1, greetings.length - 1);
+        if (hello) {
+            hello.style.opacity = '0';
+            requestAnimationFrame(() => {
+                hello.textContent = greetings[greetIdx].text;
+                hello.style.opacity = '1';
+            });
+        }
         if (lang) lang.textContent = greetings[greetIdx].lang;
-    }, 450);
+        if (greetIdx >= greetings.length - 1) clearInterval(greetTimer);
+    }, stepMs);
 
-    const tick = () => {
-        progress = Math.min(100, progress + (prefs.reduceMotion ? 20 : Math.random() * 14 + 4));
+    const tick = (now) => {
+        const elapsed = now - started;
+        const progress = Math.min(100, (elapsed / DURATION) * 100);
         fill.style.width = `${progress}%`;
         num.textContent = `${Math.floor(progress)}%`;
         if (progress < 100) {
-            requestAnimationFrame(() => setTimeout(tick, prefs.reduceMotion ? 20 : 60));
+            requestAnimationFrame(tick);
         } else {
             clearInterval(greetTimer);
             setTimeout(() => {
                 loader.classList.add('hidden');
                 document.body.classList.add('loaded');
-            }, prefs.reduceMotion ? 50 : 350);
+            }, prefs.reduceMotion ? 40 : 280);
         }
     };
-    tick();
+    requestAnimationFrame(tick);
 }
 
 // ─────────────────────────────────────────────
@@ -247,6 +269,276 @@ function initMetrics() {
         });
     }, { threshold: 0.4 });
     nums.forEach((n) => obs.observe(n));
+}
+
+// ─────────────────────────────────────────────
+// Experience modal (Sabin-style metrics)
+// ─────────────────────────────────────────────
+
+const EXPERIENCE = {
+    intern: {
+        title: 'Undergraduate Summer Intern',
+        sub: 'Kean University · Jersey City, NJ · May–Jul 2026',
+        stats: [
+            { num: '10', label: 'Week Cohort' },
+            { num: '1', label: 'Capstone Talk' },
+            { num: '100%', label: 'Paid Program' },
+        ],
+        journeyLabel: 'Journey',
+        journey: [
+            { title: 'Select', text: 'Accepted into the Undergraduate Summer Internship Program.', done: true },
+            { title: 'Build', text: 'Workshops, faculty mentorship, and hands-on product work.', done: true },
+            { title: 'Ship', text: 'Capstone presentation with the summer cohort.', done: true },
+            { title: 'Next', text: 'Carry lessons into full-time engineering roles.', done: false },
+        ],
+        ringLabel: 'Focus Mix',
+        rings: [
+            { label: 'Workshops', pct: 35, color: '#2ee6a8' },
+            { label: 'Mentorship', pct: 30, color: '#7ff5cb' },
+            { label: 'Capstone', pct: 35, color: '#0f8f68' },
+        ],
+        tags: ['Internship', 'Mentorship', 'Workshops', 'Presentation', 'Collaboration'],
+    },
+    ta: {
+        title: 'Teaching Assistant',
+        sub: 'Caldwell University · Caldwell, NJ · Sep 2023 – May 2024',
+        stats: [
+            { num: '40+', label: 'Students Helped' },
+            { num: '2', label: 'Semesters' },
+            { num: 'CS', label: 'Lab Support' },
+        ],
+        journeyLabel: 'Journey',
+        journey: [
+            { title: 'Tutor', text: 'Guided peers through full-stack fundamentals.', done: true },
+            { title: 'Labs', text: 'Set up and troubleshot department lab technology.', done: true },
+            { title: 'Support', text: 'Kept sessions running smoothly under load.', done: true },
+            { title: 'Grow', text: 'Sharpened communication and debugging craft.', done: false },
+        ],
+        ringLabel: 'Time Split',
+        rings: [
+            { label: 'Tutoring', pct: 50, color: '#2ee6a8' },
+            { label: 'Lab Ops', pct: 30, color: '#7ff5cb' },
+            { label: 'Prep', pct: 20, color: '#0f8f68' },
+        ],
+        tags: ['Teaching', 'Full Stack', 'Labs', 'Debugging', 'Mentorship'],
+    },
+    ra: {
+        title: 'Resident Assistant',
+        sub: 'Caldwell University · Caldwell, NJ · 2024',
+        stats: [
+            { num: '60+', label: 'Residents' },
+            { num: '24/7', label: 'On-Call Mindset' },
+            { num: 'Safe', label: 'Community First' },
+        ],
+        journeyLabel: 'Journey',
+        journey: [
+            { title: 'Engage', text: 'Built inclusive community programming.', done: true },
+            { title: 'Resolve', text: 'Mediated conflicts with clear policy guidance.', done: true },
+            { title: 'Lead', text: 'Modeled accountability and care on the floor.', done: true },
+            { title: 'Carry', text: 'Leadership habits that transfer to teams.', done: false },
+        ],
+        ringLabel: 'Role Mix',
+        rings: [
+            { label: 'Community', pct: 40, color: '#2ee6a8' },
+            { label: 'Conflict', pct: 25, color: '#7ff5cb' },
+            { label: 'Ops', pct: 35, color: '#0f8f68' },
+        ],
+        tags: ['Leadership', 'Community', 'Conflict Resolution', 'Policy', 'Empathy'],
+    },
+    mentor: {
+        title: 'Technical Mentor, Robotics',
+        sub: 'Caldwell University · Caldwell, NJ · Spring 2024',
+        stats: [
+            { num: 'Pi', label: 'Raspberry Builds' },
+            { num: 'STM', label: '32 Firmware' },
+            { num: 'Hands', label: 'On Mentoring' },
+        ],
+        journeyLabel: 'Journey',
+        journey: [
+            { title: 'Teach', text: 'Introduced Raspberry Pi and STM32 workflows.', done: true },
+            { title: 'Assemble', text: 'Guided robot assembly and bring-up.', done: true },
+            { title: 'Debug', text: 'Pair-debugged sensors, power, and code.', done: true },
+            { title: 'Compete', text: 'Helped juniors hit competition milestones.', done: false },
+        ],
+        ringLabel: 'Stack Mix',
+        rings: [
+            { label: 'Embedded', pct: 45, color: '#2ee6a8' },
+            { label: 'Hardware', pct: 30, color: '#7ff5cb' },
+            { label: 'Mentoring', pct: 25, color: '#0f8f68' },
+        ],
+        tags: ['Raspberry Pi', 'STM32', 'C/C++', 'Robotics', 'Mentoring'],
+    },
+    redcross: {
+        title: 'Disaster Response Team',
+        sub: 'Red Cross Society · Kathmandu, Nepal · Jul 2020 – Dec 2021',
+        stats: [
+            { num: '18', label: 'Months Active' },
+            { num: 'Field', label: 'Relief Ops' },
+            { num: 'Aid', label: 'Distribution' },
+        ],
+        journeyLabel: 'Journey',
+        journey: [
+            { title: 'Train', text: 'Prepared for flood and earthquake response.', done: true },
+            { title: 'Respond', text: 'Supported relief during active disasters.', done: true },
+            { title: 'Distribute', text: 'Helped get emergency aid to communities.', done: true },
+            { title: 'Reflect', text: 'Systems thinking under real-world pressure.', done: false },
+        ],
+        ringLabel: 'Mission Mix',
+        rings: [
+            { label: 'Relief', pct: 45, color: '#2ee6a8' },
+            { label: 'Logistics', pct: 35, color: '#7ff5cb' },
+            { label: 'Support', pct: 20, color: '#0f8f68' },
+        ],
+        tags: ['Volunteer', 'Crisis Response', 'Logistics', 'Teamwork', 'Service'],
+    },
+    aiclub: {
+        title: 'President, AI Club',
+        sub: 'Liverpool College · Kathmandu, Nepal · Jan 2021 – Dec 2022',
+        stats: [
+            { num: '2', label: 'Years Leading' },
+            { num: 'Team', label: 'Robotics Builds' },
+            { num: 'Ship', label: 'Under Deadline' },
+        ],
+        journeyLabel: 'Journey',
+        journey: [
+            { title: 'Found', text: 'Organized peers around AI and robotics goals.', done: true },
+            { title: 'Build', text: 'Drove competition project requirements.', done: true },
+            { title: 'Deliver', text: 'Shipped builds against hard deadlines.', done: true },
+            { title: 'Pass', text: 'Left playbooks for the next officers.', done: false },
+        ],
+        ringLabel: 'Effort Mix',
+        rings: [
+            { label: 'Leadership', pct: 35, color: '#2ee6a8' },
+            { label: 'Engineering', pct: 40, color: '#7ff5cb' },
+            { label: 'Competition', pct: 25, color: '#0f8f68' },
+        ],
+        tags: ['AI', 'Robotics', 'Leadership', 'Project Mgmt', 'Deadlines'],
+    },
+};
+
+function initExperience() {
+    const grid = document.getElementById('exp-grid');
+    const modal = document.getElementById('exp-modal');
+    if (!grid || !modal) return;
+
+    const titleEl = document.getElementById('exp-modal-title');
+    const subEl = document.getElementById('exp-modal-sub');
+    const statsEl = document.getElementById('exp-modal-stats');
+    const journeyEl = document.getElementById('exp-modal-journey');
+    const journeyLabel = document.getElementById('exp-modal-journey-label');
+    const ringLabel = document.getElementById('exp-modal-ring-label');
+    const donutEl = document.getElementById('exp-modal-donut');
+    const legendEl = document.getElementById('exp-modal-legend');
+    const tagsEl = document.getElementById('exp-modal-tags');
+    let lastFocus = null;
+
+    const open = (id) => {
+        const data = EXPERIENCE[id];
+        if (!data) return;
+        lastFocus = document.activeElement;
+
+        titleEl.textContent = data.title;
+        subEl.textContent = data.sub;
+        journeyLabel.textContent = data.journeyLabel || 'Journey';
+        ringLabel.textContent = data.ringLabel || 'Focus Mix';
+
+        statsEl.innerHTML = data.stats.map((s) => `
+            <div class="exp-stat">
+                <span class="exp-stat-num" data-exp-count>${s.num}</span>
+                <span class="exp-stat-label">${s.label}</span>
+            </div>
+        `).join('');
+
+        journeyEl.innerHTML = data.journey.map((j) => `
+            <li class="${j.done ? '' : 'pending'}">
+                <strong>${j.title}</strong> — ${j.text}
+            </li>
+        `).join('');
+
+        legendEl.innerHTML = data.rings.map((r) => `
+            <li><i style="background:${r.color}"></i><span>${r.label}</span> — ${r.pct}%</li>
+        `).join('');
+
+        tagsEl.innerHTML = data.tags.map((t) => `<span>${t}</span>`).join('');
+        drawDonut(donutEl, data.rings);
+
+        modal.hidden = false;
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('exp-modal-open');
+        modal.querySelector('.exp-modal-close')?.focus();
+
+        if (!prefs.reduceMotion) {
+            statsEl.querySelectorAll('[data-exp-count]').forEach((el) => {
+                const raw = el.textContent;
+                if (!/^\d/.test(raw)) return;
+                const n = parseInt(raw, 10);
+                if (Number.isNaN(n)) return;
+                const suffix = raw.replace(/^\d+/, '');
+                const start = performance.now();
+                const step = (now) => {
+                    const t = Math.min(1, (now - start) / 900);
+                    el.textContent = `${Math.floor(n * (1 - Math.pow(1 - t, 3)))}${suffix}`;
+                    if (t < 1) requestAnimationFrame(step);
+                    else el.textContent = raw;
+                };
+                el.textContent = `0${suffix}`;
+                requestAnimationFrame(step);
+            });
+        }
+    };
+
+    const close = () => {
+        modal.hidden = true;
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('exp-modal-open');
+        lastFocus?.focus?.();
+    };
+
+    grid.addEventListener('click', (e) => {
+        const card = e.target.closest('[data-exp]');
+        if (card) open(card.dataset.exp);
+    });
+    grid.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        const card = e.target.closest('[data-exp]');
+        if (!card) return;
+        e.preventDefault();
+        open(card.dataset.exp);
+    });
+    modal.addEventListener('click', (e) => {
+        if (e.target.closest('[data-exp-close]')) close();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.hidden) close();
+    });
+}
+
+function drawDonut(svg, rings) {
+    if (!svg) return;
+    const radius = 46;
+    const circ = 2 * Math.PI * radius;
+    let offset = 0;
+    const parts = [
+        `<circle class="exp-donut-track" cx="60" cy="60" r="${radius}"></circle>`,
+    ];
+    rings.forEach((ring) => {
+        const len = (ring.pct / 100) * circ;
+        const dashOffset = -offset;
+        parts.push(`<circle class="exp-donut-seg" cx="60" cy="60" r="${radius}"
+            stroke="${ring.color}"
+            stroke-dasharray="${len} ${circ - len}"
+            data-offset="${dashOffset}"
+            stroke-dashoffset="${prefs.reduceMotion ? dashOffset : circ}"></circle>`);
+        offset += len;
+    });
+    svg.innerHTML = parts.join('');
+    if (!prefs.reduceMotion) {
+        requestAnimationFrame(() => {
+            svg.querySelectorAll('.exp-donut-seg').forEach((circle) => {
+                circle.style.strokeDashoffset = circle.getAttribute('data-offset');
+            });
+        });
+    }
 }
 
 // ─────────────────────────────────────────────
