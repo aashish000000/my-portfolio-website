@@ -1,10 +1,16 @@
 [build]
   publish = "public"
+  command = "echo 'Static frontend — no build step'"
 
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
+# Contact API is Express-only; on Netlify use static projects.json.
+# Do not catch-all rewrite to index.html (breaks assets/PDFs).
 
-# No /* → index.html catch-all: this site is static; that rule can return HTML for asset URLs
-# and break PDFs and caching. Real files under public/ are served normally.
+[[headers]]
+  for = "/projects.json"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

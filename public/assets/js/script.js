@@ -450,11 +450,10 @@ async function fetchProjects(grid, loader, errEl) {
     }
 
     try {
+        // Curated projects.json is the source of truth (Netlify/static + removes retired projects).
         let projects;
         try {
-            projects = await jsonFetch('/api/github-projects', { credentials: 'same-origin' });
-        } catch (_) {
-            const res = await fetch('/projects.json');
+            const res = await fetch('/projects.json', { cache: 'no-store' });
             if (!res.ok) throw new Error('Could not load projects.');
             const raw = await res.json();
             projects = raw.map((p) => ({
@@ -465,6 +464,9 @@ async function fetchProjects(grid, loader, errEl) {
                 stars: 0,
                 language: p.technologies?.[0] || 'JavaScript',
             }));
+        } catch (staticErr) {
+            // Fallback to API only if static file is missing
+            projects = await jsonFetch('/api/github-projects', { credentials: 'same-origin' });
         }
         renderProjects(projects, grid, loader);
     } catch (err) {
