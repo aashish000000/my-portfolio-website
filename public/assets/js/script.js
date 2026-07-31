@@ -1,20 +1,7 @@
 /**
- * Aashish Joshi Portfolio — v3.0
- * ================================
- * Handles:
- *  - Navigation (scroll state, mobile menu, active links)
- *  - Hero typing animation
- *  - Scroll-triggered section reveals
- *  - GitHub projects loading with static fallback
- *  - Contact form submission
- *  - Dark / light theme toggle (persisted)
- *
- * @author Aashish Joshi
+ * Aashish Joshi Portfolio — v4
+ * Loader, cursor, theme, reveals, projects, terminal, contact
  */
-
-// ─────────────────────────────────────────────
-// Preferences
-// ─────────────────────────────────────────────
 
 const reduceMotionMQ = window.matchMedia('(prefers-reduced-motion: reduce)');
 const prefs = {
@@ -26,77 +13,133 @@ reduceMotionMQ.addEventListener?.('change', (e) => {
     prefs.reduceMotion = e.matches;
 });
 
-// ─────────────────────────────────────────────
-// API Config
-// ─────────────────────────────────────────────
-
 const API_BASE = (document.body?.dataset?.apiBase || '').trim().replace(/\/+$/, '');
-/** Same host as the Express app (local dev). Static hosts (Netlify) must call the backend URL first — never same-origin /api (wrong origin / HTML 200). */
 const IS_LOCAL_API = /^localhost$|^127\.0\.0\.1$/i.test(window.location.hostname || '');
-const API_BASES =
-    !API_BASE ? [''] : IS_LOCAL_API ? ['', API_BASE] : [API_BASE];
-
-// ─────────────────────────────────────────────
-// State
-// ─────────────────────────────────────────────
+const API_BASES = !API_BASE ? [''] : IS_LOCAL_API ? ['', API_BASE] : [API_BASE];
 
 let projectsLoaded = false;
 let contactFormReady = false;
 
-// ─────────────────────────────────────────────
-// Boot
-// ─────────────────────────────────────────────
-
 document.addEventListener('DOMContentLoaded', () => {
-    // Signal to CSS that JS is running — enables reveal animations
     document.body.classList.add('js-ready');
-
+    initLoader();
+    initCursor();
+    initTheme();
     initNav();
     initResumeLinks();
-    initTyping();
-    initReveal();
+    initReveals();
+    initMetrics();
+    initTerminal();
     updateFooterYear();
     setupLazyInit();
 });
 
-function initResumeLinks() {
-    const resumePath = 'assets/docs/Aashish_Resume.pdf';
-    const anchors = document.querySelectorAll('a[data-resume-link]');
-    if (!anchors.length) return;
+// ─────────────────────────────────────────────
+// Page loader
+// ─────────────────────────────────────────────
 
-    const path = window.location.pathname || '/';
-    const basePath = path.endsWith('/') ? path : `${path}/`;
-    const href = `${window.location.origin}${basePath}${resumePath}`;
+function initLoader() {
+    const loader = document.getElementById('page-loader');
+    const fill = document.getElementById('loader-fill');
+    const num = document.getElementById('loader-num');
+    const hello = document.getElementById('loader-hello');
+    const lang = document.getElementById('loader-lang');
+    if (!loader || !fill || !num) return;
 
-    anchors.forEach(a => a.setAttribute('href', href));
+    const greetings = [
+        { text: 'नमस्ते', lang: 'Nepali' },
+        { text: 'Hello', lang: 'English' },
+        { text: 'Namaste', lang: 'Hindi' },
+        { text: 'Welcome', lang: 'English' },
+    ];
+
+    let progress = 0;
+    let greetIdx = 0;
+
+    const greetTimer = setInterval(() => {
+        greetIdx = (greetIdx + 1) % greetings.length;
+        if (hello) hello.textContent = greetings[greetIdx].text;
+        if (lang) lang.textContent = greetings[greetIdx].lang;
+    }, 450);
+
+    const tick = () => {
+        progress = Math.min(100, progress + (prefs.reduceMotion ? 20 : Math.random() * 14 + 4));
+        fill.style.width = `${progress}%`;
+        num.textContent = `${Math.floor(progress)}%`;
+        if (progress < 100) {
+            requestAnimationFrame(() => setTimeout(tick, prefs.reduceMotion ? 20 : 60));
+        } else {
+            clearInterval(greetTimer);
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                document.body.classList.add('loaded');
+            }, prefs.reduceMotion ? 50 : 350);
+        }
+    };
+    tick();
 }
 
 // ─────────────────────────────────────────────
-// Theme (dark / light)
+// Custom cursor
+// ─────────────────────────────────────────────
+
+function initCursor() {
+    const dot = document.getElementById('cursor');
+    const ring = document.getElementById('cursor-ring');
+    if (!dot || !ring) return;
+    if (window.matchMedia('(pointer: coarse)').matches || prefs.reduceMotion) return;
+
+    document.body.classList.add('has-custom-cursor');
+    let x = 0;
+    let y = 0;
+    let rx = 0;
+    let ry = 0;
+
+    window.addEventListener('mousemove', (e) => {
+        x = e.clientX;
+        y = e.clientY;
+        dot.style.transform = `translate(${x - 5}px, ${y - 5}px)`;
+    }, { passive: true });
+
+    const loop = () => {
+        rx += (x - rx) * 0.18;
+        ry += (y - ry) * 0.18;
+        ring.style.transform = `translate(${rx - 19}px, ${ry - 19}px)`;
+        requestAnimationFrame(loop);
+    };
+    loop();
+
+    const hoverables = 'a, button, input, textarea, .project-card, .exp-card, .stack-card, .term-tab';
+    document.addEventListener('mouseover', (e) => {
+        if (e.target.closest(hoverables)) {
+            dot.classList.add('hover');
+            ring.classList.add('hover');
+        }
+    });
+    document.addEventListener('mouseout', (e) => {
+        if (e.target.closest(hoverables)) {
+            dot.classList.remove('hover');
+            ring.classList.remove('hover');
+        }
+    });
+}
+
+// ─────────────────────────────────────────────
+// Theme
 // ─────────────────────────────────────────────
 
 function initTheme() {
     const root = document.documentElement;
     const btn = document.getElementById('theme-toggle');
     const saved = localStorage.getItem('portfolio-theme');
-    if (saved === 'light' || saved === 'dark') {
+    if (saved === 'day' || saved === 'night') {
         root.setAttribute('data-theme', saved);
     }
 
-    const syncLabel = () => {
-        const t = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-        btn?.setAttribute(
-            'aria-label',
-            t === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
-        );
-    };
-    syncLabel();
-
     btn?.addEventListener('click', () => {
-        const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        const next = root.getAttribute('data-theme') === 'day' ? 'night' : 'day';
         root.setAttribute('data-theme', next);
         localStorage.setItem('portfolio-theme', next);
-        syncLabel();
     });
 }
 
@@ -105,146 +148,166 @@ function initTheme() {
 // ─────────────────────────────────────────────
 
 function initNav() {
-    const header    = document.getElementById('header');
-    const menuBtn   = document.getElementById('mobile-menu-button');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const navLinks  = document.querySelectorAll('header .nav-link');
-    const sections  = document.querySelectorAll('main section[id]');
+    const nav = document.getElementById('nav');
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobile-nav');
+    const links = document.querySelectorAll('.nav-links a, .mobile-link');
+    const sections = document.querySelectorAll('main section[id]');
 
-    // ── Scroll state ──────────────────────────
-    const setHeaderScrolled = () => {
-        header?.classList.toggle('scrolled', window.scrollY > 40);
-    };
-    window.addEventListener('scroll', setHeaderScrolled, { passive: true });
-    setHeaderScrolled();
+    const onScroll = () => nav?.classList.toggle('scrolled', window.scrollY > 24);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
 
-    // ── Mobile menu ───────────────────────────
-    menuBtn?.addEventListener('click', () => {
-        const isOpen = mobileMenu?.classList.toggle('open');
-        menuBtn.classList.toggle('open', isOpen);
-        menuBtn.setAttribute('aria-expanded', String(isOpen));
+    hamburger?.addEventListener('click', () => {
+        const open = mobileNav?.classList.toggle('open');
+        hamburger.classList.toggle('open', open);
+        hamburger.setAttribute('aria-expanded', String(!!open));
     });
 
-    mobileMenu?.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-            mobileMenu.classList.remove('open');
-            menuBtn?.classList.remove('open');
-            menuBtn?.setAttribute('aria-expanded', 'false');
+    mobileNav?.querySelectorAll('a').forEach((a) => {
+        a.addEventListener('click', () => {
+            mobileNav.classList.remove('open');
+            hamburger?.classList.remove('open');
+            hamburger?.setAttribute('aria-expanded', 'false');
         });
     });
 
-    // Close on outside click
-    document.addEventListener('click', (e) => {
-        if (
-            mobileMenu?.classList.contains('open') &&
-            !header?.contains(e.target)
-        ) {
-            mobileMenu.classList.remove('open');
-            menuBtn?.classList.remove('open');
-            menuBtn?.setAttribute('aria-expanded', 'false');
-        }
-    });
-
-    // ── Active link highlighting ───────────────
-    if (!navLinks.length || !sections.length) return;
-
-    const linkObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+    if (!links.length || !sections.length) return;
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
             if (!entry.isIntersecting) return;
             const id = entry.target.getAttribute('id');
-            navLinks.forEach(link => {
+            document.querySelectorAll('.nav-links a').forEach((link) => {
                 link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
             });
         });
     }, { rootMargin: '-35% 0px -55% 0px', threshold: 0 });
+    sections.forEach((s) => observer.observe(s));
+}
 
-    sections.forEach(s => linkObserver.observe(s));
+function initResumeLinks() {
+    const resumePath = 'assets/docs/Aashish_Resume.pdf';
+    const anchors = document.querySelectorAll('a[data-resume-link]');
+    if (!anchors.length) return;
+    const path = window.location.pathname || '/';
+    const basePath = path.endsWith('/') ? path : `${path}/`;
+    const href = `${window.location.origin}${basePath}${resumePath}`;
+    anchors.forEach((a) => a.setAttribute('href', href));
 }
 
 // ─────────────────────────────────────────────
-// Hero Typing Effect
+// Reveals + metrics
 // ─────────────────────────────────────────────
 
-function initTyping() {
-    const el = document.getElementById('typing-effect');
-    if (!el) return;
-
-    const words = [
-        'NJCU Summer Intern',
-        'Computer Science Student',
-        'Aspiring Software Engineer',
-        'Full-Stack Developer',
-        'Problem Solver',
-    ];
-
+function initReveals() {
+    const els = document.querySelectorAll('.reveal');
+    if (!els.length) return;
     if (prefs.reduceMotion) {
-        el.textContent = words[0];
+        els.forEach((el) => el.classList.add('visible'));
         return;
     }
-
-    let wordIndex  = 0;
-    let charIndex  = 0;
-    let isDeleting = false;
-
-    const tick = () => {
-        const word = words[wordIndex];
-        el.textContent = word.slice(0, charIndex);
-
-        if (!isDeleting && charIndex < word.length) {
-            charIndex++;
-        } else if (isDeleting && charIndex > 0) {
-            charIndex--;
-        } else if (!isDeleting && charIndex === word.length) {
-            isDeleting = true;
-        } else {
-            isDeleting = false;
-            wordIndex = (wordIndex + 1) % words.length;
-        }
-
-        const atWordEnd = !isDeleting && charIndex === word.length;
-        const delay = atWordEnd ? 1800 : isDeleting ? 65 : 130;
-        setTimeout(tick, delay);
-    };
-
-    tick();
-}
-
-// ─────────────────────────────────────────────
-// Scroll Reveal
-// ─────────────────────────────────────────────
-
-function initReveal() {
-    const targets = document.querySelectorAll('.reveal');
-    if (!targets.length) return;
-
-    if (prefs.reduceMotion) {
-        targets.forEach(el => el.classList.add('visible'));
-        return;
-    }
-
-    const observer = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
+    const obs = new IntersectionObserver((entries, o) => {
+        entries.forEach((entry) => {
             if (!entry.isIntersecting) return;
             entry.target.classList.add('visible');
-            obs.unobserve(entry.target);
+            o.unobserve(entry.target);
         });
-    }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+    els.forEach((el) => obs.observe(el));
+}
 
-    targets.forEach(el => observer.observe(el));
+function initMetrics() {
+    const nums = document.querySelectorAll('.hero-metric-num[data-count]');
+    if (!nums.length) return;
+
+    const animate = (el) => {
+        const target = Number(el.dataset.count || 0);
+        if (prefs.reduceMotion) {
+            el.textContent = `${target}+`;
+            return;
+        }
+        const start = performance.now();
+        const dur = 1200;
+        const step = (now) => {
+            const t = Math.min(1, (now - start) / dur);
+            const eased = 1 - Math.pow(1 - t, 3);
+            el.textContent = `${Math.floor(target * eased)}+`;
+            if (t < 1) requestAnimationFrame(step);
+            else el.textContent = `${target}+`;
+        };
+        requestAnimationFrame(step);
+    };
+
+    const obs = new IntersectionObserver((entries, o) => {
+        entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            animate(entry.target);
+            o.unobserve(entry.target);
+        });
+    }, { threshold: 0.4 });
+    nums.forEach((n) => obs.observe(n));
 }
 
 // ─────────────────────────────────────────────
-// Lazy Section Init
+// Terminal demo
 // ─────────────────────────────────────────────
+
+function initTerminal() {
+    const tabs = document.querySelectorAll('.term-tab');
+    const codeEl = document.getElementById('term-code');
+    const preview = document.getElementById('term-preview');
+    if (!tabs.length || !codeEl || !preview) return;
+
+    const snippets = {
+        html: {
+            code: `<span class="tok-cm">&lt;!-- Hello from Aashish --&gt;</span>
+<span class="tok-kw">&lt;h1&gt;</span>Hello World!<span class="tok-kw">&lt;/h1&gt;</span>`,
+            preview: '<h3>Hello World!</h3>',
+        },
+        js: {
+            code: `<span class="tok-kw">const</span> greet = <span class="tok-fn">()</span> => {
+  <span class="tok-kw">return</span> <span class="tok-str">'Hello World!'</span>;
+};
+<span class="tok-fn">console.log</span>(greet());`,
+            preview: '<h3>Hello World!</h3><p style="color:var(--text-dim);font-size:14px;margin-top:8px;font-family:var(--font-mono)">→ Hello World!</p>',
+        },
+        py: {
+            code: `<span class="tok-kw">def</span> <span class="tok-fn">greet</span>():
+    <span class="tok-kw">return</span> <span class="tok-str">"Hello World!"</span>
+
+<span class="tok-fn">print</span>(greet())`,
+            preview: '<h3>Hello World!</h3><p style="color:var(--text-dim);font-size:14px;margin-top:8px;font-family:var(--font-mono)">Hello World!</p>',
+        },
+        sql: {
+            code: `<span class="tok-kw">SELECT</span> <span class="tok-str">'Hello World!'</span>
+<span class="tok-kw">AS</span> greeting;`,
+            preview: '<h3>Hello World!</h3><p style="color:var(--text-dim);font-size:14px;margin-top:8px;font-family:var(--font-mono)">greeting</p>',
+        },
+    };
+
+    const setLang = (lang) => {
+        const snip = snippets[lang] || snippets.html;
+        codeEl.innerHTML = snip.code;
+        preview.innerHTML = snip.preview;
+        tabs.forEach((tab) => {
+            const active = tab.dataset.lang === lang;
+            tab.classList.toggle('active', active);
+            tab.setAttribute('aria-selected', String(active));
+        });
+    };
+
+    tabs.forEach((tab) => {
+        tab.addEventListener('click', () => setLang(tab.dataset.lang));
+    });
+    setLang('html');
+}
 
 function setupLazyInit() {
     const sectionMap = new WeakMap();
-
     const lazyObserver = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
+        entries.forEach((entry) => {
             if (!entry.isIntersecting) return;
-            const fn = sectionMap.get(entry.target);
-            fn?.();
+            sectionMap.get(entry.target)?.();
             obs.unobserve(entry.target);
         });
     }, { rootMargin: '160px 0px' });
@@ -257,7 +320,7 @@ function setupLazyInit() {
     };
 
     register('projects', () => initProjects());
-    register('contact',  () => initContactForm());
+    register('contact', () => initContactForm());
 }
 
 // ─────────────────────────────────────────────
@@ -268,12 +331,11 @@ function initProjects() {
     if (projectsLoaded) return;
     projectsLoaded = true;
 
-    const grid   = document.getElementById('project-grid');
+    const grid = document.getElementById('project-grid');
     const loader = document.getElementById('projects-loader');
-    const errEl  = document.getElementById('projects-error');
+    const errEl = document.getElementById('projects-error');
     if (!grid) return;
 
-    // Save-data banner
     if (prefs.saveData && errEl) {
         if (loader) loader.style.display = 'none';
         errEl.innerHTML = 'Projects skipped to save data. <button type="button" class="retry-btn">Load anyway</button>';
@@ -296,25 +358,21 @@ async function fetchProjects(grid, loader, errEl) {
 
     try {
         let projects;
-
-        // Try API first
         try {
             projects = await jsonFetch('/api/github-projects', { credentials: 'same-origin' });
         } catch (_) {
-            // Fallback to static file
             const res = await fetch('/projects.json');
             if (!res.ok) throw new Error('Could not load projects.');
             const raw = await res.json();
-            projects = raw.map(p => ({
-                id:          p.id,
-                title:       p.title,
+            projects = raw.map((p) => ({
+                id: p.id,
+                title: p.title,
                 description: p.description,
-                githubUrl:   p.githubUrl,
-                stars:       0,
-                language:    p.technologies?.[0] || 'JavaScript',
+                githubUrl: p.githubUrl,
+                stars: 0,
+                language: p.technologies?.[0] || 'JavaScript',
             }));
         }
-
         renderProjects(projects, grid, loader);
     } catch (err) {
         console.error('[projects]', err);
@@ -333,62 +391,46 @@ async function fetchProjects(grid, loader, errEl) {
 function renderProjects(projects, grid, loader) {
     if (loader) loader.style.display = 'none';
     if (!grid) return;
-
     grid.innerHTML = '';
 
     if (!projects?.length) {
-        grid.innerHTML = '<p style="text-align:center;color:var(--text-3);grid-column:1/-1">No public projects found.</p>';
+        grid.innerHTML = '<p style="text-align:center;color:var(--text-dim);grid-column:1/-1">No public projects found.</p>';
         return;
     }
 
     const frag = document.createDocumentFragment();
-
-    projects.forEach(p => {
-        const card = document.createElement('div');
-        card.className = 'project-card';
-
-        const lang   = p.language
+    projects.forEach((p, i) => {
+        const card = document.createElement('article');
+        card.className = 'project-card reveal visible';
+        const lang = p.language
             ? `<span class="project-lang">${escapeHtml(p.language)}</span>`
             : '';
-
-        const stars  = `
-            <span class="project-stars">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                </svg>
-                ${p.stars ?? 0}
-            </span>`;
-
+        const num = String(i + 1).padStart(2, '0');
         card.innerHTML = `
             <div class="project-card-top">
-                <div class="project-repo-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"/>
+                <span class="project-lang">${num}</span>
+                <span class="project-stars">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                     </svg>
-                </div>
-                ${stars}
+                    ${p.stars ?? 0}
+                </span>
             </div>
             <h3>${escapeHtml(p.title)}</h3>
             <p class="project-desc">${escapeHtml(p.description)}</p>
             <div class="project-footer">
                 ${lang}
                 <a href="${escapeHtml(p.githubUrl)}" target="_blank" rel="noopener noreferrer" class="project-link">
-                    View on GitHub
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"/>
-                    </svg>
+                    View metrics ↗
                 </a>
             </div>`;
-
         frag.appendChild(card);
     });
-
     grid.appendChild(frag);
 }
 
 // ─────────────────────────────────────────────
-// Contact Form
+// Contact form
 // ─────────────────────────────────────────────
 
 function initContactForm() {
@@ -399,11 +441,10 @@ function initContactForm() {
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const submitBtn  = document.getElementById('form-submit-btn');
+        const submitBtn = document.getElementById('form-submit-btn');
         const responseEl = document.getElementById('form-response');
         if (!submitBtn || !responseEl) return;
 
-        // Loading state
         const originalHTML = submitBtn.innerHTML;
         submitBtn.disabled = true;
         submitBtn.innerHTML = `
@@ -411,14 +452,14 @@ function initContactForm() {
                 <circle cx="12" cy="12" r="10" stroke-opacity="0.25" stroke-width="4"/>
                 <path d="M12 2a10 10 0 0 1 10 10" stroke-width="4"/>
             </svg>
-            Sending…`;
+            <span class="btn-text">Sending…</span>`;
 
         responseEl.textContent = '';
         responseEl.className = 'form-response';
 
         const payload = {
-            name:    form.name.value.trim(),
-            email:   form.email.value.trim(),
+            name: form.name.value.trim(),
+            email: form.email.value.trim(),
             message: form.message.value.trim(),
         };
 
@@ -429,7 +470,7 @@ function initContactForm() {
                 body: JSON.stringify(payload),
                 credentials: 'same-origin',
             });
-            responseEl.textContent = result?.message || 'Message sent! I'll be in touch soon.';
+            responseEl.textContent = result?.message || "Message sent! I'll be in touch soon.";
             responseEl.classList.add('success');
             form.reset();
         } catch (err) {
@@ -442,30 +483,18 @@ function initContactForm() {
     });
 }
 
-// ─────────────────────────────────────────────
-// Utilities
-// ─────────────────────────────────────────────
-
 function updateFooterYear() {
     const el = document.getElementById('year');
     if (el) el.textContent = new Date().getFullYear();
 }
 
-/**
- * Fetch JSON with multi-base fallback (local → remote backend).
- * @param {string} path
- * @param {RequestInit} [options]
- * @returns {Promise<any>}
- */
 async function jsonFetch(path, options = {}) {
     let lastErr = null;
-
     for (const base of API_BASES) {
         const url = `${base}${path}`;
         try {
             const res = await fetch(url, options);
             const isJson = (res.headers.get('content-type') || '').includes('application/json');
-
             if (!res.ok) {
                 let msg = `Request failed (${res.status})`;
                 if (isJson) {
@@ -476,24 +505,15 @@ async function jsonFetch(path, options = {}) {
                 }
                 throw new Error(msg);
             }
-
-            if (!isJson) {
-                throw new Error('Invalid response from server.');
-            }
+            if (!isJson) throw new Error('Invalid response from server.');
             return res.json();
         } catch (err) {
             lastErr = err;
         }
     }
-
     throw lastErr ?? new Error('Request failed.');
 }
 
-/**
- * Minimal HTML escape for user-provided strings rendered via innerHTML.
- * @param {string} str
- * @returns {string}
- */
 function escapeHtml(str) {
     if (typeof str !== 'string') return '';
     return str
