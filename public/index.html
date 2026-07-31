@@ -275,7 +275,48 @@
                     <span class="section-index">05 — Technical Expertise</span>
                     <h2 class="section-title">Tools of the Trade</h2>
                 </div>
-                <div class="skills-grid">
+
+                <div class="skills-switch" role="tablist" aria-label="Skills view">
+                    <button class="skills-switch-btn active" data-view="orbit" role="tab" aria-selected="true">◐ Orbit</button>
+                    <button class="skills-switch-btn" data-view="grid" role="tab" aria-selected="false">▦ Grid</button>
+                </div>
+
+                <!-- Orbit / solar-system view -->
+                <div class="solar" id="solar-view">
+                    <div class="solar-stage">
+                        <div class="solar-core">
+                            <span class="solar-core-label">AJ</span>
+                            <span class="solar-core-sub">full_stack</span>
+                        </div>
+                        <div class="orbit" style="--size:34%;--dur:20s;--delay:-3s;--angle:20deg;--pc:var(--accent)">
+                            <span class="orbit-path"></span>
+                            <div class="orbit-arm"><button class="planet" type="button" aria-label="Languages, 92%"><span class="planet-inner"><span class="planet-dot"></span><span class="planet-name">Languages</span><span class="planet-lvl">92%</span></span></button></div>
+                        </div>
+                        <div class="orbit" style="--size:48%;--dur:26s;--delay:-10s;--angle:85deg;--pc:#6fe3d0">
+                            <span class="orbit-path"></span>
+                            <div class="orbit-arm"><button class="planet" type="button" aria-label="Frameworks, 90%"><span class="planet-inner"><span class="planet-dot"></span><span class="planet-name">Frameworks</span><span class="planet-lvl">90%</span></span></button></div>
+                        </div>
+                        <div class="orbit" style="--size:59%;--dur:32s;--delay:-6s;--angle:150deg;--pc:#8fe9f4">
+                            <span class="orbit-path"></span>
+                            <div class="orbit-arm"><button class="planet" type="button" aria-label="Databases, 85%"><span class="planet-inner"><span class="planet-dot"></span><span class="planet-name">Databases</span><span class="planet-lvl">85%</span></span></button></div>
+                        </div>
+                        <div class="orbit" style="--size:74%;--dur:40s;--delay:-22s;--angle:210deg;--pc:#5ab0e0">
+                            <span class="orbit-path"></span>
+                            <div class="orbit-arm"><button class="planet" type="button" aria-label="AI and Integration, 74%"><span class="planet-inner"><span class="planet-dot"></span><span class="planet-name">AI &amp; Integration</span><span class="planet-lvl">74%</span></span></button></div>
+                        </div>
+                        <div class="orbit" style="--size:88%;--dur:48s;--delay:-14s;--angle:285deg;--pc:#7c9cf0">
+                            <span class="orbit-path"></span>
+                            <div class="orbit-arm"><button class="planet" type="button" aria-label="Cloud and Tools, 70%"><span class="planet-inner"><span class="planet-dot"></span><span class="planet-name">Cloud &amp; Tools</span><span class="planet-lvl">70%</span></span></button></div>
+                        </div>
+                        <div class="orbit" style="--size:100%;--dur:56s;--delay:-34s;--angle:330deg;--pc:#4dd0b0">
+                            <span class="orbit-path"></span>
+                            <div class="orbit-arm"><button class="planet" type="button" aria-label="Engineering, 82%"><span class="planet-inner"><span class="planet-dot"></span><span class="planet-name">Engineering</span><span class="planet-lvl">82%</span></span></button></div>
+                        </div>
+                    </div>
+                    <p class="solar-hint">The core is me — each planet is a skill orbit. Hover a planet for detail.</p>
+                </div>
+
+                <div class="skills-grid hidden" id="grid-view">
                     <article class="skill-card" data-level="92">
                         <div class="skill-top"><span class="skill-idx">01</span><span class="skill-badge">Expert</span></div>
                         <h3 class="skill-name">Languages</h3>

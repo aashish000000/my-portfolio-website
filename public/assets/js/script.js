@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initReveal();
     initCounters();
     initSkillBars();
+    initSkillsView();
     initEditor();
     updateFooterYear();
     setupLazyInit();
@@ -210,6 +211,27 @@ function initSkillBars() {
         });
     }, { threshold: 0.3 });
     cards.forEach(c => obs.observe(c));
+}
+
+// ── Skills view toggle (Orbit / Grid) ──────────
+function initSkillsView() {
+    const btns  = document.querySelectorAll('.skills-switch-btn');
+    const solar = document.getElementById('solar-view');
+    const grid  = document.getElementById('grid-view');
+    if (!btns.length || !solar || !grid) return;
+
+    btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const view = btn.dataset.view;
+            btns.forEach(b => {
+                const on = b === btn;
+                b.classList.toggle('active', on);
+                b.setAttribute('aria-selected', String(on));
+            });
+            solar.classList.toggle('hidden', view !== 'orbit');
+            grid.classList.toggle('hidden', view !== 'grid');
+        });
+    });
 }
 
 // ── Code editor / terminal ─────────────────────

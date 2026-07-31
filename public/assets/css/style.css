@@ -349,6 +349,53 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .preview-badge { margin-top: 20px; font-family: var(--mono); font-size: 0.7rem; color: var(--accent-deep); border: 1px solid var(--accent-deep); border-radius: 999px; padding: 4px 12px; text-transform: uppercase; }
 
 /* ---------------- Skills ---------------- */
+/* View switch */
+.skills-switch { display: inline-flex; gap: 4px; padding: 4px; border: 1px solid var(--line); border-radius: 999px; margin-bottom: 40px; background: var(--surface); }
+.skills-switch-btn { font-family: var(--mono); font-size: 0.74rem; color: var(--muted); padding: 8px 18px; border-radius: 999px; transition: color 0.25s, background 0.25s; }
+.skills-switch-btn.active { color: var(--bg); background: var(--accent); font-weight: 600; }
+
+/* Solar / orbit view */
+.solar { display: flex; flex-direction: column; align-items: center; gap: 22px; }
+.solar-stage {
+    position: relative; width: min(600px, 90vw); aspect-ratio: 1; margin-inline: auto;
+    -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 72%, transparent 100%);
+    mask-image: radial-gradient(circle at 50% 50%, #000 72%, transparent 100%);
+}
+.solar-core {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 5;
+    width: clamp(76px, 15%, 108px); aspect-ratio: 1; border-radius: 50%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+    background: radial-gradient(circle at 35% 30%, var(--accent-soft), var(--accent) 45%, var(--accent-deep) 100%);
+    color: var(--bg); box-shadow: 0 0 60px var(--accent-glow), 0 0 120px var(--accent-glow); animation: corePulse 4s ease-in-out infinite;
+}
+@keyframes corePulse { 0%,100% { box-shadow: 0 0 40px var(--accent-glow), 0 0 90px var(--accent-glow); } 50% { box-shadow: 0 0 70px var(--accent-glow), 0 0 150px var(--accent-glow); } }
+.solar-core-label { font-family: var(--serif); font-size: 1.7rem; line-height: 1; font-weight: 700; }
+.solar-core-sub { font-family: var(--mono); font-size: 0.52rem; letter-spacing: 0.06em; opacity: 0.8; }
+
+.orbit { position: absolute; top: 50%; left: 50%; width: var(--size); height: var(--size); transform: translate(-50%, -50%); }
+.orbit-path { position: absolute; inset: 0; border: 1px dashed rgba(234, 229, 216, 0.10); border-radius: 50%; }
+.orbit-arm {
+    position: absolute; inset: 0; border-radius: 50%;
+    animation: ringRotate var(--dur) linear infinite; animation-delay: var(--delay); will-change: transform;
+}
+@keyframes ringRotate { to { transform: rotate(360deg); } }
+.planet {
+    position: absolute; top: -1px; left: 50%; transform: translate(-50%, -50%);
+}
+.planet-inner {
+    display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 8px; border-radius: 999px;
+    background: rgba(20, 20, 24, 0.85); border: 1px solid var(--line-2); backdrop-filter: blur(4px);
+    animation: ringRotate var(--dur) linear infinite reverse; animation-delay: var(--delay);
+    transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s; white-space: nowrap; cursor: pointer;
+}
+.planet-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--pc); box-shadow: 0 0 12px var(--pc); flex: none; }
+.planet-name { font-family: var(--mono); font-size: 0.72rem; color: var(--cream); }
+.planet-lvl { font-family: var(--mono); font-size: 0.66rem; color: var(--pc); font-weight: 600; max-width: 0; overflow: hidden; opacity: 0; transition: max-width 0.3s var(--ease), opacity 0.25s; }
+.planet:hover .planet-inner, .planet:focus-visible .planet-inner { border-color: var(--pc); box-shadow: 0 0 26px color-mix(in srgb, var(--pc) 40%, transparent); transform: scale(1.08); }
+.planet:hover .planet-lvl, .planet:focus-visible .planet-lvl { max-width: 44px; opacity: 1; }
+.solar-stage:hover .orbit-arm, .solar-stage:hover .planet-inner { animation-play-state: paused; }
+.solar-hint { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); text-align: center; max-width: 42ch; }
+
 .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .skill-card { background: linear-gradient(160deg, var(--surface-2), var(--surface)); border: 1px solid var(--line); border-radius: 16px; padding: 26px; transition: border-color 0.3s, transform 0.3s; }
 .skill-card:hover { border-color: var(--line-2); transform: translateY(-4px); }
@@ -423,4 +470,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
     * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
     .reveal { opacity: 1; transform: none; }
     .marquee-track { animation: none; }
+    /* Freeze the solar system at distinct static angles so planets don't stack */
+    .orbit-arm { animation: none !important; transform: rotate(var(--angle)) !important; }
+    .planet-inner { animation: none !important; transform: rotate(calc(-1 * var(--angle))) !important; }
+    .solar-core { animation: none !important; }
 }
