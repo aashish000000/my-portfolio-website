@@ -1033,22 +1033,31 @@ body::after {
 
 .constellation {
     position: relative;
-    width: min(100%, 560px);
+    width: min(100%, 520px);
     aspect-ratio: 1;
     margin-inline: auto;
-    border: 1px solid var(--border);
     border-radius: 50%;
     background:
-        radial-gradient(circle at center, rgba(46, 230, 168, 0.08) 0%, transparent 55%),
+        radial-gradient(circle at center, rgba(46, 230, 168, 0.07) 0%, transparent 52%),
         var(--charcoal);
+    border: 1px solid var(--border);
+    /* Room for labels sitting outside the orbit track */
     overflow: visible;
 }
 .constellation-glow {
     position: absolute;
-    inset: 12%;
+    inset: 18%;
     border-radius: 50%;
-    border: 1px dashed rgba(46, 230, 168, 0.18);
+    border: 1px dashed rgba(46, 230, 168, 0.14);
     pointer-events: none;
+}
+.constellation-orbit-track {
+    position: absolute;
+    inset: 14%;
+    border-radius: 50%;
+    border: 1px solid rgba(46, 230, 168, 0.22);
+    pointer-events: none;
+    box-shadow: inset 0 0 40px rgba(46, 230, 168, 0.04);
 }
 .constellation-svg {
     position: absolute;
@@ -1060,17 +1069,17 @@ body::after {
 }
 .constellation-svg line {
     stroke: var(--jade);
-    stroke-width: 1;
-    stroke-opacity: 0.28;
+    stroke-width: 0.7;
+    stroke-opacity: 0.22;
     stroke-linecap: round;
 }
 .constellation-svg line.trail {
-    stroke-opacity: 0.55;
-    filter: drop-shadow(0 0 4px rgba(46, 230, 168, 0.55));
+    stroke-opacity: 0.4;
+    filter: drop-shadow(0 0 3px rgba(46, 230, 168, 0.4));
 }
 .constellation-svg circle.hub-dot {
     fill: var(--jade);
-    opacity: 0.7;
+    opacity: 0.55;
 }
 
 .constellation-core {
@@ -1078,21 +1087,22 @@ body::after {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 110px;
-    height: 110px;
+    width: 96px;
+    height: 96px;
     border-radius: 50%;
     border: 1px solid var(--border);
-    background: rgba(5, 7, 11, 0.85);
+    background: color-mix(in srgb, var(--obsidian) 88%, transparent);
     display: grid;
     place-items: center;
     align-content: center;
     gap: 2px;
-    z-index: 3;
-    box-shadow: 0 0 40px rgba(46, 230, 168, 0.18);
+    z-index: 4;
+    box-shadow: 0 0 36px rgba(46, 230, 168, 0.16);
+    pointer-events: none;
 }
 .constellation-core strong {
     font-family: var(--font-display);
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 400;
     color: var(--jade);
     letter-spacing: 0.08em;
@@ -1107,29 +1117,33 @@ body::after {
 .core-ring,
 .core-ring-2 {
     position: absolute;
-    inset: -10px;
+    inset: -8px;
     border-radius: 50%;
-    border: 1px solid rgba(46, 230, 168, 0.25);
+    border: 1px solid rgba(46, 230, 168, 0.22);
     animation: corePulse 4s ease-in-out infinite;
 }
 .core-ring-2 {
-    inset: -22px;
-    border-color: rgba(46, 230, 168, 0.12);
+    inset: -18px;
+    border-color: rgba(46, 230, 168, 0.1);
     animation-delay: 1.2s;
 }
 @keyframes corePulse {
     0%, 100% { transform: scale(1); opacity: 0.7; }
-    50% { transform: scale(1.06); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 1; }
 }
 
 .constellation-ring {
     position: absolute;
     inset: 0;
-    animation: orbitSpin 60s linear infinite;
-    transform-origin: center;
+    animation: orbitSpin 70s linear infinite;
+    transform-origin: center center;
 }
 .constellation.is-paused .constellation-ring,
 .constellation.reduce-motion .constellation-ring {
+    animation-play-state: paused;
+}
+.constellation.is-paused .c-node-inner,
+.constellation.reduce-motion .c-node-inner {
     animation-play-state: paused;
 }
 @keyframes orbitSpin {
@@ -1137,87 +1151,73 @@ body::after {
     to { transform: rotate(360deg); }
 }
 
+/* Nodes are placed with left/top % via JS — % is relative to the ring, so spacing stays correct */
 .c-node {
-    --radius: 42%;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 120px;
-    min-height: 72px;
+    width: 108px;
     margin: 0;
-    padding: 10px;
+    padding: 0;
     border: 0;
     background: transparent;
     color: var(--text);
-    transform:
-        rotate(calc(var(--i) * 60deg))
-        translateY(calc(var(--radius) * -1))
-        rotate(calc(var(--i) * -60deg));
-    transform-origin: center;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+.c-node-inner {
     display: grid;
     justify-items: center;
-    align-content: center;
     gap: 8px;
-    z-index: 2;
-    transition: filter 0.3s;
-}
-/* Keep labels readable while the ring rotates */
-.constellation-ring .c-node-label,
-.constellation-ring .c-node-orb {
-    animation: orbitSpin 60s linear infinite reverse;
-}
-.constellation.is-paused .c-node-label,
-.constellation.is-paused .c-node-orb,
-.constellation.reduce-motion .c-node-label,
-.constellation.reduce-motion .c-node-orb {
-    animation-play-state: paused;
+    /* Counter-rotate so labels stay upright while the ring spins */
+    animation: orbitSpin 70s linear infinite reverse;
 }
 .c-node-orb {
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
     background: radial-gradient(circle at 35% 30%, var(--jade-light), var(--jade) 55%, var(--jade-dark));
     box-shadow:
-        0 0 0 6px rgba(46, 230, 168, 0.08),
-        0 0 18px rgba(46, 230, 168, 0.55);
+        0 0 0 5px rgba(46, 230, 168, 0.08),
+        0 0 14px rgba(46, 230, 168, 0.5);
     position: relative;
 }
 .c-node-orb::after {
     content: "";
     position: absolute;
-    inset: -10px;
+    inset: -8px;
     border-radius: 50%;
-    border: 1px solid rgba(46, 230, 168, 0.2);
+    border: 1px solid rgba(46, 230, 168, 0.25);
     opacity: 0;
     transition: opacity 0.3s, transform 0.3s;
 }
 .c-node-label {
-    font-size: 11px;
-    letter-spacing: 0.12em;
+    font-size: 10px;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--text-dim);
     white-space: nowrap;
-    padding: 4px 8px;
+    padding: 5px 10px;
     border-radius: 999px;
-    background: rgba(5, 7, 11, 0.65);
-    border: 1px solid transparent;
-    transition: color 0.25s, border-color 0.25s, background 0.25s;
+    background: color-mix(in srgb, var(--obsidian) 82%, transparent);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(6px);
+    transition: color 0.25s, border-color 0.25s, background 0.25s, box-shadow 0.25s;
 }
 .c-node:hover .c-node-label,
 .c-node[aria-pressed="true"] .c-node-label {
     color: var(--jade);
-    border-color: var(--border);
-    background: rgba(46, 230, 168, 0.08);
+    border-color: rgba(46, 230, 168, 0.45);
+    background: rgba(46, 230, 168, 0.1);
+    box-shadow: 0 0 16px rgba(46, 230, 168, 0.15);
 }
 .c-node:hover .c-node-orb::after,
 .c-node[aria-pressed="true"] .c-node-orb::after {
     opacity: 1;
-    transform: scale(1.15);
+    transform: scale(1.1);
 }
 .c-node[aria-pressed="true"] .c-node-orb {
     box-shadow:
-        0 0 0 8px rgba(46, 230, 168, 0.12),
-        0 0 28px rgba(46, 230, 168, 0.75);
+        0 0 0 7px rgba(46, 230, 168, 0.12),
+        0 0 22px rgba(46, 230, 168, 0.7);
 }
 
 .constellation-detail {
@@ -1487,6 +1487,5 @@ footer {
     }
     .marquee-track { animation: none; }
     .constellation-ring,
-    .constellation-ring .c-node-label,
-    .constellation-ring .c-node-orb { animation: none !important; }
+    .c-node-inner { animation: none !important; }
 }

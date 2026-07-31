@@ -363,16 +363,26 @@ function initConstellation() {
 
     if (prefs.reduceMotion) constellation.classList.add('reduce-motion');
 
+    // Place nodes evenly on a true circle (left/top % is relative to the ring)
+    const ORBIT_R = 36; // percent from center — keeps labels clear of the hub
+    const count = nodes.length;
+    nodes.forEach((node, i) => {
+        const angle = ((i / count) * Math.PI * 2) - Math.PI / 2;
+        const x = 50 + ORBIT_R * Math.cos(angle);
+        const y = 50 + ORBIT_R * Math.sin(angle);
+        node.style.left = `${x}%`;
+        node.style.top = `${y}%`;
+    });
+
     // Draw constellation network once (SVG lives inside the rotating ring)
     const NS = 'http://www.w3.org/2000/svg';
     const cx = 50;
     const cy = 50;
-    const radius = 42;
     const points = nodes.map((_, i) => {
-        const angle = ((i * 60) - 90) * (Math.PI / 180);
+        const angle = ((i / count) * Math.PI * 2) - Math.PI / 2;
         return {
-            x: cx + radius * Math.cos(angle),
-            y: cy + radius * Math.sin(angle),
+            x: cx + ORBIT_R * Math.cos(angle),
+            y: cy + ORBIT_R * Math.sin(angle),
         };
     });
 
@@ -394,20 +404,10 @@ function initConstellation() {
         rim.setAttribute('y2', String(next.y));
         frag.appendChild(rim);
 
-        // Chord to +2 for denser constellation feel
-        const skip = points[(i + 2) % points.length];
-        const chord = document.createElementNS(NS, 'line');
-        chord.setAttribute('x1', String(p.x));
-        chord.setAttribute('y1', String(p.y));
-        chord.setAttribute('x2', String(skip.x));
-        chord.setAttribute('y2', String(skip.y));
-        chord.style.strokeOpacity = '0.14';
-        frag.appendChild(chord);
-
         const dot = document.createElementNS(NS, 'circle');
         dot.setAttribute('cx', String(p.x));
         dot.setAttribute('cy', String(p.y));
-        dot.setAttribute('r', '1.2');
+        dot.setAttribute('r', '1.1');
         dot.classList.add('hub-dot');
         frag.appendChild(dot);
     });
@@ -415,10 +415,10 @@ function initConstellation() {
     const hub = document.createElementNS(NS, 'circle');
     hub.setAttribute('cx', String(cx));
     hub.setAttribute('cy', String(cy));
-    hub.setAttribute('r', '1.6');
+    hub.setAttribute('r', '1.4');
     hub.classList.add('hub-dot');
     frag.appendChild(hub);
-    svg.appendChild(frag);
+    svg.replaceChildren(frag);
 
     const showDetail = (id) => {
         const data = STACK_DOMAINS[id];
@@ -439,7 +439,6 @@ function initConstellation() {
         }
         if (meter) {
             meter.style.setProperty('--p', `${data.pct}%`);
-            // retrigger width transition
             meter.style.width = '0';
             requestAnimationFrame(() => {
                 meter.style.width = `${data.pct}%`;

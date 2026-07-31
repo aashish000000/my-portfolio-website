@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/style.css?v=20260731-3">
+    <link rel="stylesheet" href="/assets/css/style.css?v=20260731-4">
 </head>
 <body data-api-base="https://aashish-portfolio-backend.onrender.com">
 
@@ -369,31 +369,44 @@
                     <div id="stack-orbit" class="stack-orbit reveal" data-active="true">
                         <div class="constellation" id="constellation">
                             <div class="constellation-glow" aria-hidden="true"></div>
+                            <div class="constellation-orbit-track" aria-hidden="true"></div>
                             <div class="constellation-ring" id="constellation-ring">
                                 <svg class="constellation-svg" id="constellation-svg" viewBox="0 0 100 100" aria-hidden="true"></svg>
-                                <button type="button" class="c-node" data-id="languages" style="--i:0" aria-pressed="true">
-                                    <span class="c-node-orb"></span>
-                                    <span class="c-node-label">Languages</span>
+                                <button type="button" class="c-node" data-id="languages" data-i="0" aria-pressed="true">
+                                    <span class="c-node-inner">
+                                        <span class="c-node-orb"></span>
+                                        <span class="c-node-label">Languages</span>
+                                    </span>
                                 </button>
-                                <button type="button" class="c-node" data-id="frameworks" style="--i:1" aria-pressed="false">
-                                    <span class="c-node-orb"></span>
-                                    <span class="c-node-label">Frameworks</span>
+                                <button type="button" class="c-node" data-id="frameworks" data-i="1" aria-pressed="false">
+                                    <span class="c-node-inner">
+                                        <span class="c-node-orb"></span>
+                                        <span class="c-node-label">Frameworks</span>
+                                    </span>
                                 </button>
-                                <button type="button" class="c-node" data-id="databases" style="--i:2" aria-pressed="false">
-                                    <span class="c-node-orb"></span>
-                                    <span class="c-node-label">Databases</span>
+                                <button type="button" class="c-node" data-id="databases" data-i="2" aria-pressed="false">
+                                    <span class="c-node-inner">
+                                        <span class="c-node-orb"></span>
+                                        <span class="c-node-label">Databases</span>
+                                    </span>
                                 </button>
-                                <button type="button" class="c-node" data-id="ai" style="--i:3" aria-pressed="false">
-                                    <span class="c-node-orb"></span>
-                                    <span class="c-node-label">AI &amp; Product</span>
+                                <button type="button" class="c-node" data-id="ai" data-i="3" aria-pressed="false">
+                                    <span class="c-node-inner">
+                                        <span class="c-node-orb"></span>
+                                        <span class="c-node-label">AI &amp; Product</span>
+                                    </span>
                                 </button>
-                                <button type="button" class="c-node" data-id="engineering" style="--i:4" aria-pressed="false">
-                                    <span class="c-node-orb"></span>
-                                    <span class="c-node-label">Engineering</span>
+                                <button type="button" class="c-node" data-id="engineering" data-i="4" aria-pressed="false">
+                                    <span class="c-node-inner">
+                                        <span class="c-node-orb"></span>
+                                        <span class="c-node-label">Engineering</span>
+                                    </span>
                                 </button>
-                                <button type="button" class="c-node" data-id="craft" style="--i:5" aria-pressed="false">
-                                    <span class="c-node-orb"></span>
-                                    <span class="c-node-label">Craft</span>
+                                <button type="button" class="c-node" data-id="craft" data-i="5" aria-pressed="false">
+                                    <span class="c-node-inner">
+                                        <span class="c-node-orb"></span>
+                                        <span class="c-node-label">Craft</span>
+                                    </span>
                                 </button>
                             </div>
                             <div class="constellation-core" aria-hidden="true">
@@ -589,6 +602,6 @@
         </footer>
     </div>
 
-    <script type="module" src="/assets/js/script.js?v=20260731-3"></script>
+    <script type="module" src="/assets/js/script.js?v=20260731-4"></script>
 </body>
 </html>
