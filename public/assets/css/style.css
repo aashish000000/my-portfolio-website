@@ -1526,7 +1526,16 @@ body::after {
     border-radius: 50%;
     border: 0;
     background: transparent;
+    /* Rings must not steal clicks from inner planets */
+    pointer-events: none;
+    z-index: 2;
 }
+.orbit-ring[data-orbit="1"] { z-index: 8; }
+.orbit-ring[data-orbit="2"] { z-index: 7; }
+.orbit-ring[data-orbit="3"] { z-index: 6; }
+.orbit-ring[data-orbit="4"] { z-index: 5; }
+.orbit-ring[data-orbit="5"] { z-index: 4; }
+.orbit-ring[data-orbit="6"] { z-index: 3; }
 .orbit-svg {
     position: absolute;
     inset: 0;
@@ -1596,7 +1605,7 @@ body::after {
     width: max-content;
     height: max-content;
     margin: 0;
-    padding: 0;
+    padding: 12px;
     border: 0;
     background: transparent;
     color: var(--ss-text);
@@ -1606,6 +1615,8 @@ body::after {
     animation: moveOrbit var(--dur) linear infinite;
     animation-delay: var(--delay);
     z-index: 3;
+    pointer-events: auto;
+    cursor: pointer;
 }
 .planet-spin {
     display: grid;
