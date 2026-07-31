@@ -668,17 +668,112 @@ function initSolarSystem() {
     const orbit = document.getElementById('stack-orbit');
     const grid = document.getElementById('stack-grid');
     const toggleBtns = document.querySelectorAll('.view-toggle-btn');
+    const pop = document.getElementById('planet-pop');
+    const popTitle = document.getElementById('planet-pop-title');
+    const popKicker = document.getElementById('planet-pop-kicker');
+    const popLevel = document.getElementById('planet-pop-level');
+    const popChips = document.getElementById('planet-pop-chips');
+    const popMeter = document.getElementById('planet-pop-meter');
+    const popClose = document.getElementById('planet-pop-close');
     if (!system || !planets.length) return;
 
     if (prefs.reduceMotion) system.classList.add('reduce-motion');
 
-    // Highlight only — no side panel; orbits never pause on hover
-    planets.forEach((planet) => {
-        planet.addEventListener('click', () => {
-            planets.forEach((p) => {
-                p.setAttribute('aria-pressed', String(p === planet));
-            });
+    const PLANET_PAYLOAD = {
+        languages: {
+            title: 'Languages',
+            level: 'Expert · 88%',
+            pct: 88,
+            items: ['Python', 'Java', 'JavaScript', 'TypeScript', 'C++', 'SQL', 'PHP'],
+        },
+        frameworks: {
+            title: 'Frameworks',
+            level: 'Advanced · 84%',
+            pct: 84,
+            items: ['Next.js', 'Node.js', 'Express', 'ASP.NET Core', 'Tkinter'],
+        },
+        databases: {
+            title: 'Databases',
+            level: 'Proficient · 78%',
+            pct: 78,
+            items: ['MySQL', 'MongoDB', 'NeDB'],
+        },
+        ai: {
+            title: 'AI & Product',
+            level: 'Advanced · 80%',
+            pct: 80,
+            items: ['OpenAI API', 'Chatbots', 'Photo Recognition', 'Analytics'],
+        },
+        engineering: {
+            title: 'Engineering',
+            level: 'Expert · 86%',
+            pct: 86,
+            items: ['REST APIs', 'WebSockets', 'System Design', 'Accessibility'],
+        },
+        craft: {
+            title: 'Craft',
+            level: 'Advanced · 82%',
+            pct: 82,
+            items: ['UI/UX', 'Design Systems', 'Performance', 'Docs'],
+        },
+    };
+
+    const closePop = () => {
+        if (!pop) return;
+        pop.classList.remove('is-open');
+        pop.hidden = true;
+        planets.forEach((p) => p.setAttribute('aria-pressed', 'false'));
+    };
+
+    const openPop = (id) => {
+        const data = PLANET_PAYLOAD[id];
+        if (!data || !pop) return;
+        planets.forEach((p) => {
+            p.setAttribute('aria-pressed', String(p.dataset.id === id));
         });
+        if (popKicker) popKicker.textContent = 'Planet payload';
+        if (popTitle) popTitle.textContent = data.title;
+        if (popLevel) popLevel.textContent = data.level;
+        if (popChips) {
+            popChips.innerHTML = data.items.map((item) => `<span class="chip">${item}</span>`).join('');
+        }
+        if (popMeter) {
+            popMeter.style.width = '0%';
+            requestAnimationFrame(() => {
+                popMeter.style.width = `${data.pct}%`;
+            });
+        }
+        pop.hidden = false;
+        // force reflow so transition plays
+        // eslint-disable-next-line no-unused-expressions
+        pop.offsetHeight;
+        pop.classList.add('is-open');
+    };
+
+    planets.forEach((planet) => {
+        planet.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = planet.dataset.id;
+            if (planet.getAttribute('aria-pressed') === 'true' && pop && !pop.hidden) {
+                closePop();
+                return;
+            }
+            openPop(id);
+        });
+    });
+
+    popClose?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closePop();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && pop && !pop.hidden) closePop();
+    });
+
+    orbit?.addEventListener('click', (e) => {
+        if (e.target.closest('.planet') || e.target.closest('#planet-pop')) return;
+        if (pop && !pop.hidden) closePop();
     });
 
     const setView = (view) => {
@@ -696,6 +791,7 @@ function initSolarSystem() {
             btn.classList.toggle('active', active);
             btn.setAttribute('aria-pressed', String(active));
         });
+        if (!isOrbit) closePop();
     };
 
     toggleBtns.forEach((btn) => {

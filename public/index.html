@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/style.css?v=20260731-12">
+    <link rel="stylesheet" href="/assets/css/style.css?v=20260731-13">
 </head>
 <body>
 
@@ -282,14 +282,14 @@
             </section>
 
             <!-- STACK — full-screen solar system -->
-            <section id="stack" class="solar-section" aria-label="Tools of the Trade">
+            <section id="stack" class="solar-section" aria-label="Stack Orbit">
                 <div class="solar-stars" id="solar-stars" aria-hidden="true"></div>
 
                 <header class="solar-hud">
                     <div class="solar-hud-copy">
-                        <span class="section-kicker">Technical Expertise</span>
-                        <h2 class="section-title">Tools of the Trade</h2>
-                        <p class="solar-hud-sub">A living solar system of my stack — planets keep orbiting as you explore.</p>
+                        <span class="section-kicker">Skill System</span>
+                        <h2 class="section-title">Stack <em>Orbit</em></h2>
+                        <p class="solar-hud-sub">Click any planet to inspect what it carries — orbits keep moving.</p>
                     </div>
                     <div class="view-toggle" role="group" aria-label="Stack view mode">
                         <button type="button" class="view-toggle-btn active" data-view="orbit" aria-pressed="true">Solar</button>
@@ -308,7 +308,7 @@
                         </div>
 
                         <div class="orbit-ring" style="--rx:18vmin; --ry:8vmin; --dur:16s; --delay:-2s;" data-orbit="1">
-                            <button type="button" class="planet planet-mercury" data-id="languages" aria-pressed="true">
+                            <button type="button" class="planet planet-mercury" data-id="languages" aria-pressed="false" aria-haspopup="dialog" aria-controls="planet-pop">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
                                     <span class="planet-label">Languages</span>
@@ -316,7 +316,7 @@
                             </button>
                         </div>
                         <div class="orbit-ring" style="--rx:34vmin; --ry:15vmin; --dur:24s; --delay:-7s;" data-orbit="2">
-                            <button type="button" class="planet planet-venus" data-id="frameworks" aria-pressed="false">
+                            <button type="button" class="planet planet-venus" data-id="frameworks" aria-pressed="false" aria-haspopup="dialog" aria-controls="planet-pop">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
                                     <span class="planet-label">Frameworks</span>
@@ -324,7 +324,7 @@
                             </button>
                         </div>
                         <div class="orbit-ring" style="--rx:50vmin; --ry:22vmin; --dur:32s; --delay:-12s;" data-orbit="3">
-                            <button type="button" class="planet planet-earth" data-id="databases" aria-pressed="false">
+                            <button type="button" class="planet planet-earth" data-id="databases" aria-pressed="false" aria-haspopup="dialog" aria-controls="planet-pop">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
                                     <span class="planet-label">Databases</span>
@@ -332,7 +332,7 @@
                             </button>
                         </div>
                         <div class="orbit-ring" style="--rx:66vmin; --ry:29vmin; --dur:42s; --delay:-4s;" data-orbit="4">
-                            <button type="button" class="planet planet-mars" data-id="ai" aria-pressed="false">
+                            <button type="button" class="planet planet-mars" data-id="ai" aria-pressed="false" aria-haspopup="dialog" aria-controls="planet-pop">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
                                     <span class="planet-label">AI &amp; Product</span>
@@ -340,7 +340,7 @@
                             </button>
                         </div>
                         <div class="orbit-ring" style="--rx:82vmin; --ry:36vmin; --dur:54s; --delay:-18s;" data-orbit="5">
-                            <button type="button" class="planet planet-jupiter" data-id="engineering" aria-pressed="false">
+                            <button type="button" class="planet planet-jupiter" data-id="engineering" aria-pressed="false" aria-haspopup="dialog" aria-controls="planet-pop">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
                                     <span class="planet-label">Engineering</span>
@@ -348,7 +348,7 @@
                             </button>
                         </div>
                         <div class="orbit-ring" style="--rx:98vmin; --ry:44vmin; --dur:70s; --delay:-28s;" data-orbit="6">
-                            <button type="button" class="planet planet-saturn" data-id="craft" aria-pressed="false">
+                            <button type="button" class="planet planet-saturn" data-id="craft" aria-pressed="false" aria-haspopup="dialog" aria-controls="planet-pop">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
                                     <span class="planet-ringlet" aria-hidden="true"></span>
@@ -356,6 +356,20 @@
                                 </span>
                             </button>
                         </div>
+                    </div>
+
+                    <div class="planet-pop" id="planet-pop" hidden role="dialog" aria-modal="false" aria-labelledby="planet-pop-title">
+                        <div class="planet-pop-head">
+                            <div>
+                                <p class="planet-pop-kicker" id="planet-pop-kicker">Payload</p>
+                                <h3 class="planet-pop-title" id="planet-pop-title">—</h3>
+                            </div>
+                            <button type="button" class="planet-pop-close" id="planet-pop-close" aria-label="Close planet details">✕</button>
+                        </div>
+                        <p class="planet-pop-level" id="planet-pop-level"></p>
+                        <div class="planet-pop-chips" id="planet-pop-chips"></div>
+                        <div class="planet-pop-meter"><span id="planet-pop-meter"></span></div>
+                        <p class="planet-pop-hint">Click another planet or press Esc</p>
                     </div>
                 </div>
 
@@ -513,6 +527,6 @@
         </footer>
     </div>
 
-    <script type="module" src="/assets/js/script.js?v=20260731-12"></script>
+    <script type="module" src="/assets/js/script.js?v=20260731-13"></script>
 </body>
 </html>
