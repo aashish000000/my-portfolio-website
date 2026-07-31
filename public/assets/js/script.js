@@ -132,7 +132,7 @@ function initCursor() {
     };
     loop();
 
-    const hoverables = 'a, button, input, textarea, .project-card, .exp-card, .stack-card, .term-tab';
+    const hoverables = 'a, button, input, textarea, .project-card, .exp-rail-item, .stack-card, .term-tab';
     document.addEventListener('mouseover', (e) => {
         if (e.target.closest(hoverables)) {
             dot.classList.add('hover');
@@ -272,273 +272,291 @@ function initMetrics() {
 }
 
 // ─────────────────────────────────────────────
-// Experience modal (Sabin-style metrics)
+// Experience — Mission Log / Signal Deck
 // ─────────────────────────────────────────────
 
-const EXPERIENCE = {
-    intern: {
+const EXPERIENCE = [
+    {
+        id: 'intern',
+        year: '2026',
+        short: 'Summer Intern',
+        org: 'Kean University',
         title: 'Undergraduate Summer Intern',
-        sub: 'Kean University · Jersey City, NJ · May–Jul 2026',
-        stats: [
-            { num: '10', label: 'Week Cohort' },
-            { num: '1', label: 'Capstone Talk' },
-            { num: '100%', label: 'Paid Program' },
+        meta: 'Kean University · Jersey City, NJ · May–Jul 2026',
+        file: 'kean-intern',
+        summary: 'Selected for a paid summer cohort: workshops, faculty mentorship, and a capstone presentation that ties research to shipped work.',
+        telemetry: [
+            { label: 'Duration', value: '10 wks' },
+            { label: 'Mode', value: 'Paid' },
+            { label: 'Output', value: 'Capstone' },
         ],
-        journeyLabel: 'Journey',
-        journey: [
-            { title: 'Select', text: 'Accepted into the Undergraduate Summer Internship Program.', done: true },
-            { title: 'Build', text: 'Workshops, faculty mentorship, and hands-on product work.', done: true },
-            { title: 'Ship', text: 'Capstone presentation with the summer cohort.', done: true },
-            { title: 'Next', text: 'Carry lessons into full-time engineering roles.', done: false },
+        log: [
+            { tag: 'SELECT', text: 'Accepted into the Undergraduate Summer Internship Program.' },
+            { tag: 'BUILD', text: 'Workshops + mentorship folded into hands-on product work.' },
+            { tag: 'SHIP', text: 'Presented capstone work with the summer cohort.' },
+            { tag: 'NEXT', text: 'Carry systems thinking into full-time engineering.' },
         ],
-        ringLabel: 'Focus Mix',
-        rings: [
-            { label: 'Workshops', pct: 35, color: '#2ee6a8' },
-            { label: 'Mentorship', pct: 30, color: '#7ff5cb' },
-            { label: 'Capstone', pct: 35, color: '#0f8f68' },
+        signals: [
+            { name: 'Workshops', pct: 35 },
+            { name: 'Mentorship', pct: 30 },
+            { name: 'Capstone', pct: 35 },
         ],
-        tags: ['Internship', 'Mentorship', 'Workshops', 'Presentation', 'Collaboration'],
+        tags: ['Internship', 'Mentorship', 'Workshops', 'Presentation'],
     },
-    ta: {
+    {
+        id: 'ta',
+        year: '23–24',
+        short: 'Teaching Assistant',
+        org: 'Caldwell University',
         title: 'Teaching Assistant',
-        sub: 'Caldwell University · Caldwell, NJ · Sep 2023 – May 2024',
-        stats: [
-            { num: '40+', label: 'Students Helped' },
-            { num: '2', label: 'Semesters' },
-            { num: 'CS', label: 'Lab Support' },
+        meta: 'Caldwell University · Caldwell, NJ · Sep 2023 – May 2024',
+        file: 'ta-labs',
+        summary: 'Tutored full-stack fundamentals, kept CS labs healthy, and turned confusing bugs into teachable moments.',
+        telemetry: [
+            { label: 'Reach', value: '40+' },
+            { label: 'Terms', value: '2' },
+            { label: 'Domain', value: 'CS Labs' },
         ],
-        journeyLabel: 'Journey',
-        journey: [
-            { title: 'Tutor', text: 'Guided peers through full-stack fundamentals.', done: true },
-            { title: 'Labs', text: 'Set up and troubleshot department lab technology.', done: true },
-            { title: 'Support', text: 'Kept sessions running smoothly under load.', done: true },
-            { title: 'Grow', text: 'Sharpened communication and debugging craft.', done: false },
+        log: [
+            { tag: 'TUTOR', text: 'Guided peers through full-stack fundamentals.' },
+            { tag: 'OPS', text: 'Set up and troubleshot lab technology under load.' },
+            { tag: 'CLEAR', text: 'Kept sessions moving when tooling failed.' },
+            { tag: 'CRAFT', text: 'Leveled up debugging + explanation skills.' },
         ],
-        ringLabel: 'Time Split',
-        rings: [
-            { label: 'Tutoring', pct: 50, color: '#2ee6a8' },
-            { label: 'Lab Ops', pct: 30, color: '#7ff5cb' },
-            { label: 'Prep', pct: 20, color: '#0f8f68' },
+        signals: [
+            { name: 'Tutoring', pct: 50 },
+            { name: 'Lab Ops', pct: 30 },
+            { name: 'Prep', pct: 20 },
         ],
-        tags: ['Teaching', 'Full Stack', 'Labs', 'Debugging', 'Mentorship'],
+        tags: ['Teaching', 'Full Stack', 'Labs', 'Debugging'],
     },
-    ra: {
+    {
+        id: 'ra',
+        year: '2024',
+        short: 'Resident Assistant',
+        org: 'Caldwell University',
         title: 'Resident Assistant',
-        sub: 'Caldwell University · Caldwell, NJ · 2024',
-        stats: [
-            { num: '60+', label: 'Residents' },
-            { num: '24/7', label: 'On-Call Mindset' },
-            { num: 'Safe', label: 'Community First' },
+        meta: 'Caldwell University · Caldwell, NJ · 2024',
+        file: 'ra-floor',
+        summary: 'Ran community on the floor — engagement, conflict resolution, and a safe inclusive living culture.',
+        telemetry: [
+            { label: 'Residents', value: '60+' },
+            { label: 'Duty', value: 'On-call' },
+            { label: 'Focus', value: 'Community' },
         ],
-        journeyLabel: 'Journey',
-        journey: [
-            { title: 'Engage', text: 'Built inclusive community programming.', done: true },
-            { title: 'Resolve', text: 'Mediated conflicts with clear policy guidance.', done: true },
-            { title: 'Lead', text: 'Modeled accountability and care on the floor.', done: true },
-            { title: 'Carry', text: 'Leadership habits that transfer to teams.', done: false },
+        log: [
+            { tag: 'ENGAGE', text: 'Programmed inclusive community events.' },
+            { tag: 'RESOLVE', text: 'Mediated conflicts with clear policy guidance.' },
+            { tag: 'LEAD', text: 'Modeled accountability and care on the floor.' },
+            { tag: 'TRANSFER', text: 'Leadership habits that map to product teams.' },
         ],
-        ringLabel: 'Role Mix',
-        rings: [
-            { label: 'Community', pct: 40, color: '#2ee6a8' },
-            { label: 'Conflict', pct: 25, color: '#7ff5cb' },
-            { label: 'Ops', pct: 35, color: '#0f8f68' },
+        signals: [
+            { name: 'Community', pct: 40 },
+            { name: 'Conflict', pct: 25 },
+            { name: 'Ops', pct: 35 },
         ],
-        tags: ['Leadership', 'Community', 'Conflict Resolution', 'Policy', 'Empathy'],
+        tags: ['Leadership', 'Community', 'Policy', 'Empathy'],
     },
-    mentor: {
+    {
+        id: 'mentor',
+        year: '2024',
+        short: 'Tech Mentor',
+        org: 'Robotics Club',
         title: 'Technical Mentor, Robotics',
-        sub: 'Caldwell University · Caldwell, NJ · Spring 2024',
-        stats: [
-            { num: 'Pi', label: 'Raspberry Builds' },
-            { num: 'STM', label: '32 Firmware' },
-            { num: 'Hands', label: 'On Mentoring' },
+        meta: 'Caldwell University · Spring 2024',
+        file: 'robotics-mentor',
+        summary: 'Mentored juniors on Raspberry Pi and STM32 — from blinky boards to competition-ready robots.',
+        telemetry: [
+            { label: 'Stack', value: 'Pi/STM' },
+            { label: 'Mode', value: 'Hands-on' },
+            { label: 'Goal', value: 'Compete' },
         ],
-        journeyLabel: 'Journey',
-        journey: [
-            { title: 'Teach', text: 'Introduced Raspberry Pi and STM32 workflows.', done: true },
-            { title: 'Assemble', text: 'Guided robot assembly and bring-up.', done: true },
-            { title: 'Debug', text: 'Pair-debugged sensors, power, and code.', done: true },
-            { title: 'Compete', text: 'Helped juniors hit competition milestones.', done: false },
+        log: [
+            { tag: 'TEACH', text: 'Introduced Pi + STM32 bring-up workflows.' },
+            { tag: 'ASSEMBLE', text: 'Guided mechanical + electrical assembly.' },
+            { tag: 'DEBUG', text: 'Pair-debugged sensors, power, and firmware.' },
+            { tag: 'SHIP', text: 'Helped juniors hit competition milestones.' },
         ],
-        ringLabel: 'Stack Mix',
-        rings: [
-            { label: 'Embedded', pct: 45, color: '#2ee6a8' },
-            { label: 'Hardware', pct: 30, color: '#7ff5cb' },
-            { label: 'Mentoring', pct: 25, color: '#0f8f68' },
+        signals: [
+            { name: 'Embedded', pct: 45 },
+            { name: 'Hardware', pct: 30 },
+            { name: 'Mentoring', pct: 25 },
         ],
-        tags: ['Raspberry Pi', 'STM32', 'C/C++', 'Robotics', 'Mentoring'],
+        tags: ['Raspberry Pi', 'STM32', 'C/C++', 'Robotics'],
     },
-    redcross: {
+    {
+        id: 'redcross',
+        year: '20–21',
+        short: 'Disaster Response',
+        org: 'Red Cross Society',
         title: 'Disaster Response Team',
-        sub: 'Red Cross Society · Kathmandu, Nepal · Jul 2020 – Dec 2021',
-        stats: [
-            { num: '18', label: 'Months Active' },
-            { num: 'Field', label: 'Relief Ops' },
-            { num: 'Aid', label: 'Distribution' },
+        meta: 'Red Cross Society · Kathmandu, Nepal · Jul 2020 – Dec 2021',
+        file: 'red-cross',
+        summary: 'Field relief during floods and earthquakes — logistics, distribution, and calm under pressure.',
+        telemetry: [
+            { label: 'Active', value: '18 mo' },
+            { label: 'Theater', value: 'Field' },
+            { label: 'Mission', value: 'Aid' },
         ],
-        journeyLabel: 'Journey',
-        journey: [
-            { title: 'Train', text: 'Prepared for flood and earthquake response.', done: true },
-            { title: 'Respond', text: 'Supported relief during active disasters.', done: true },
-            { title: 'Distribute', text: 'Helped get emergency aid to communities.', done: true },
-            { title: 'Reflect', text: 'Systems thinking under real-world pressure.', done: false },
+        log: [
+            { tag: 'TRAIN', text: 'Prepared for flood and earthquake response.' },
+            { tag: 'RESPOND', text: 'Supported relief during active disasters.' },
+            { tag: 'DISTRIBUTE', text: 'Moved emergency aid to communities in need.' },
+            { tag: 'LEARN', text: 'Systems thinking under real-world pressure.' },
         ],
-        ringLabel: 'Mission Mix',
-        rings: [
-            { label: 'Relief', pct: 45, color: '#2ee6a8' },
-            { label: 'Logistics', pct: 35, color: '#7ff5cb' },
-            { label: 'Support', pct: 20, color: '#0f8f68' },
+        signals: [
+            { name: 'Relief', pct: 45 },
+            { name: 'Logistics', pct: 35 },
+            { name: 'Support', pct: 20 },
         ],
-        tags: ['Volunteer', 'Crisis Response', 'Logistics', 'Teamwork', 'Service'],
+        tags: ['Volunteer', 'Crisis', 'Logistics', 'Service'],
     },
-    aiclub: {
+    {
+        id: 'aiclub',
+        year: '21–22',
+        short: 'AI Club President',
+        org: 'Liverpool College',
         title: 'President, AI Club',
-        sub: 'Liverpool College · Kathmandu, Nepal · Jan 2021 – Dec 2022',
-        stats: [
-            { num: '2', label: 'Years Leading' },
-            { num: 'Team', label: 'Robotics Builds' },
-            { num: 'Ship', label: 'Under Deadline' },
+        meta: 'Liverpool College · Kathmandu, Nepal · Jan 2021 – Dec 2022',
+        file: 'ai-club',
+        summary: 'Led a student robotics/AI team from fuzzy briefs to competition-ready builds on hard deadlines.',
+        telemetry: [
+            { label: 'Tenure', value: '2 yrs' },
+            { label: 'Unit', value: 'Team' },
+            { label: 'Bias', value: 'Ship' },
         ],
-        journeyLabel: 'Journey',
-        journey: [
-            { title: 'Found', text: 'Organized peers around AI and robotics goals.', done: true },
-            { title: 'Build', text: 'Drove competition project requirements.', done: true },
-            { title: 'Deliver', text: 'Shipped builds against hard deadlines.', done: true },
-            { title: 'Pass', text: 'Left playbooks for the next officers.', done: false },
+        log: [
+            { tag: 'FOUND', text: 'Organized peers around AI + robotics goals.' },
+            { tag: 'SCOPE', text: 'Turned competition requirements into a plan.' },
+            { tag: 'DELIVER', text: 'Shipped builds against hard deadlines.' },
+            { tag: 'HANDOFF', text: 'Left playbooks for the next officers.' },
         ],
-        ringLabel: 'Effort Mix',
-        rings: [
-            { label: 'Leadership', pct: 35, color: '#2ee6a8' },
-            { label: 'Engineering', pct: 40, color: '#7ff5cb' },
-            { label: 'Competition', pct: 25, color: '#0f8f68' },
+        signals: [
+            { name: 'Leadership', pct: 35 },
+            { name: 'Engineering', pct: 40 },
+            { name: 'Competition', pct: 25 },
         ],
-        tags: ['AI', 'Robotics', 'Leadership', 'Project Mgmt', 'Deadlines'],
+        tags: ['AI', 'Robotics', 'Leadership', 'Deadlines'],
     },
-};
+];
 
 function initExperience() {
-    const grid = document.getElementById('exp-grid');
-    const modal = document.getElementById('exp-modal');
-    if (!grid || !modal) return;
+    const rail = document.getElementById('exp-rail');
+    const body = document.getElementById('exp-doss-body');
+    const pathEl = document.getElementById('exp-path');
+    const statusEl = document.getElementById('exp-status');
+    if (!rail || !body) return;
 
-    const titleEl = document.getElementById('exp-modal-title');
-    const subEl = document.getElementById('exp-modal-sub');
-    const statsEl = document.getElementById('exp-modal-stats');
-    const journeyEl = document.getElementById('exp-modal-journey');
-    const journeyLabel = document.getElementById('exp-modal-journey-label');
-    const ringLabel = document.getElementById('exp-modal-ring-label');
-    const donutEl = document.getElementById('exp-modal-donut');
-    const legendEl = document.getElementById('exp-modal-legend');
-    const tagsEl = document.getElementById('exp-modal-tags');
-    let lastFocus = null;
+    rail.innerHTML = EXPERIENCE.map((item, i) => `
+        <button type="button" class="exp-rail-item${i === 0 ? ' is-active' : ''}"
+            role="option" aria-selected="${i === 0 ? 'true' : 'false'}"
+            data-exp-id="${item.id}" id="exp-opt-${item.id}">
+            <span class="exp-rail-year">${item.year}</span>
+            <span>
+                <span class="exp-rail-role">${item.short}</span>
+                <span class="exp-rail-org">${item.org}</span>
+            </span>
+        </button>
+    `).join('');
 
-    const open = (id) => {
-        const data = EXPERIENCE[id];
-        if (!data) return;
-        lastFocus = document.activeElement;
+    const select = (id) => {
+        const item = EXPERIENCE.find((e) => e.id === id);
+        if (!item) return;
 
-        titleEl.textContent = data.title;
-        subEl.textContent = data.sub;
-        journeyLabel.textContent = data.journeyLabel || 'Journey';
-        ringLabel.textContent = data.ringLabel || 'Focus Mix';
-
-        statsEl.innerHTML = data.stats.map((s) => `
-            <div class="exp-stat">
-                <span class="exp-stat-num" data-exp-count>${s.num}</span>
-                <span class="exp-stat-label">${s.label}</span>
-            </div>
-        `).join('');
-
-        journeyEl.innerHTML = data.journey.map((j) => `
-            <li class="${j.done ? '' : 'pending'}">
-                <strong>${j.title}</strong> — ${j.text}
-            </li>
-        `).join('');
-
-        legendEl.innerHTML = data.rings.map((r) => `
-            <li><i style="background:${r.color}"></i><span>${r.label}</span> — ${r.pct}%</li>
-        `).join('');
-
-        tagsEl.innerHTML = data.tags.map((t) => `<span>${t}</span>`).join('');
-        drawDonut(donutEl, data.rings);
-
-        modal.hidden = false;
-        modal.setAttribute('aria-hidden', 'false');
-        document.body.classList.add('exp-modal-open');
-        modal.querySelector('.exp-modal-close')?.focus();
-
-        if (!prefs.reduceMotion) {
-            statsEl.querySelectorAll('[data-exp-count]').forEach((el) => {
-                const raw = el.textContent;
-                if (!/^\d/.test(raw)) return;
-                const n = parseInt(raw, 10);
-                if (Number.isNaN(n)) return;
-                const suffix = raw.replace(/^\d+/, '');
-                const start = performance.now();
-                const step = (now) => {
-                    const t = Math.min(1, (now - start) / 900);
-                    el.textContent = `${Math.floor(n * (1 - Math.pow(1 - t, 3)))}${suffix}`;
-                    if (t < 1) requestAnimationFrame(step);
-                    else el.textContent = raw;
-                };
-                el.textContent = `0${suffix}`;
-                requestAnimationFrame(step);
-            });
-        }
-    };
-
-    const close = () => {
-        modal.hidden = true;
-        modal.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('exp-modal-open');
-        lastFocus?.focus?.();
-    };
-
-    grid.addEventListener('click', (e) => {
-        const card = e.target.closest('[data-exp]');
-        if (card) open(card.dataset.exp);
-    });
-    grid.addEventListener('keydown', (e) => {
-        if (e.key !== 'Enter' && e.key !== ' ') return;
-        const card = e.target.closest('[data-exp]');
-        if (!card) return;
-        e.preventDefault();
-        open(card.dataset.exp);
-    });
-    modal.addEventListener('click', (e) => {
-        if (e.target.closest('[data-exp-close]')) close();
-    });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !modal.hidden) close();
-    });
-}
-
-function drawDonut(svg, rings) {
-    if (!svg) return;
-    const radius = 46;
-    const circ = 2 * Math.PI * radius;
-    let offset = 0;
-    const parts = [
-        `<circle class="exp-donut-track" cx="60" cy="60" r="${radius}"></circle>`,
-    ];
-    rings.forEach((ring) => {
-        const len = (ring.pct / 100) * circ;
-        const dashOffset = -offset;
-        parts.push(`<circle class="exp-donut-seg" cx="60" cy="60" r="${radius}"
-            stroke="${ring.color}"
-            stroke-dasharray="${len} ${circ - len}"
-            data-offset="${dashOffset}"
-            stroke-dashoffset="${prefs.reduceMotion ? dashOffset : circ}"></circle>`);
-        offset += len;
-    });
-    svg.innerHTML = parts.join('');
-    if (!prefs.reduceMotion) {
-        requestAnimationFrame(() => {
-            svg.querySelectorAll('.exp-donut-seg').forEach((circle) => {
-                circle.style.strokeDashoffset = circle.getAttribute('data-offset');
-            });
+        rail.querySelectorAll('.exp-rail-item').forEach((btn) => {
+            const on = btn.dataset.expId === id;
+            btn.classList.toggle('is-active', on);
+            btn.setAttribute('aria-selected', on ? 'true' : 'false');
         });
-    }
+
+        if (pathEl) pathEl.innerHTML = `~/career/<span>${item.file}</span>.log`;
+        if (statusEl) statusEl.textContent = 'LOCKED';
+
+        const render = () => {
+            body.innerHTML = `
+                <header>
+                    <div class="exp-doss-kicker">Transmission // ${item.year}</div>
+                    <h3 class="exp-doss-title">${item.title}</h3>
+                    <p class="exp-doss-meta">${item.meta}</p>
+                </header>
+                <p class="exp-doss-summary">${item.summary}</p>
+                <div class="exp-telemetry">
+                    ${item.telemetry.map((t) => `
+                        <div class="exp-tel">
+                            <span class="exp-tel-label">${t.label}</span>
+                            <span class="exp-tel-value">${t.value}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                <div>
+                    <div class="exp-block-label">Mission Log</div>
+                    <ul class="exp-log">
+                        ${item.log.map((l) => `<li><span><strong>${l.tag}</strong> — ${l.text}</span></li>`).join('')}
+                    </ul>
+                </div>
+                <div>
+                    <div class="exp-block-label">Signal Strength</div>
+                    <div class="exp-signals">
+                        ${item.signals.map((s) => `
+                            <div class="exp-signal">
+                                <span class="exp-signal-name">${s.name}</span>
+                                <div class="exp-signal-track"><div class="exp-signal-fill" data-pct="${s.pct}"></div></div>
+                                <span class="exp-signal-pct">${s.pct}%</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <div>
+                    <div class="exp-block-label">Tags</div>
+                    <div class="exp-chips">${item.tags.map((t) => `<span>${t}</span>`).join('')}</div>
+                </div>
+            `;
+            body.classList.remove('is-swapping');
+            // restart enter animation
+            body.style.animation = 'none';
+            // eslint-disable-next-line no-unused-expressions
+            body.offsetHeight;
+            body.style.animation = '';
+            requestAnimationFrame(() => {
+                body.querySelectorAll('.exp-signal-fill').forEach((fill) => {
+                    fill.style.width = prefs.reduceMotion ? `${fill.dataset.pct}%` : '0%';
+                    requestAnimationFrame(() => {
+                        fill.style.width = `${fill.dataset.pct}%`;
+                    });
+                });
+            });
+        };
+
+        if (prefs.reduceMotion) {
+            render();
+            return;
+        }
+        body.classList.add('is-swapping');
+        setTimeout(render, 160);
+    };
+
+    rail.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-exp-id]');
+        if (btn) select(btn.dataset.expId);
+    });
+
+    rail.addEventListener('keydown', (e) => {
+        const items = [...rail.querySelectorAll('.exp-rail-item')];
+        const idx = items.findIndex((el) => el.classList.contains('is-active'));
+        if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+            e.preventDefault();
+            const next = items[(idx + 1) % items.length];
+            next.focus();
+            select(next.dataset.expId);
+        } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+            e.preventDefault();
+            const prev = items[(idx - 1 + items.length) % items.length];
+            prev.focus();
+            select(prev.dataset.expId);
+        }
+    });
+
+    select(EXPERIENCE[0].id);
 }
 
 // ─────────────────────────────────────────────

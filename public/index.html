@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/style.css?v=20260731-11">
+    <link rel="stylesheet" href="/assets/css/style.css?v=20260731-12">
 </head>
 <body>
 
@@ -206,98 +206,34 @@
                 </div>
             </section>
 
-            <!-- EXPERIENCE -->
-            <section id="experience" class="section">
+            <!-- EXPERIENCE — Mission Log (unique split deck, not Sabin cards/modal) -->
+            <section id="experience" class="section exp-section">
                 <div class="container">
                     <div class="section-head reveal">
-                        <span class="section-kicker">02 — Experience</span>
-                        <h2 class="section-title">Where I've <em>Worked</em></h2>
+                        <span class="section-kicker">02 — Mission Log</span>
+                        <h2 class="section-title">Career <em>Signal</em> Deck</h2>
+                        <p class="section-sub">Select a transmission on the left. The dossier on the right updates live — no popup, no card grid.</p>
                     </div>
 
-                    <div class="exp-grid" id="exp-grid">
-                        <article class="exp-card reveal" role="button" tabindex="0" data-exp="intern" aria-label="Open Undergraduate Summer Intern details">
-                            <span class="exp-num" aria-hidden="true">01</span>
-                            <div class="exp-icon" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 19V7l8-4 8 4v12"/><path d="M4 10l8 4 8-4"/><path d="M12 14v8"/></svg>
+                    <div class="exp-deck reveal" id="exp-deck">
+                        <aside class="exp-rail" aria-label="Experience timeline">
+                            <div class="exp-rail-head">
+                                <span class="exp-rail-dot" aria-hidden="true"></span>
+                                <span>ACTIVE CHANNELS</span>
                             </div>
-                            <h3>Undergraduate Summer Intern</h3>
-                            <p class="exp-meta">Kean University · May–Jul 2026</p>
-                            <p class="exp-blurb">Paid cohort: workshops, mentorship, and a capstone presentation.</p>
-                            <div class="exp-foot">
-                                <span class="exp-loc">Jersey City, NJ</span>
-                                <span class="exp-cta">View metrics <span aria-hidden="true">↗</span></span>
-                            </div>
-                        </article>
+                            <div class="exp-rail-list" id="exp-rail" role="listbox" aria-label="Roles" aria-controls="exp-dossier"></div>
+                        </aside>
 
-                        <article class="exp-card reveal" role="button" tabindex="0" data-exp="ta" aria-label="Open Teaching Assistant details">
-                            <span class="exp-num" aria-hidden="true">02</span>
-                            <div class="exp-icon" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 19h16"/><path d="M7 19V8l5-3 5 3v11"/><path d="M10 12h4"/></svg>
+                        <div class="exp-dossier" id="exp-dossier" role="region" aria-live="polite" aria-atomic="true">
+                            <div class="exp-doss-chrome">
+                                <span class="exp-doss-lights" aria-hidden="true"><i></i><i></i><i></i></span>
+                                <span class="exp-doss-path" id="exp-path">~/career/<span>select</span>.log</span>
+                                <span class="exp-doss-status" id="exp-status">STANDBY</span>
                             </div>
-                            <h3>Teaching Assistant</h3>
-                            <p class="exp-meta">Caldwell University · Sep 2023 – May 2024</p>
-                            <p class="exp-blurb">Tutored full-stack fundamentals and kept CS labs running.</p>
-                            <div class="exp-foot">
-                                <span class="exp-loc">Caldwell, NJ</span>
-                                <span class="exp-cta">View metrics <span aria-hidden="true">↗</span></span>
+                            <div class="exp-doss-body" id="exp-doss-body">
+                                <!-- filled by JS -->
                             </div>
-                        </article>
-
-                        <article class="exp-card reveal" role="button" tabindex="0" data-exp="ra" aria-label="Open Resident Assistant details">
-                            <span class="exp-num" aria-hidden="true">03</span>
-                            <div class="exp-icon" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="9" cy="8" r="3"/><circle cx="16" cy="9" r="2.5"/><path d="M3 19c1.5-3 4-4.5 6-4.5S14.5 16 16 19"/><path d="M14 14.5c1.2 0 3.2.8 4.5 4.5"/></svg>
-                            </div>
-                            <h3>Resident Assistant</h3>
-                            <p class="exp-meta">Caldwell University · 2024</p>
-                            <p class="exp-blurb">Community leadership, conflict resolution, inclusive housing.</p>
-                            <div class="exp-foot">
-                                <span class="exp-loc">Caldwell, NJ</span>
-                                <span class="exp-cta">View metrics <span aria-hidden="true">↗</span></span>
-                            </div>
-                        </article>
-
-                        <article class="exp-card reveal" role="button" tabindex="0" data-exp="mentor" aria-label="Open Technical Mentor details">
-                            <span class="exp-num" aria-hidden="true">04</span>
-                            <div class="exp-icon" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M7 7V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2"/><circle cx="12" cy="13" r="2"/></svg>
-                            </div>
-                            <h3>Technical Mentor</h3>
-                            <p class="exp-meta">Robotics Club · Spring 2024</p>
-                            <p class="exp-blurb">Raspberry Pi &amp; STM32 mentoring for robot builds.</p>
-                            <div class="exp-foot">
-                                <span class="exp-loc">Caldwell, NJ</span>
-                                <span class="exp-cta">View metrics <span aria-hidden="true">↗</span></span>
-                            </div>
-                        </article>
-
-                        <article class="exp-card reveal" role="button" tabindex="0" data-exp="redcross" aria-label="Open Disaster Response details">
-                            <span class="exp-num" aria-hidden="true">05</span>
-                            <div class="exp-icon" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s-7-4.5-7-11a7 7 0 0 1 14 0c0 6.5-7 11-7 11z"/><path d="M12 8v6M9 11h6"/></svg>
-                            </div>
-                            <h3>Disaster Response</h3>
-                            <p class="exp-meta">Red Cross Society · 2020 – 2021</p>
-                            <p class="exp-blurb">Flood &amp; earthquake relief; aid distribution on the ground.</p>
-                            <div class="exp-foot">
-                                <span class="exp-loc">Kathmandu, Nepal</span>
-                                <span class="exp-cta">View metrics <span aria-hidden="true">↗</span></span>
-                            </div>
-                        </article>
-
-                        <article class="exp-card reveal" role="button" tabindex="0" data-exp="aiclub" aria-label="Open AI Club President details">
-                            <span class="exp-num" aria-hidden="true">06</span>
-                            <div class="exp-icon" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="4"/><path d="M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M16.3 7.7l2.1-2.1M5.6 18.4l2.1-2.1"/></svg>
-                            </div>
-                            <h3>President, AI Club</h3>
-                            <p class="exp-meta">Liverpool College · 2021 – 2022</p>
-                            <p class="exp-blurb">Led robotics teams from brief to competition-ready builds.</p>
-                            <div class="exp-foot">
-                                <span class="exp-loc">Kathmandu, Nepal</span>
-                                <span class="exp-cta">View metrics <span aria-hidden="true">↗</span></span>
-                            </div>
-                        </article>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -577,38 +513,6 @@
         </footer>
     </div>
 
-    <!-- Experience metrics modal -->
-    <div class="exp-modal" id="exp-modal" hidden aria-hidden="true">
-        <div class="exp-modal-backdrop" data-exp-close></div>
-        <div class="exp-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="exp-modal-title">
-            <button type="button" class="exp-modal-close" data-exp-close aria-label="Close">
-                <span aria-hidden="true">✕</span>
-            </button>
-            <header class="exp-modal-head">
-                <h2 id="exp-modal-title" class="exp-modal-title"></h2>
-                <p class="exp-modal-sub" id="exp-modal-sub"></p>
-            </header>
-            <div class="exp-modal-stats" id="exp-modal-stats"></div>
-            <div class="exp-modal-section">
-                <h3 class="exp-modal-label" id="exp-modal-journey-label">Journey</h3>
-                <ol class="exp-journey" id="exp-modal-journey"></ol>
-            </div>
-            <div class="exp-modal-section exp-modal-split">
-                <div>
-                    <h3 class="exp-modal-label" id="exp-modal-ring-label">Focus Mix</h3>
-                    <div class="exp-donut-wrap">
-                        <svg class="exp-donut" id="exp-modal-donut" viewBox="0 0 120 120" aria-hidden="true"></svg>
-                    </div>
-                </div>
-                <ul class="exp-ring-legend" id="exp-modal-legend"></ul>
-            </div>
-            <div class="exp-modal-section">
-                <h3 class="exp-modal-label">Tech Stack</h3>
-                <div class="exp-modal-tags" id="exp-modal-tags"></div>
-            </div>
-        </div>
-    </div>
-
-    <script type="module" src="/assets/js/script.js?v=20260731-11"></script>
+    <script type="module" src="/assets/js/script.js?v=20260731-12"></script>
 </body>
 </html>
