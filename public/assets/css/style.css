@@ -986,21 +986,14 @@ body::after {
     font-weight: 300;
 }
 
-/* Stack */
-.section-head-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 20px;
-    max-width: none;
-}
+/* Stack — full-screen solar system */
 .view-toggle {
     display: inline-flex;
     border: 1px solid var(--border);
     border-radius: 999px;
     padding: 4px;
-    background: var(--charcoal);
+    background: color-mix(in srgb, var(--charcoal) 85%, transparent);
+    backdrop-filter: blur(10px);
 }
 .view-toggle-btn {
     border: 0;
@@ -1019,216 +1012,316 @@ body::after {
     font-weight: 600;
 }
 
-.stack-orbit {
-    display: grid;
-    grid-template-columns: minmax(280px, 1fr) minmax(260px, 360px);
-    gap: 28px;
-    align-items: center;
-}
-.stack-orbit[data-active="false"],
-.stack-grid[data-active="false"] { display: none; }
-.stack-grid[data-active="true"] {
-    display: grid;
-}
-
-.constellation {
+.solar-section {
+    --ss-ink: #03050a;
+    --ss-text: #e8f0f2;
+    --ss-dim: #8a9aa3;
+    --ss-ring: rgba(46, 230, 168, 0.32);
+    --ss-ring-soft: rgba(46, 230, 168, 0.12);
     position: relative;
-    width: min(100%, 520px);
-    aspect-ratio: 1;
-    margin-inline: auto;
-    border-radius: 50%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+    isolation: isolate;
+    color: var(--ss-text);
     background:
-        radial-gradient(circle at center, rgba(46, 230, 168, 0.07) 0%, transparent 52%),
-        var(--charcoal);
-    border: 1px solid var(--border);
-    /* Room for labels sitting outside the orbit track */
-    overflow: visible;
+        radial-gradient(ellipse 70% 55% at 50% 48%, rgba(46, 230, 168, 0.1), transparent 58%),
+        radial-gradient(ellipse 45% 35% at 15% 20%, rgba(80, 140, 255, 0.08), transparent 50%),
+        radial-gradient(ellipse 40% 30% at 85% 75%, rgba(255, 160, 60, 0.05), transparent 50%),
+        var(--ss-ink);
 }
-.constellation-glow {
-    position: absolute;
-    inset: 18%;
-    border-radius: 50%;
-    border: 1px dashed rgba(46, 230, 168, 0.14);
-    pointer-events: none;
-}
-.constellation-orbit-track {
-    position: absolute;
-    inset: 14%;
-    border-radius: 50%;
-    border: 1px solid rgba(46, 230, 168, 0.22);
-    pointer-events: none;
-    box-shadow: inset 0 0 40px rgba(46, 230, 168, 0.04);
-}
-.constellation-svg {
+.solar-stars {
     position: absolute;
     inset: 0;
-    width: 100%;
-    height: 100%;
+    z-index: 0;
     pointer-events: none;
-    overflow: visible;
+    opacity: 0.9;
+    background-image:
+        radial-gradient(1.5px 1.5px at 8% 12%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 18% 40%, rgba(255,255,255,0.45), transparent),
+        radial-gradient(1.5px 1.5px at 32% 16%, rgba(46,230,168,0.7), transparent),
+        radial-gradient(1px 1px at 48% 28%, rgba(255,255,255,0.4), transparent),
+        radial-gradient(2px 2px at 62% 10%, rgba(255,255,255,0.65), transparent),
+        radial-gradient(1px 1px at 74% 36%, rgba(255,255,255,0.4), transparent),
+        radial-gradient(1.5px 1.5px at 88% 22%, rgba(255,200,120,0.55), transparent),
+        radial-gradient(1px 1px at 12% 68%, rgba(255,255,255,0.45), transparent),
+        radial-gradient(1.5px 1.5px at 28% 82%, rgba(46,230,168,0.5), transparent),
+        radial-gradient(1px 1px at 44% 74%, rgba(255,255,255,0.35), transparent),
+        radial-gradient(2px 2px at 66% 88%, rgba(255,255,255,0.55), transparent),
+        radial-gradient(1px 1px at 82% 70%, rgba(255,255,255,0.4), transparent),
+        radial-gradient(1.5px 1.5px at 94% 58%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1px 1px at 54% 52%, rgba(255,255,255,0.28), transparent);
+    animation: starTwinkle 7s ease-in-out infinite alternate;
 }
-.constellation-svg line {
-    stroke: var(--jade);
-    stroke-width: 0.7;
-    stroke-opacity: 0.22;
-    stroke-linecap: round;
-}
-.constellation-svg line.trail {
-    stroke-opacity: 0.4;
-    filter: drop-shadow(0 0 3px rgba(46, 230, 168, 0.4));
-}
-.constellation-svg circle.hub-dot {
-    fill: var(--jade);
-    opacity: 0.55;
+@keyframes starTwinkle {
+    from { opacity: 0.55; }
+    to { opacity: 1; }
 }
 
-.constellation-core {
+.solar-hud {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 96px;
-    height: 96px;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 8;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 100px var(--gutter) 0;
+    pointer-events: none;
+}
+.solar-hud > * { pointer-events: auto; }
+.solar-hud .section-kicker { color: var(--jade); }
+.solar-hud .section-title { color: var(--ss-text); }
+.solar-hud-copy { max-width: 520px; }
+.solar-hud-sub {
+    margin-top: 10px;
+    color: var(--ss-dim);
+    font-size: 14px;
+    max-width: 44ch;
+}
+
+.solar-stage {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+}
+.solar-stage[data-active="false"],
+.solar-grid-wrap[data-active="false"] { display: none; }
+.solar-grid-wrap[data-active="true"] {
+    display: block;
+    position: relative;
+    z-index: 3;
+    padding: 160px var(--gutter) 80px;
+}
+
+.solar-system {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+}
+.solar-system::before {
+    content: "";
+    position: absolute;
+    width: 96vmin;
+    height: 96vmin;
     border-radius: 50%;
-    border: 1px solid var(--border);
-    background: color-mix(in srgb, var(--obsidian) 88%, transparent);
+    background: radial-gradient(circle, rgba(46,230,168,0.1), transparent 62%);
+    pointer-events: none;
+}
+
+.sun {
+    position: absolute;
+    z-index: 10;
+    width: clamp(100px, 13vmin, 150px);
+    height: clamp(100px, 13vmin, 150px);
+    border-radius: 50%;
     display: grid;
     place-items: center;
     align-content: center;
     gap: 2px;
-    z-index: 4;
-    box-shadow: 0 0 36px rgba(46, 230, 168, 0.16);
     pointer-events: none;
 }
-.constellation-core strong {
+.sun-core {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 35% 30%, #fff7c2, #ffe066 28%, #2ee6a8 62%, #0f8f68 100%);
+    box-shadow:
+        0 0 50px rgba(46, 230, 168, 0.65),
+        0 0 110px rgba(46, 230, 168, 0.35),
+        0 0 180px rgba(255, 200, 80, 0.22);
+    animation: sunPulse 4.5s ease-in-out infinite;
+}
+.sun-flare,
+.sun-flare-2 {
+    position: absolute;
+    inset: -20%;
+    border-radius: 50%;
+    border: 1px solid rgba(46, 230, 168, 0.35);
+    animation: corePulse 5s ease-in-out infinite;
+}
+.sun-flare-2 {
+    inset: -38%;
+    border-color: rgba(255, 210, 100, 0.18);
+    animation-delay: 1.4s;
+}
+.sun strong {
+    position: relative;
+    z-index: 1;
     font-family: var(--font-display);
-    font-size: 26px;
+    font-size: clamp(24px, 3.6vmin, 38px);
     font-weight: 400;
-    color: var(--jade);
+    color: #04110c;
     letter-spacing: 0.08em;
     line-height: 1;
 }
-.core-sub {
+.sun em {
+    position: relative;
+    z-index: 1;
+    font-style: normal;
     font-size: 10px;
-    letter-spacing: 0.28em;
+    letter-spacing: 0.32em;
     text-transform: uppercase;
-    color: var(--text-dim);
+    color: rgba(4, 17, 12, 0.72);
 }
-.core-ring,
-.core-ring-2 {
-    position: absolute;
-    inset: -8px;
-    border-radius: 50%;
-    border: 1px solid rgba(46, 230, 168, 0.22);
-    animation: corePulse 4s ease-in-out infinite;
-}
-.core-ring-2 {
-    inset: -18px;
-    border-color: rgba(46, 230, 168, 0.1);
-    animation-delay: 1.2s;
+@keyframes sunPulse {
+    0%, 100% { filter: brightness(1); transform: scale(1); }
+    50% { filter: brightness(1.12); transform: scale(1.04); }
 }
 @keyframes corePulse {
     0%, 100% { transform: scale(1); opacity: 0.7; }
-    50% { transform: scale(1.05); opacity: 1; }
+    50% { transform: scale(1.06); opacity: 1; }
 }
 
-.constellation-ring {
+.orbit-ring {
+    --size: 40vmin;
+    --dur: 40s;
+    --delay: 0s;
     position: absolute;
-    inset: 0;
-    animation: orbitSpin 70s linear infinite;
-    transform-origin: center center;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    border: 1.5px solid var(--ss-ring);
+    background: radial-gradient(circle, transparent 68%, var(--ss-ring-soft) 100%);
+    animation: orbitSpin var(--dur) linear infinite;
+    animation-delay: var(--delay);
+    box-shadow: 0 0 40px rgba(46, 230, 168, 0.04);
 }
-.constellation.is-paused .constellation-ring,
-.constellation.reduce-motion .constellation-ring {
+.solar-system.is-paused .orbit-ring,
+.solar-system.reduce-motion .orbit-ring {
     animation-play-state: paused;
 }
-.constellation.is-paused .c-node-inner,
-.constellation.reduce-motion .c-node-inner {
+.solar-system.is-paused .planet-spin,
+.solar-system.reduce-motion .planet-spin {
     animation-play-state: paused;
 }
 @keyframes orbitSpin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
 }
+@keyframes planetCounter {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+}
 
-/* Nodes are placed with left/top % via JS — % is relative to the ring, so spacing stays correct */
-.c-node {
+.planet {
+    --start: 0deg;
     position: absolute;
-    width: 108px;
+    top: 50%;
+    left: 50%;
+    width: auto;
     margin: 0;
     padding: 0;
     border: 0;
     background: transparent;
-    color: var(--text);
-    transform: translate(-50%, -50%);
-    z-index: 2;
+    color: var(--ss-text);
+    transform:
+        rotate(var(--start))
+        translateY(calc(var(--size) / -2))
+        rotate(calc(var(--start) * -1));
+    z-index: 3;
 }
-.c-node-inner {
+.planet-spin {
     display: grid;
     justify-items: center;
-    gap: 8px;
-    /* Counter-rotate so labels stay upright while the ring spins */
-    animation: orbitSpin 70s linear infinite reverse;
-}
-.c-node-orb {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 30%, var(--jade-light), var(--jade) 55%, var(--jade-dark));
-    box-shadow:
-        0 0 0 5px rgba(46, 230, 168, 0.08),
-        0 0 14px rgba(46, 230, 168, 0.5);
+    gap: 10px;
     position: relative;
-}
-.c-node-orb::after {
-    content: "";
-    position: absolute;
-    inset: -8px;
-    border-radius: 50%;
-    border: 1px solid rgba(46, 230, 168, 0.25);
-    opacity: 0;
-    transition: opacity 0.3s, transform 0.3s;
-}
-.c-node-label {
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    white-space: nowrap;
-    padding: 5px 10px;
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--obsidian) 82%, transparent);
-    border: 1px solid var(--border);
-    backdrop-filter: blur(6px);
-    transition: color 0.25s, border-color 0.25s, background 0.25s, box-shadow 0.25s;
-}
-.c-node:hover .c-node-label,
-.c-node[aria-pressed="true"] .c-node-label {
-    color: var(--jade);
-    border-color: rgba(46, 230, 168, 0.45);
-    background: rgba(46, 230, 168, 0.1);
-    box-shadow: 0 0 16px rgba(46, 230, 168, 0.15);
-}
-.c-node:hover .c-node-orb::after,
-.c-node[aria-pressed="true"] .c-node-orb::after {
-    opacity: 1;
-    transform: scale(1.1);
-}
-.c-node[aria-pressed="true"] .c-node-orb {
-    box-shadow:
-        0 0 0 7px rgba(46, 230, 168, 0.12),
-        0 0 22px rgba(46, 230, 168, 0.7);
+    animation: planetCounter var(--dur) linear infinite;
+    animation-delay: var(--delay);
 }
 
-.constellation-detail {
-    border: 1px solid var(--border);
+.planet-body {
+    width: var(--p-size, 18px);
+    height: var(--p-size, 18px);
+    border-radius: 50%;
+    background: var(--p-grad);
+    box-shadow:
+        0 0 0 5px rgba(255,255,255,0.05),
+        0 0 22px var(--p-glow),
+        inset -3px -3px 8px rgba(0,0,0,0.35);
+    position: relative;
+    transition: transform 0.3s var(--ease), box-shadow 0.3s;
+}
+.planet-ringlet {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: calc(var(--p-size, 18px) * 2.2);
+    height: calc(var(--p-size, 18px) * 0.55);
+    border: 1.5px solid rgba(220, 200, 140, 0.75);
+    border-radius: 50%;
+    transform: translate(-50%, -110%) rotate(-18deg);
+    pointer-events: none;
+}
+.planet-label {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ss-text);
+    white-space: nowrap;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: rgba(3, 5, 10, 0.78);
+    border: 1px solid rgba(46, 230, 168, 0.28);
+    backdrop-filter: blur(8px);
+    opacity: 0.92;
+    transition: opacity 0.25s, border-color 0.25s, color 0.25s, box-shadow 0.25s;
+}
+.planet:hover .planet-body,
+.planet[aria-pressed="true"] .planet-body {
+    transform: scale(1.28);
+    box-shadow:
+        0 0 0 7px rgba(255,255,255,0.07),
+        0 0 34px var(--p-glow),
+        inset -3px -3px 8px rgba(0,0,0,0.35);
+}
+.planet:hover .planet-label,
+.planet[aria-pressed="true"] .planet-label {
+    opacity: 1;
+    color: var(--jade-light);
+    border-color: rgba(46, 230, 168, 0.55);
+    box-shadow: 0 0 18px rgba(46, 230, 168, 0.2);
+}
+
+.planet-mercury { --p-size: 18px; --p-grad: radial-gradient(circle at 30% 30%, #d8fff0, #2ee6a8 70%, #0f8f68); --p-glow: rgba(46,230,168,0.6); }
+.planet-venus   { --p-size: 22px; --p-grad: radial-gradient(circle at 30% 30%, #fff1c2, #f0b429 65%, #a67c1a); --p-glow: rgba(240,180,41,0.55); }
+.planet-earth   { --p-size: 24px; --p-grad: radial-gradient(circle at 30% 30%, #c9e8ff, #4d9fff 55%, #1f5fbf); --p-glow: rgba(77,159,255,0.6); }
+.planet-mars    { --p-size: 20px; --p-grad: radial-gradient(circle at 30% 30%, #ffd0c2, #ff6b4a 60%, #b8321a); --p-glow: rgba(255,107,74,0.6); }
+.planet-jupiter { --p-size: 34px; --p-grad: radial-gradient(circle at 30% 30%, #ffe6c2, #e8a54b 45%, #c47a2a 80%); --p-glow: rgba(232,165,75,0.55); }
+.planet-saturn  { --p-size: 28px; --p-grad: radial-gradient(circle at 30% 30%, #f5ecd0, #d4c08a 55%, #9a8650); --p-glow: rgba(212,192,138,0.55); }
+
+.solar-panel {
+    position: absolute;
+    right: var(--gutter);
+    bottom: 28px;
+    z-index: 9;
+    width: min(360px, calc(100% - (var(--gutter) * 2)));
+    border: 1px solid rgba(46, 230, 168, 0.28);
     border-radius: 18px;
-    padding: 28px;
-    background: var(--charcoal);
+    padding: 24px;
+    background: rgba(8, 12, 18, 0.82);
+    color: var(--ss-text);
+    backdrop-filter: blur(16px);
     display: grid;
-    gap: 14px;
-    min-height: 280px;
-    align-content: start;
+    gap: 12px;
+    box-shadow: 0 24px 70px rgba(0,0,0,0.45);
+}
+.solar-panel .stack-level,
+.solar-panel .meter-label,
+.solar-panel .detail-hint { color: var(--ss-dim); }
+.solar-panel .chip {
+    border-color: rgba(46, 230, 168, 0.22);
+    background: rgba(46, 230, 168, 0.06);
+    color: var(--ss-text);
 }
 .detail-num {
     font-family: var(--font-display);
@@ -1243,17 +1336,22 @@ body::after {
 }
 .detail-head h3 {
     font-family: var(--font-display);
-    font-size: 30px;
+    font-size: 28px;
     font-weight: 400;
+    color: var(--ss-text);
 }
 .detail-hint {
-    margin-top: 8px;
+    margin-top: 4px;
     font-size: 12px;
-    color: var(--text-dim);
     letter-spacing: 0.04em;
 }
-.constellation-detail .meter span {
+.solar-panel .meter span {
     width: var(--p);
+}
+
+.solar-section .view-toggle {
+    background: rgba(8, 12, 18, 0.75);
+    border-color: rgba(46, 230, 168, 0.28);
 }
 
 .stack-grid {
@@ -1449,12 +1547,18 @@ footer {
     .hero-card { width: min(360px, 100%); margin-inline: auto; }
     .about-layout,
     .contact-layout,
-    .term-body,
-    .stack-orbit { grid-template-columns: 1fr; }
+    .term-body { grid-template-columns: 1fr; }
     .about-side { position: static; }
     .stack-grid { grid-template-columns: repeat(2, 1fr); }
     .term-preview { border-left: 0; border-top: 1px solid var(--border); }
-    .constellation { width: min(100%, 440px); }
+    .solar-section { min-height: 120vh; }
+    .solar-panel {
+        left: var(--gutter);
+        right: var(--gutter);
+        bottom: 20px;
+        width: auto;
+    }
+    .solar-hud { padding-top: 88px; }
 }
 
 @media (max-width: 768px) {
@@ -1486,6 +1590,6 @@ footer {
         scroll-behavior: auto !important;
     }
     .marquee-track { animation: none; }
-    .constellation-ring,
-    .c-node-inner { animation: none !important; }
+    .orbit-ring,
+    .planet-spin { animation: none !important; }
 }

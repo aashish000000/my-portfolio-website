@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initReveals();
     initMetrics();
     initTerminal();
-    initConstellation();
+    initSolarSystem();
     updateFooterYear();
     setupLazyInit();
 });
@@ -352,73 +352,15 @@ const STACK_DOMAINS = {
     },
 };
 
-function initConstellation() {
-    const constellation = document.getElementById('constellation');
-    const svg = document.getElementById('constellation-svg');
-    const nodes = [...document.querySelectorAll('.c-node')];
+function initSolarSystem() {
+    const system = document.getElementById('solar-system');
+    const planets = [...document.querySelectorAll('.planet')];
     const orbit = document.getElementById('stack-orbit');
     const grid = document.getElementById('stack-grid');
     const toggleBtns = document.querySelectorAll('.view-toggle-btn');
-    if (!constellation || !svg || !nodes.length) return;
+    if (!system || !planets.length) return;
 
-    if (prefs.reduceMotion) constellation.classList.add('reduce-motion');
-
-    // Place nodes evenly on a true circle (left/top % is relative to the ring)
-    const ORBIT_R = 36; // percent from center — keeps labels clear of the hub
-    const count = nodes.length;
-    nodes.forEach((node, i) => {
-        const angle = ((i / count) * Math.PI * 2) - Math.PI / 2;
-        const x = 50 + ORBIT_R * Math.cos(angle);
-        const y = 50 + ORBIT_R * Math.sin(angle);
-        node.style.left = `${x}%`;
-        node.style.top = `${y}%`;
-    });
-
-    // Draw constellation network once (SVG lives inside the rotating ring)
-    const NS = 'http://www.w3.org/2000/svg';
-    const cx = 50;
-    const cy = 50;
-    const points = nodes.map((_, i) => {
-        const angle = ((i / count) * Math.PI * 2) - Math.PI / 2;
-        return {
-            x: cx + ORBIT_R * Math.cos(angle),
-            y: cy + ORBIT_R * Math.sin(angle),
-        };
-    });
-
-    const frag = document.createDocumentFragment();
-    points.forEach((p, i) => {
-        const spoke = document.createElementNS(NS, 'line');
-        spoke.setAttribute('x1', String(cx));
-        spoke.setAttribute('y1', String(cy));
-        spoke.setAttribute('x2', String(p.x));
-        spoke.setAttribute('y2', String(p.y));
-        spoke.classList.add('trail');
-        frag.appendChild(spoke);
-
-        const next = points[(i + 1) % points.length];
-        const rim = document.createElementNS(NS, 'line');
-        rim.setAttribute('x1', String(p.x));
-        rim.setAttribute('y1', String(p.y));
-        rim.setAttribute('x2', String(next.x));
-        rim.setAttribute('y2', String(next.y));
-        frag.appendChild(rim);
-
-        const dot = document.createElementNS(NS, 'circle');
-        dot.setAttribute('cx', String(p.x));
-        dot.setAttribute('cy', String(p.y));
-        dot.setAttribute('r', '1.1');
-        dot.classList.add('hub-dot');
-        frag.appendChild(dot);
-    });
-
-    const hub = document.createElementNS(NS, 'circle');
-    hub.setAttribute('cx', String(cx));
-    hub.setAttribute('cy', String(cy));
-    hub.setAttribute('r', '1.4');
-    hub.classList.add('hub-dot');
-    frag.appendChild(hub);
-    svg.replaceChildren(frag);
+    if (prefs.reduceMotion) system.classList.add('reduce-motion');
 
     const showDetail = (id) => {
         const data = STACK_DOMAINS[id];
@@ -428,7 +370,7 @@ function initConstellation() {
         const chips = document.getElementById('detail-chips');
         const meter = document.getElementById('detail-meter');
         const meterLabel = document.getElementById('detail-meter-label');
-        const num = document.querySelector('.constellation-detail .detail-num');
+        const num = document.getElementById('detail-num');
         if (num) num.textContent = data.num;
         if (title) title.textContent = data.title;
         if (level) level.textContent = data.level;
@@ -446,17 +388,19 @@ function initConstellation() {
         }
         if (meterLabel) meterLabel.textContent = `Proficiency ${data.pct}%`;
 
-        nodes.forEach((n) => {
-            n.setAttribute('aria-pressed', String(n.dataset.id === id));
+        planets.forEach((p) => {
+            p.setAttribute('aria-pressed', String(p.dataset.id === id));
         });
     };
 
-    nodes.forEach((node) => {
-        node.addEventListener('click', () => showDetail(node.dataset.id));
+    planets.forEach((planet) => {
+        planet.addEventListener('click', () => showDetail(planet.dataset.id));
+        planet.addEventListener('focus', () => system.classList.add('is-paused'));
+        planet.addEventListener('blur', () => system.classList.remove('is-paused'));
     });
 
-    constellation.addEventListener('mouseenter', () => constellation.classList.add('is-paused'));
-    constellation.addEventListener('mouseleave', () => constellation.classList.remove('is-paused'));
+    system.addEventListener('mouseenter', () => system.classList.add('is-paused'));
+    system.addEventListener('mouseleave', () => system.classList.remove('is-paused'));
 
     const setView = (view) => {
         const isOrbit = view === 'orbit';
@@ -467,9 +411,6 @@ function initConstellation() {
         if (grid) {
             grid.hidden = isOrbit;
             grid.dataset.active = String(!isOrbit);
-            if (!isOrbit) {
-                grid.querySelectorAll('.reveal').forEach((el) => el.classList.add('visible'));
-            }
         }
         toggleBtns.forEach((btn) => {
             const active = btn.dataset.view === view;
@@ -479,7 +420,7 @@ function initConstellation() {
     };
 
     toggleBtns.forEach((btn) => {
-        btn.addEventListener('click', () => setView(btn.dataset.view));
+        btn.addEventListener('click', () => setView(btn.dataset.view || 'orbit'));
     });
 
     showDetail('languages');

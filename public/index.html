@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/style.css?v=20260731-4">
+    <link rel="stylesheet" href="/assets/css/style.css?v=20260731-7">
 </head>
 <body data-api-base="https://aashish-portfolio-backend.onrender.com">
 
@@ -351,93 +351,101 @@
                 </div>
             </section>
 
-            <!-- STACK -->
-            <section id="stack" class="section">
-                <div class="container">
-                    <div class="section-head reveal section-head-row">
-                        <div>
-                            <span class="section-kicker">Technical Expertise</span>
-                            <h2 class="section-title">Tools of the Trade</h2>
+            <!-- STACK — full-screen solar system -->
+            <section id="stack" class="solar-section" aria-label="Tools of the Trade">
+                <div class="solar-stars" id="solar-stars" aria-hidden="true"></div>
+
+                <header class="solar-hud">
+                    <div class="solar-hud-copy">
+                        <span class="section-kicker">Technical Expertise</span>
+                        <h2 class="section-title">Tools of the Trade</h2>
+                        <p class="solar-hud-sub">A living solar system of my stack — click a planet to inspect a domain.</p>
+                    </div>
+                    <div class="view-toggle" role="group" aria-label="Stack view mode">
+                        <button type="button" class="view-toggle-btn active" data-view="orbit" aria-pressed="true">Solar</button>
+                        <button type="button" class="view-toggle-btn" data-view="grid" aria-pressed="false">Grid</button>
+                    </div>
+                </header>
+
+                <div id="stack-orbit" class="solar-stage" data-active="true">
+                    <div class="solar-system" id="solar-system">
+                        <div class="sun" aria-hidden="true">
+                            <span class="sun-core"></span>
+                            <span class="sun-flare"></span>
+                            <span class="sun-flare sun-flare-2"></span>
+                            <strong>AJ</strong>
+                            <em>Stack</em>
                         </div>
-                        <div class="view-toggle" role="group" aria-label="Stack view mode">
-                            <button type="button" class="view-toggle-btn active" data-view="orbit" aria-pressed="true">Orbit</button>
-                            <button type="button" class="view-toggle-btn" data-view="grid" aria-pressed="false">Grid</button>
+
+                        <div class="orbit-ring" style="--size:16vmin; --dur:14s; --delay:-2s;" data-orbit="1">
+                            <button type="button" class="planet planet-mercury" data-id="languages" aria-pressed="true" style="--start:0deg;">
+                                <span class="planet-spin">
+                                    <span class="planet-body"></span>
+                                    <span class="planet-label">Languages</span>
+                                </span>
+                            </button>
+                        </div>
+                        <div class="orbit-ring" style="--size:30vmin; --dur:22s; --delay:-7s;" data-orbit="2">
+                            <button type="button" class="planet planet-venus" data-id="frameworks" aria-pressed="false" style="--start:55deg;">
+                                <span class="planet-spin">
+                                    <span class="planet-body"></span>
+                                    <span class="planet-label">Frameworks</span>
+                                </span>
+                            </button>
+                        </div>
+                        <div class="orbit-ring" style="--size:44vmin; --dur:30s; --delay:-12s;" data-orbit="3">
+                            <button type="button" class="planet planet-earth" data-id="databases" aria-pressed="false" style="--start:120deg;">
+                                <span class="planet-spin">
+                                    <span class="planet-body"></span>
+                                    <span class="planet-label">Databases</span>
+                                </span>
+                            </button>
+                        </div>
+                        <div class="orbit-ring" style="--size:58vmin; --dur:40s; --delay:-4s;" data-orbit="4">
+                            <button type="button" class="planet planet-mars" data-id="ai" aria-pressed="false" style="--start:185deg;">
+                                <span class="planet-spin">
+                                    <span class="planet-body"></span>
+                                    <span class="planet-label">AI &amp; Product</span>
+                                </span>
+                            </button>
+                        </div>
+                        <div class="orbit-ring" style="--size:72vmin; --dur:52s; --delay:-18s;" data-orbit="5">
+                            <button type="button" class="planet planet-jupiter" data-id="engineering" aria-pressed="false" style="--start:250deg;">
+                                <span class="planet-spin">
+                                    <span class="planet-body"></span>
+                                    <span class="planet-label">Engineering</span>
+                                </span>
+                            </button>
+                        </div>
+                        <div class="orbit-ring" style="--size:88vmin; --dur:68s; --delay:-28s;" data-orbit="6">
+                            <button type="button" class="planet planet-saturn" data-id="craft" aria-pressed="false" style="--start:310deg;">
+                                <span class="planet-spin">
+                                    <span class="planet-body"></span>
+                                    <span class="planet-ringlet" aria-hidden="true"></span>
+                                    <span class="planet-label">Craft</span>
+                                </span>
+                            </button>
                         </div>
                     </div>
 
-                    <!-- Constellation orbit view -->
-                    <div id="stack-orbit" class="stack-orbit reveal" data-active="true">
-                        <div class="constellation" id="constellation">
-                            <div class="constellation-glow" aria-hidden="true"></div>
-                            <div class="constellation-orbit-track" aria-hidden="true"></div>
-                            <div class="constellation-ring" id="constellation-ring">
-                                <svg class="constellation-svg" id="constellation-svg" viewBox="0 0 100 100" aria-hidden="true"></svg>
-                                <button type="button" class="c-node" data-id="languages" data-i="0" aria-pressed="true">
-                                    <span class="c-node-inner">
-                                        <span class="c-node-orb"></span>
-                                        <span class="c-node-label">Languages</span>
-                                    </span>
-                                </button>
-                                <button type="button" class="c-node" data-id="frameworks" data-i="1" aria-pressed="false">
-                                    <span class="c-node-inner">
-                                        <span class="c-node-orb"></span>
-                                        <span class="c-node-label">Frameworks</span>
-                                    </span>
-                                </button>
-                                <button type="button" class="c-node" data-id="databases" data-i="2" aria-pressed="false">
-                                    <span class="c-node-inner">
-                                        <span class="c-node-orb"></span>
-                                        <span class="c-node-label">Databases</span>
-                                    </span>
-                                </button>
-                                <button type="button" class="c-node" data-id="ai" data-i="3" aria-pressed="false">
-                                    <span class="c-node-inner">
-                                        <span class="c-node-orb"></span>
-                                        <span class="c-node-label">AI &amp; Product</span>
-                                    </span>
-                                </button>
-                                <button type="button" class="c-node" data-id="engineering" data-i="4" aria-pressed="false">
-                                    <span class="c-node-inner">
-                                        <span class="c-node-orb"></span>
-                                        <span class="c-node-label">Engineering</span>
-                                    </span>
-                                </button>
-                                <button type="button" class="c-node" data-id="craft" data-i="5" aria-pressed="false">
-                                    <span class="c-node-inner">
-                                        <span class="c-node-orb"></span>
-                                        <span class="c-node-label">Craft</span>
-                                    </span>
-                                </button>
-                            </div>
-                            <div class="constellation-core" aria-hidden="true">
-                                <span class="core-ring"></span>
-                                <span class="core-ring core-ring-2"></span>
-                                <strong>AJ</strong>
-                                <span class="core-sub">Stack</span>
-                            </div>
+                    <aside class="solar-panel" id="solar-panel" aria-live="polite">
+                        <span class="detail-num" id="detail-num">01</span>
+                        <div class="detail-head">
+                            <h3 id="detail-title">Languages</h3>
+                            <span class="stack-level" id="detail-level">Expert</span>
                         </div>
+                        <div class="chip-row" id="detail-chips"></div>
+                        <div class="meter"><span id="detail-meter" style="--p:88%"></span></div>
+                        <span class="meter-label" id="detail-meter-label">Proficiency 88%</span>
+                        <p class="detail-hint">Select a planet to explore that domain.</p>
+                    </aside>
+                </div>
 
-                        <aside class="constellation-detail" id="constellation-detail" aria-live="polite">
-                            <span class="detail-num">01</span>
-                            <div class="detail-head">
-                                <h3 id="detail-title">Languages</h3>
-                                <span class="stack-level" id="detail-level">Expert</span>
-                            </div>
-                            <div class="chip-row" id="detail-chips"></div>
-                            <div class="meter"><span id="detail-meter" style="--p:88%"></span></div>
-                            <span class="meter-label" id="detail-meter-label">Proficiency 88%</span>
-                            <p class="detail-hint">Click a node on the constellation to explore each domain.</p>
-                        </aside>
-                    </div>
-
-                    <!-- Grid view -->
-                    <div id="stack-grid" class="stack-grid" data-active="false" hidden>
-                        <article class="stack-card reveal">
+                <div id="stack-grid" class="solar-grid-wrap" data-active="false" hidden>
+                    <div class="stack-grid">
+                        <article class="stack-card">
                             <span class="stack-num">01</span>
-                            <div class="stack-head">
-                                <h3>Languages</h3>
-                                <span class="stack-level">Expert</span>
-                            </div>
+                            <div class="stack-head"><h3>Languages</h3><span class="stack-level">Expert</span></div>
                             <div class="chip-row">
                                 <span class="chip">Python</span><span class="chip">Java</span><span class="chip">JavaScript</span>
                                 <span class="chip">TypeScript</span><span class="chip">C++</span><span class="chip">SQL</span><span class="chip">PHP</span>
@@ -445,12 +453,9 @@
                             <div class="meter"><span style="--p:88%"></span></div>
                             <span class="meter-label">Proficiency 88%</span>
                         </article>
-                        <article class="stack-card reveal">
+                        <article class="stack-card">
                             <span class="stack-num">02</span>
-                            <div class="stack-head">
-                                <h3>Frameworks</h3>
-                                <span class="stack-level">Advanced</span>
-                            </div>
+                            <div class="stack-head"><h3>Frameworks</h3><span class="stack-level">Advanced</span></div>
                             <div class="chip-row">
                                 <span class="chip">Next.js</span><span class="chip">Node.js</span><span class="chip">Express</span>
                                 <span class="chip">ASP.NET Core</span><span class="chip">Tkinter</span>
@@ -458,24 +463,18 @@
                             <div class="meter"><span style="--p:84%"></span></div>
                             <span class="meter-label">Proficiency 84%</span>
                         </article>
-                        <article class="stack-card reveal">
+                        <article class="stack-card">
                             <span class="stack-num">03</span>
-                            <div class="stack-head">
-                                <h3>Databases</h3>
-                                <span class="stack-level">Proficient</span>
-                            </div>
+                            <div class="stack-head"><h3>Databases</h3><span class="stack-level">Proficient</span></div>
                             <div class="chip-row">
                                 <span class="chip">MySQL</span><span class="chip">MongoDB</span><span class="chip">NeDB</span>
                             </div>
                             <div class="meter"><span style="--p:78%"></span></div>
                             <span class="meter-label">Proficiency 78%</span>
                         </article>
-                        <article class="stack-card reveal">
+                        <article class="stack-card">
                             <span class="stack-num">04</span>
-                            <div class="stack-head">
-                                <h3>AI &amp; Product</h3>
-                                <span class="stack-level">Advanced</span>
-                            </div>
+                            <div class="stack-head"><h3>AI &amp; Product</h3><span class="stack-level">Advanced</span></div>
                             <div class="chip-row">
                                 <span class="chip">OpenAI API</span><span class="chip">Chatbots</span>
                                 <span class="chip">Photo Recognition</span><span class="chip">Analytics</span>
@@ -483,12 +482,9 @@
                             <div class="meter"><span style="--p:80%"></span></div>
                             <span class="meter-label">Proficiency 80%</span>
                         </article>
-                        <article class="stack-card reveal">
+                        <article class="stack-card">
                             <span class="stack-num">05</span>
-                            <div class="stack-head">
-                                <h3>Engineering</h3>
-                                <span class="stack-level">Expert</span>
-                            </div>
+                            <div class="stack-head"><h3>Engineering</h3><span class="stack-level">Expert</span></div>
                             <div class="chip-row">
                                 <span class="chip">REST APIs</span><span class="chip">WebSockets</span>
                                 <span class="chip">System Design</span><span class="chip">Accessibility</span>
@@ -496,12 +492,9 @@
                             <div class="meter"><span style="--p:86%"></span></div>
                             <span class="meter-label">Proficiency 86%</span>
                         </article>
-                        <article class="stack-card reveal">
+                        <article class="stack-card">
                             <span class="stack-num">06</span>
-                            <div class="stack-head">
-                                <h3>Craft</h3>
-                                <span class="stack-level">Advanced</span>
-                            </div>
+                            <div class="stack-head"><h3>Craft</h3><span class="stack-level">Advanced</span></div>
                             <div class="chip-row">
                                 <span class="chip">UI/UX</span><span class="chip">Design Systems</span>
                                 <span class="chip">Performance</span><span class="chip">Docs</span>
@@ -602,6 +595,6 @@
         </footer>
     </div>
 
-    <script type="module" src="/assets/js/script.js?v=20260731-4"></script>
+    <script type="module" src="/assets/js/script.js?v=20260731-7"></script>
 </body>
 </html>
