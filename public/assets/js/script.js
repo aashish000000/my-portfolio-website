@@ -493,7 +493,10 @@ async function jsonFetch(path, options = {}) {
     for (const base of API_BASES) {
         const url = `${base}${path}`;
         try {
-            const res = await fetch(url, options);
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), 8000);
+            const res = await fetch(url, { ...options, signal: controller.signal });
+            clearTimeout(timer);
             const isJson = (res.headers.get('content-type') || '').includes('application/json');
             if (!res.ok) {
                 let msg = `Request failed (${res.status})`;
@@ -503,12 +506,16 @@ async function jsonFetch(path, options = {}) {
                         if (body?.message) msg = body.message;
                     } catch (_) { /* noop */ }
                 }
-                throw new Error(msg);
+                // Real HTTP response from a reachable host — do not fan out to other bases.
+                const err = new Error(msg);
+                err.fatal = true;
+                throw err;
             }
             if (!isJson) throw new Error('Invalid response from server.');
             return res.json();
         } catch (err) {
             lastErr = err;
+            if (err?.fatal) throw err;
         }
     }
     throw lastErr ?? new Error('Request failed.');
