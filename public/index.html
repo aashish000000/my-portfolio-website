@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/style.css?v=20260731-14">
+    <link rel="stylesheet" href="/assets/css/style.css?v=20260731-15">
 </head>
 <body>
 
@@ -307,6 +307,7 @@
                         </div>
 
                         <div class="orbit-ring" style="--rx:18vmin; --ry:8vmin; --dur:16s; --delay:-2s;" data-orbit="1">
+                            <svg class="orbit-svg" viewBox="0 0 200 200" preserveAspectRatio="none" aria-hidden="true"><ellipse class="orbit-glow-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-dash-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-tick-path" cx="100" cy="100" rx="99" ry="99"/></svg>
                             <button type="button" class="planet planet-mercury" data-id="languages" aria-pressed="false" aria-haspopup="dialog" aria-controls="planet-pop">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
@@ -315,6 +316,7 @@
                             </button>
                         </div>
                         <div class="orbit-ring" style="--rx:34vmin; --ry:15vmin; --dur:24s; --delay:-7s;" data-orbit="2">
+                            <svg class="orbit-svg" viewBox="0 0 200 200" preserveAspectRatio="none" aria-hidden="true"><ellipse class="orbit-glow-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-dash-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-tick-path" cx="100" cy="100" rx="99" ry="99"/></svg>
                             <button type="button" class="planet planet-venus" data-id="frameworks" aria-pressed="false" aria-haspopup="dialog" aria-controls="planet-pop">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
@@ -323,6 +325,7 @@
                             </button>
                         </div>
                         <div class="orbit-ring" style="--rx:50vmin; --ry:22vmin; --dur:32s; --delay:-12s;" data-orbit="3">
+                            <svg class="orbit-svg" viewBox="0 0 200 200" preserveAspectRatio="none" aria-hidden="true"><ellipse class="orbit-glow-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-dash-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-tick-path" cx="100" cy="100" rx="99" ry="99"/></svg>
                             <button type="button" class="planet planet-earth" data-id="databases" aria-pressed="false" aria-haspopup="dialog" aria-controls="planet-pop">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
@@ -331,6 +334,7 @@
                             </button>
                         </div>
                         <div class="orbit-ring" style="--rx:66vmin; --ry:29vmin; --dur:42s; --delay:-4s;" data-orbit="4">
+                            <svg class="orbit-svg" viewBox="0 0 200 200" preserveAspectRatio="none" aria-hidden="true"><ellipse class="orbit-glow-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-dash-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-tick-path" cx="100" cy="100" rx="99" ry="99"/></svg>
                             <button type="button" class="planet planet-mars" data-id="ai" aria-pressed="false" aria-haspopup="dialog" aria-controls="planet-pop">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
@@ -339,6 +343,7 @@
                             </button>
                         </div>
                         <div class="orbit-ring" style="--rx:82vmin; --ry:36vmin; --dur:54s; --delay:-18s;" data-orbit="5">
+                            <svg class="orbit-svg" viewBox="0 0 200 200" preserveAspectRatio="none" aria-hidden="true"><ellipse class="orbit-glow-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-dash-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-tick-path" cx="100" cy="100" rx="99" ry="99"/></svg>
                             <button type="button" class="planet planet-jupiter" data-id="engineering" aria-pressed="false" aria-haspopup="dialog" aria-controls="planet-pop">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
@@ -347,6 +352,7 @@
                             </button>
                         </div>
                         <div class="orbit-ring" style="--rx:98vmin; --ry:44vmin; --dur:70s; --delay:-28s;" data-orbit="6">
+                            <svg class="orbit-svg" viewBox="0 0 200 200" preserveAspectRatio="none" aria-hidden="true"><ellipse class="orbit-glow-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-dash-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-tick-path" cx="100" cy="100" rx="99" ry="99"/></svg>
                             <button type="button" class="planet planet-saturn" data-id="craft" aria-pressed="false" aria-haspopup="dialog" aria-controls="planet-pop">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
@@ -437,73 +443,63 @@
                 </div>
             </section>
 
-            <!-- PERSONAL -->
+            <!-- PERSONAL — Sabin-style experience cards -->
             <section id="favorites" class="section fuel-section">
                 <div class="container">
                     <div class="section-head reveal">
                         <span class="section-kicker">Beyond the code</span>
                         <h2 class="section-title">What <em>fuels</em> me</h2>
-                        <p class="section-sub">Out of everything I do off the keyboard, <strong>reading</strong> sits at the top — MMA nights and great series keep the fire going too.</p>
+                        <p class="section-sub">Reading leads. MMA and series keep the voltage high.</p>
                     </div>
 
-                    <div class="fuel-layout">
-                        <article class="fuel-hero reveal" aria-label="Reading — primary fuel">
-                            <div class="fuel-hero-visual" aria-hidden="true">
-                                <div class="fuel-book">
-                                    <span class="fuel-book-spine"></span>
-                                    <span class="fuel-book-page">
-                                        <i></i><i></i><i></i><i></i>
-                                    </span>
-                                    <span class="fuel-book-page fuel-book-page-r">
-                                        <i></i><i></i><i></i>
-                                    </span>
-                                </div>
-                                <div class="fuel-hero-glow"></div>
+                    <div class="fuel-grid">
+                        <article class="fuel-svc reveal">
+                            <span class="fuel-svc-num" aria-hidden="true">01</span>
+                            <div class="fuel-svc-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5h7a3 3 0 0 1 3 3v11H7a3 3 0 0 0-3 3V5z"/><path d="M20 5h-7a3 3 0 0 0-3 3v11h7a3 3 0 0 1 3 3V5z"/></svg>
                             </div>
-                            <div class="fuel-hero-copy">
-                                <span class="fuel-rank">01 · Primary fuel</span>
-                                <h3>Reading</h3>
-                                <p class="fuel-lead">Pages first. Stories, systems, biographies — anything that stretches how I think before I write another line of code.</p>
-                                <ul class="fuel-notes">
-                                    <li>Quiet focus that recharges deeper than scrolling</li>
-                                    <li>New mental models I bring back into product work</li>
-                                    <li>The habit I protect when everything else gets loud</li>
-                                </ul>
-                                <div class="fuel-chips">
-                                    <span>Fiction</span><span>Non-fiction</span><span>Long-form</span>
-                                </div>
+                            <h3 class="fuel-svc-title">Reading</h3>
+                            <p class="fuel-svc-sub">Primary fuel · Pages over noise</p>
+                            <p class="fuel-svc-desc">Stories, systems, biographies — anything that stretches how I think before I ship another line of code. The habit I protect when everything else gets loud.</p>
+                            <div class="fuel-svc-foot">
+                                <span>Fiction · Non-fiction · Long-form</span>
+                                <span class="fuel-svc-cta">Top pick</span>
                             </div>
                         </article>
 
-                        <div class="fuel-side">
-                            <article class="fuel-card reveal">
-                                <div class="fuel-card-media">
-                                    <img src="/assets/img/jon_jones.png" alt="Jon Jones in the octagon" loading="lazy">
-                                </div>
-                                <div class="fuel-card-body">
-                                    <span class="fuel-rank">02 · Spectacle</span>
-                                    <h3>MMA</h3>
-                                    <p>Octagon nights for timing, grit, and chess under pressure. Favorite to watch: <strong>Jon Jones</strong>.</p>
-                                    <div class="fuel-chips">
-                                        <span>UFC</span><span>Strategy</span><span>Intensity</span>
-                                    </div>
-                                </div>
-                            </article>
+                        <article class="fuel-svc reveal">
+                            <span class="fuel-svc-num" aria-hidden="true">02</span>
+                            <div class="fuel-svc-media" aria-hidden="true">
+                                <img src="/assets/img/jon_jones.png" alt="" loading="lazy">
+                            </div>
+                            <div class="fuel-svc-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><path d="M8 12h8"/></svg>
+                            </div>
+                            <h3 class="fuel-svc-title">MMA</h3>
+                            <p class="fuel-svc-sub">Spectacle · Octagon nights</p>
+                            <p class="fuel-svc-desc">Timing, grit, and chess under pressure. Favorite to watch: Jon Jones — composure and control when the pace spikes.</p>
+                            <div class="fuel-svc-foot">
+                                <span>UFC · Strategy · Intensity</span>
+                                <span class="fuel-svc-cta">Watch →</span>
+                            </div>
+                        </article>
 
-                            <article class="fuel-card reveal">
-                                <div class="fuel-card-media">
-                                    <img src="/assets/img/Walter_white.jpg" alt="Bryan Cranston as Walter White" loading="lazy">
-                                </div>
-                                <div class="fuel-card-body">
-                                    <span class="fuel-rank">03 · Stories</span>
-                                    <h3>Series</h3>
-                                    <p>Long arcs, sharp dialogue, characters that mutate. All-timer: <strong>Breaking Bad</strong> — Bryan Cranston owns the screen.</p>
-                                    <div class="fuel-chips">
-                                        <span>Drama</span><span>Character study</span><span>Binge-worthy</span>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
+                        <article class="fuel-svc reveal">
+                            <span class="fuel-svc-num" aria-hidden="true">03</span>
+                            <div class="fuel-svc-media" aria-hidden="true">
+                                <img src="/assets/img/Walter_white.jpg" alt="" loading="lazy">
+                            </div>
+                            <div class="fuel-svc-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M8 6V4h8v2M12 10v4"/></svg>
+                            </div>
+                            <h3 class="fuel-svc-title">Series</h3>
+                            <p class="fuel-svc-sub">Stories · Long arcs</p>
+                            <p class="fuel-svc-desc">Sharp dialogue and characters that mutate. All-timer: Breaking Bad — Bryan Cranston turning every scene into a pressure cooker.</p>
+                            <div class="fuel-svc-foot">
+                                <span>Drama · Character · Binge</span>
+                                <span class="fuel-svc-cta">Watch →</span>
+                            </div>
+                        </article>
                     </div>
                 </div>
             </section>
@@ -561,6 +557,6 @@
         </footer>
     </div>
 
-    <script type="module" src="/assets/js/script.js?v=20260731-14"></script>
+    <script type="module" src="/assets/js/script.js?v=20260731-15"></script>
 </body>
 </html>

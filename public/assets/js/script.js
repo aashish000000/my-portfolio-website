@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initReveals();
     initMetrics();
     initExperience();
+    initFuelTilt();
     initTerminal();
     initSolarSystem();
     updateFooterYear();
@@ -132,7 +133,7 @@ function initCursor() {
     };
     loop();
 
-    const hoverables = 'a, button, input, textarea, .project-card, .exp-rail-item, .stack-card, .fuel-card, .fuel-hero, .term-tab, .planet';
+    const hoverables = 'a, button, input, textarea, .project-card, .exp-rail-item, .stack-card, .fuel-svc, .term-tab, .planet';
     document.addEventListener('mouseover', (e) => {
         if (e.target.closest(hoverables)) {
             dot.classList.add('hover');
@@ -559,6 +560,24 @@ function initExperience() {
     select(EXPERIENCE[0].id);
 }
 
+function initFuelTilt() {
+    const cards = document.querySelectorAll('.fuel-svc');
+    if (!cards.length || prefs.reduceMotion) return;
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+
+    cards.forEach((card) => {
+        card.addEventListener('mousemove', (e) => {
+            const r = card.getBoundingClientRect();
+            const x = (e.clientX - r.left) / r.width - 0.5;
+            const y = (e.clientY - r.top) / r.height - 0.5;
+            card.style.transform = `perspective(700px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) translateZ(6px)`;
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+        });
+    });
+}
+
 // ─────────────────────────────────────────────
 // Terminal demo
 // ─────────────────────────────────────────────
@@ -735,14 +754,21 @@ function initSolarSystem() {
         if (!pop) return;
         pop.classList.remove('is-open');
         pop.hidden = true;
-        planets.forEach((p) => p.setAttribute('aria-pressed', 'false'));
+        planets.forEach((p) => {
+            p.setAttribute('aria-pressed', 'false');
+            p.classList.remove('is-paused');
+            p.closest('.orbit-ring')?.classList.remove('is-hot');
+        });
     };
 
     const openPop = (id) => {
         const data = PLANET_PAYLOAD[id];
         if (!data || !pop) return;
         planets.forEach((p) => {
-            p.setAttribute('aria-pressed', String(p.dataset.id === id));
+            const on = p.dataset.id === id;
+            p.setAttribute('aria-pressed', String(on));
+            p.classList.toggle('is-paused', on);
+            p.closest('.orbit-ring')?.classList.toggle('is-hot', on);
         });
         if (popKicker) popKicker.textContent = 'Planet payload';
         if (popTitle) popTitle.textContent = data.title;
@@ -757,13 +783,23 @@ function initSolarSystem() {
             });
         }
         pop.hidden = false;
-        // force reflow so transition plays
         // eslint-disable-next-line no-unused-expressions
         pop.offsetHeight;
         pop.classList.add('is-open');
     };
 
     planets.forEach((planet) => {
+        const ring = planet.closest('.orbit-ring');
+        planet.addEventListener('mouseenter', () => {
+            if (prefs.reduceMotion) return;
+            planet.classList.add('is-paused');
+            ring?.classList.add('is-hot');
+        });
+        planet.addEventListener('mouseleave', () => {
+            if (planet.getAttribute('aria-pressed') === 'true') return;
+            planet.classList.remove('is-paused');
+            ring?.classList.remove('is-hot');
+        });
         planet.addEventListener('click', (e) => {
             e.stopPropagation();
             const id = planet.dataset.id;
