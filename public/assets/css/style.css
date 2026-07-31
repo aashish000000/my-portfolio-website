@@ -1193,12 +1193,27 @@ body::after {
 .project-link svg { width: 14px; height: 14px; }
 .project-link:hover { color: var(--jade); }
 
-/* Terminal panel */
+/* Terminal panel + live shell duo */
+.dev-toys {
+    display: grid;
+    grid-template-columns: 1.35fr 0.95fr;
+    gap: 14px;
+    align-items: stretch;
+}
+.section-sub code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    color: var(--jade);
+    background: rgba(46, 230, 168, 0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
 .term-panel {
     border: 1px solid var(--border);
     border-radius: 18px;
     overflow: hidden;
     background: var(--charcoal);
+    min-width: 0;
 }
 .term-tabs {
     display: flex;
@@ -1261,6 +1276,117 @@ body::after {
     font-family: var(--font-display);
     font-size: 36px;
     font-weight: 300;
+}
+
+/* Live shell (REPL + fake API) beside terminal */
+.live-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 360px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at top left, rgba(46, 230, 168, 0.08), transparent 45%),
+        #070b10;
+}
+.live-shell-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(8, 12, 18, 0.9);
+}
+.live-shell-dots { display: flex; gap: 6px; }
+.live-shell-dots i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #3a4550;
+}
+.live-shell-dots i:nth-child(1) { background: #ff6b6b; }
+.live-shell-dots i:nth-child(2) { background: #e6c35c; }
+.live-shell-dots i:nth-child(3) { background: var(--jade); }
+.live-shell-title {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+}
+.live-shell-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--jade);
+    border: 1px solid rgba(46, 230, 168, 0.35);
+    padding: 3px 8px;
+    border-radius: 999px;
+    animation: shellPulse 1.8s ease-in-out infinite;
+}
+@keyframes shellPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.45; }
+}
+.live-shell-out {
+    flex: 1;
+    overflow: auto;
+    padding: 16px 16px 8px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.65;
+    color: var(--text-dim);
+}
+.shell-line { margin: 0 0 8px; white-space: pre-wrap; word-break: break-word; }
+.shell-line.cmd { color: var(--text); }
+.shell-line.cmd span { color: var(--jade); margin-right: 8px; }
+.shell-line.ok { color: #9cdcfe; }
+.shell-line.err { color: #ff8e8e; }
+.shell-line.json { color: #ce9178; }
+.live-shell-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px 12px;
+    border-top: 1px solid var(--border);
+    background: rgba(5, 7, 11, 0.65);
+}
+.live-shell-prompt {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    white-space: nowrap;
+}
+.live-shell-prompt span { color: var(--jade); margin-right: 6px; }
+.live-shell-form input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    outline: none;
+}
+.live-shell-hints {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0 14px 14px;
+}
+.live-shell-hints button {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--jade);
+    background: rgba(46, 230, 168, 0.06);
+    border: 1px solid rgba(46, 230, 168, 0.22);
+    border-radius: 999px;
+    padding: 5px 10px;
+    transition: background 0.2s, border-color 0.2s;
+}
+.live-shell-hints button:hover {
+    background: rgba(46, 230, 168, 0.12);
+    border-color: var(--jade);
 }
 
 /* Stack — full-screen solar system */
@@ -2101,6 +2227,7 @@ footer {
     .about-layout,
     .contact-layout,
     .term-body { grid-template-columns: 1fr; }
+    .dev-toys { grid-template-columns: 1fr; }
     .about-side { position: static; }
     .stack-grid { grid-template-columns: repeat(2, 1fr); }
     .fuel-grid { grid-template-columns: 1fr; }

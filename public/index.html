@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/style.css?v=20260731-16">
+    <link rel="stylesheet" href="/assets/css/style.css?v=20260731-17">
 </head>
 <body>
 
@@ -253,29 +253,52 @@
                 </div>
             </section>
 
-            <!-- TERMINAL -->
+            <!-- TERMINAL + LIVE SHELL -->
             <section id="terminal" class="section terminal-section">
                 <div class="container">
                     <div class="section-head reveal">
                         <span class="section-kicker">04 — Terminal</span>
                         <h2 class="section-title">One Developer,<br><em>Different Languages</em></h2>
+                        <p class="section-sub">Code tabs on the left. Talk to the portfolio on the right — try <code>whoami</code>, <code>hire</code>, or <code>GET /projects</code>.</p>
                     </div>
-                    <div class="term-panel reveal">
-                        <div class="term-tabs" role="tablist">
-                            <button type="button" class="term-tab active" data-lang="html" role="tab" aria-selected="true">&lt;&gt; index.html</button>
-                            <button type="button" class="term-tab" data-lang="js" role="tab" aria-selected="false">JS app.js</button>
-                            <button type="button" class="term-tab" data-lang="py" role="tab" aria-selected="false">PY main.py</button>
-                            <button type="button" class="term-tab" data-lang="sql" role="tab" aria-selected="false">SQL query.sql</button>
-                        </div>
-                        <div class="term-body">
-                            <pre class="term-code" id="term-code" aria-live="polite"></pre>
-                            <div class="term-preview">
-                                <div class="term-preview-bar">🌐 Browser Preview</div>
-                                <div class="term-preview-content" id="term-preview">
-                                    <h3>Hello World!</h3>
+
+                    <div class="dev-toys reveal">
+                        <div class="term-panel">
+                            <div class="term-tabs" role="tablist">
+                                <button type="button" class="term-tab active" data-lang="html" role="tab" aria-selected="true">&lt;&gt; index.html</button>
+                                <button type="button" class="term-tab" data-lang="js" role="tab" aria-selected="false">JS app.js</button>
+                                <button type="button" class="term-tab" data-lang="py" role="tab" aria-selected="false">PY main.py</button>
+                                <button type="button" class="term-tab" data-lang="sql" role="tab" aria-selected="false">SQL query.sql</button>
+                            </div>
+                            <div class="term-body">
+                                <pre class="term-code" id="term-code" aria-live="polite"></pre>
+                                <div class="term-preview">
+                                    <div class="term-preview-bar">🌐 Browser Preview</div>
+                                    <div class="term-preview-content" id="term-preview">
+                                        <h3>Hello World!</h3>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
+                        <aside class="live-shell" aria-label="Interactive portfolio shell">
+                            <div class="live-shell-bar">
+                                <span class="live-shell-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                                <span class="live-shell-title">aj@portfolio — zsh</span>
+                                <span class="live-shell-badge">LIVE</span>
+                            </div>
+                            <div class="live-shell-out" id="shell-out" aria-live="polite"></div>
+                            <form class="live-shell-form" id="shell-form" autocomplete="off">
+                                <label class="live-shell-prompt" for="shell-input"><span>➜</span> ~</label>
+                                <input id="shell-input" name="cmd" type="text" spellcheck="false" placeholder="try help, whoami, hire…" aria-label="Shell command">
+                            </form>
+                            <div class="live-shell-hints" id="shell-hints">
+                                <button type="button" data-cmd="help">help</button>
+                                <button type="button" data-cmd="whoami">whoami</button>
+                                <button type="button" data-cmd="GET /projects">GET /projects</button>
+                                <button type="button" data-cmd="hire">hire</button>
+                            </div>
+                        </aside>
                     </div>
                 </div>
             </section>
@@ -557,6 +580,6 @@
         </footer>
     </div>
 
-    <script type="module" src="/assets/js/script.js?v=20260731-16"></script>
+    <script type="module" src="/assets/js/script.js?v=20260731-17"></script>
 </body>
 </html>

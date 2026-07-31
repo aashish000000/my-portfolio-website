@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initExperience();
     initFuelTilt();
     initTerminal();
+    initLiveShell();
     initSolarSystem();
     updateFooterYear();
     setupLazyInit();
@@ -133,7 +134,7 @@ function initCursor() {
     };
     loop();
 
-    const hoverables = 'a, button, input, textarea, .project-card, .exp-rail-item, .stack-card, .fuel-svc, .term-tab, .planet';
+    const hoverables = 'a, button, input, textarea, .project-card, .exp-rail-item, .stack-card, .fuel-svc, .term-tab, .planet, .live-shell-hints button';
     document.addEventListener('mouseover', (e) => {
         if (e.target.closest(hoverables)) {
             dot.classList.add('hover');
@@ -632,6 +633,155 @@ function initTerminal() {
     setLang('html');
 }
 
+function initLiveShell() {
+    const out = document.getElementById('shell-out');
+    const form = document.getElementById('shell-form');
+    const input = document.getElementById('shell-input');
+    const hints = document.getElementById('shell-hints');
+    if (!out || !form || !input) return;
+
+    const history = [];
+    let histIdx = -1;
+
+    const print = (html, cls = 'ok') => {
+        const line = document.createElement('p');
+        line.className = `shell-line ${cls}`;
+        line.innerHTML = html;
+        out.appendChild(line);
+        out.scrollTop = out.scrollHeight;
+    };
+
+    const run = (raw) => {
+        const cmd = String(raw || '').trim();
+        if (!cmd) return;
+        history.push(cmd);
+        histIdx = history.length;
+        print(`<span>➜</span>${escapeHtml(cmd)}`, 'cmd');
+
+        const lower = cmd.toLowerCase();
+        const getMatch = cmd.match(/^get\s+(\/\S*)/i);
+
+        if (lower === 'help' || lower === '?') {
+            print(`commands:
+  whoami          — identity dump
+  stack           — core tools
+  projects        — shipped work
+  hire / contact  — next step
+  GET /skills     — JSON skills
+  GET /projects   — JSON projects
+  clear           — wipe screen
+  help            — this list`);
+            return;
+        }
+        if (lower === 'clear' || lower === 'cls') {
+            out.innerHTML = '';
+            return;
+        }
+        if (lower === 'whoami') {
+            print(`Aashish Joshi
+CS @ Kean University · Full Stack Developer
+Jersey City, NJ · summer '26 intern
+status: open to opportunities`);
+            return;
+        }
+        if (lower === 'stack' || lower === 'ls') {
+            print(`languages/   frameworks/   databases/
+ai/          engineering/  craft/
+tip: open Stack Orbit below and click a planet`);
+            return;
+        }
+        if (lower === 'projects') {
+            print(`01  AI Calorie Calculator
+02  MoodRing
+03  Collaborative Expense Splitter
+→ https://github.com/aashish000000`);
+            return;
+        }
+        if (lower === 'hire' || lower === 'contact') {
+            print(`ready when you are.
+calendly → https://calendly.com/aa-aashish2023/
+or jump to #contact and send a note.`);
+            return;
+        }
+        if (getMatch) {
+            const path = getMatch[1].toLowerCase();
+            if (path === '/skills' || path === '/stack') {
+                print(JSON.stringify({
+                    status: 200,
+                    languages: ['Python', 'Java', 'JavaScript', 'TypeScript', 'C++', 'SQL'],
+                    frameworks: ['Next.js', 'Node.js', 'Express', 'ASP.NET Core'],
+                    focus: ['REST', 'AI product features', 'clean UX'],
+                }, null, 2), 'json');
+                return;
+            }
+            if (path === '/projects') {
+                print(JSON.stringify({
+                    status: 200,
+                    data: [
+                        { id: 1, title: 'AI Calorie Calculator' },
+                        { id: 2, title: 'MoodRing' },
+                        { id: 3, title: 'Collaborative Expense Splitter' },
+                    ],
+                }, null, 2), 'json');
+                return;
+            }
+            if (path === '/whoami' || path === '/me') {
+                print(JSON.stringify({
+                    status: 200,
+                    name: 'Aashish Joshi',
+                    role: 'Full Stack Developer',
+                    school: 'Kean University',
+                }, null, 2), 'json');
+                return;
+            }
+            print(`404  unknown route ${escapeHtml(path)}
+try GET /skills or GET /projects`, 'err');
+            return;
+        }
+
+        print(`command not found: ${escapeHtml(cmd)}
+type <span style="color:var(--jade)">help</span> for available commands`, 'err');
+    };
+
+    print(`aj portfolio shell v1.0
+type help to begin — or click a chip below.`);
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const value = input.value;
+        input.value = '';
+        run(value);
+    });
+
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (!history.length) return;
+            histIdx = Math.max(0, histIdx - 1);
+            input.value = history[histIdx] || '';
+        } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            histIdx = Math.min(history.length, histIdx + 1);
+            input.value = histIdx >= history.length ? '' : history[histIdx];
+        }
+    });
+
+    hints?.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-cmd]');
+        if (!btn) return;
+        run(btn.dataset.cmd);
+        input.focus();
+    });
+}
+
+function escapeHtml(str) {
+    return String(str)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;');
+}
+
 // ─────────────────────────────────────────────
 // Constellation orbit (Tools of the Trade)
 // ─────────────────────────────────────────────
@@ -1071,12 +1221,3 @@ async function jsonFetch(path, options = {}) {
     throw lastErr ?? new Error('Request failed.');
 }
 
-function escapeHtml(str) {
-    if (typeof str !== 'string') return '';
-    return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-}
