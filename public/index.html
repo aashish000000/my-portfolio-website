@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/style.css?v=20260731-7">
+    <link rel="stylesheet" href="/assets/css/style.css?v=20260731-9">
 </head>
 <body data-api-base="https://aashish-portfolio-backend.onrender.com">
 
@@ -359,7 +359,7 @@
                     <div class="solar-hud-copy">
                         <span class="section-kicker">Technical Expertise</span>
                         <h2 class="section-title">Tools of the Trade</h2>
-                        <p class="solar-hud-sub">A living solar system of my stack — click a planet to inspect a domain.</p>
+                        <p class="solar-hud-sub">A living solar system of my stack — planets keep orbiting as you explore.</p>
                     </div>
                     <div class="view-toggle" role="group" aria-label="Stack view mode">
                         <button type="button" class="view-toggle-btn active" data-view="orbit" aria-pressed="true">Solar</button>
@@ -377,48 +377,48 @@
                             <em>Stack</em>
                         </div>
 
-                        <div class="orbit-ring" style="--size:16vmin; --dur:14s; --delay:-2s;" data-orbit="1">
-                            <button type="button" class="planet planet-mercury" data-id="languages" aria-pressed="true" style="--start:0deg;">
+                        <div class="orbit-ring" style="--rx:18vmin; --ry:8vmin; --dur:16s; --delay:-2s;" data-orbit="1">
+                            <button type="button" class="planet planet-mercury" data-id="languages" aria-pressed="true">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
                                     <span class="planet-label">Languages</span>
                                 </span>
                             </button>
                         </div>
-                        <div class="orbit-ring" style="--size:30vmin; --dur:22s; --delay:-7s;" data-orbit="2">
-                            <button type="button" class="planet planet-venus" data-id="frameworks" aria-pressed="false" style="--start:55deg;">
+                        <div class="orbit-ring" style="--rx:34vmin; --ry:15vmin; --dur:24s; --delay:-7s;" data-orbit="2">
+                            <button type="button" class="planet planet-venus" data-id="frameworks" aria-pressed="false">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
                                     <span class="planet-label">Frameworks</span>
                                 </span>
                             </button>
                         </div>
-                        <div class="orbit-ring" style="--size:44vmin; --dur:30s; --delay:-12s;" data-orbit="3">
-                            <button type="button" class="planet planet-earth" data-id="databases" aria-pressed="false" style="--start:120deg;">
+                        <div class="orbit-ring" style="--rx:50vmin; --ry:22vmin; --dur:32s; --delay:-12s;" data-orbit="3">
+                            <button type="button" class="planet planet-earth" data-id="databases" aria-pressed="false">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
                                     <span class="planet-label">Databases</span>
                                 </span>
                             </button>
                         </div>
-                        <div class="orbit-ring" style="--size:58vmin; --dur:40s; --delay:-4s;" data-orbit="4">
-                            <button type="button" class="planet planet-mars" data-id="ai" aria-pressed="false" style="--start:185deg;">
+                        <div class="orbit-ring" style="--rx:66vmin; --ry:29vmin; --dur:42s; --delay:-4s;" data-orbit="4">
+                            <button type="button" class="planet planet-mars" data-id="ai" aria-pressed="false">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
                                     <span class="planet-label">AI &amp; Product</span>
                                 </span>
                             </button>
                         </div>
-                        <div class="orbit-ring" style="--size:72vmin; --dur:52s; --delay:-18s;" data-orbit="5">
-                            <button type="button" class="planet planet-jupiter" data-id="engineering" aria-pressed="false" style="--start:250deg;">
+                        <div class="orbit-ring" style="--rx:82vmin; --ry:36vmin; --dur:54s; --delay:-18s;" data-orbit="5">
+                            <button type="button" class="planet planet-jupiter" data-id="engineering" aria-pressed="false">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
                                     <span class="planet-label">Engineering</span>
                                 </span>
                             </button>
                         </div>
-                        <div class="orbit-ring" style="--size:88vmin; --dur:68s; --delay:-28s;" data-orbit="6">
-                            <button type="button" class="planet planet-saturn" data-id="craft" aria-pressed="false" style="--start:310deg;">
+                        <div class="orbit-ring" style="--rx:98vmin; --ry:44vmin; --dur:70s; --delay:-28s;" data-orbit="6">
+                            <button type="button" class="planet planet-saturn" data-id="craft" aria-pressed="false">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
                                     <span class="planet-ringlet" aria-hidden="true"></span>
@@ -427,18 +427,6 @@
                             </button>
                         </div>
                     </div>
-
-                    <aside class="solar-panel" id="solar-panel" aria-live="polite">
-                        <span class="detail-num" id="detail-num">01</span>
-                        <div class="detail-head">
-                            <h3 id="detail-title">Languages</h3>
-                            <span class="stack-level" id="detail-level">Expert</span>
-                        </div>
-                        <div class="chip-row" id="detail-chips"></div>
-                        <div class="meter"><span id="detail-meter" style="--p:88%"></span></div>
-                        <span class="meter-label" id="detail-meter-label">Proficiency 88%</span>
-                        <p class="detail-hint">Select a planet to explore that domain.</p>
-                    </aside>
                 </div>
 
                 <div id="stack-grid" class="solar-grid-wrap" data-active="false" hidden>
@@ -595,6 +583,6 @@
         </footer>
     </div>
 
-    <script type="module" src="/assets/js/script.js?v=20260731-7"></script>
+    <script type="module" src="/assets/js/script.js?v=20260731-9"></script>
 </body>
 </html>

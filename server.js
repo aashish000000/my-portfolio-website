@@ -93,7 +93,7 @@ app.get('/api/github-projects', async (req, res) => {
         const username = 'aashish000000'; // Your GitHub username
 
         // ** UPDATED: Define which specific repositories you want to show **
-        const pinnedRepos = ['final-project-calorie-calculator', 'Calorie_Calculator', 'Expense-Splitter', 'CS230-Stock_Price'];
+        const pinnedRepos = ['final-project-calorie-calculator', 'Moodring', 'Expense-Splitter'];
 
         // If no GitHub token, fall back to local projects.json
         if (!githubToken) {

@@ -362,45 +362,14 @@ function initSolarSystem() {
 
     if (prefs.reduceMotion) system.classList.add('reduce-motion');
 
-    const showDetail = (id) => {
-        const data = STACK_DOMAINS[id];
-        if (!data) return;
-        const title = document.getElementById('detail-title');
-        const level = document.getElementById('detail-level');
-        const chips = document.getElementById('detail-chips');
-        const meter = document.getElementById('detail-meter');
-        const meterLabel = document.getElementById('detail-meter-label');
-        const num = document.getElementById('detail-num');
-        if (num) num.textContent = data.num;
-        if (title) title.textContent = data.title;
-        if (level) level.textContent = data.level;
-        if (chips) {
-            chips.innerHTML = data.chips
-                .map((c) => `<span class="chip">${escapeHtml(c)}</span>`)
-                .join('');
-        }
-        if (meter) {
-            meter.style.setProperty('--p', `${data.pct}%`);
-            meter.style.width = '0';
-            requestAnimationFrame(() => {
-                meter.style.width = `${data.pct}%`;
-            });
-        }
-        if (meterLabel) meterLabel.textContent = `Proficiency ${data.pct}%`;
-
-        planets.forEach((p) => {
-            p.setAttribute('aria-pressed', String(p.dataset.id === id));
-        });
-    };
-
+    // Highlight only — no side panel; orbits never pause on hover
     planets.forEach((planet) => {
-        planet.addEventListener('click', () => showDetail(planet.dataset.id));
-        planet.addEventListener('focus', () => system.classList.add('is-paused'));
-        planet.addEventListener('blur', () => system.classList.remove('is-paused'));
+        planet.addEventListener('click', () => {
+            planets.forEach((p) => {
+                p.setAttribute('aria-pressed', String(p === planet));
+            });
+        });
     });
-
-    system.addEventListener('mouseenter', () => system.classList.add('is-paused'));
-    system.addEventListener('mouseleave', () => system.classList.remove('is-paused'));
 
     const setView = (view) => {
         const isOrbit = view === 'orbit';
@@ -423,7 +392,6 @@ function initSolarSystem() {
         btn.addEventListener('click', () => setView(btn.dataset.view || 'orbit'));
     });
 
-    showDetail('languages');
     setView('orbit');
 }
 

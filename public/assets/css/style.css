@@ -1061,23 +1061,20 @@ body::after {
 }
 
 .solar-hud {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    position: relative;
     z-index: 8;
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
     justify-content: space-between;
     gap: 20px;
-    padding: 100px var(--gutter) 0;
+    padding: 100px var(--gutter) 8px;
     pointer-events: none;
 }
 .solar-hud > * { pointer-events: auto; }
 .solar-hud .section-kicker { color: var(--jade); }
 .solar-hud .section-title { color: var(--ss-text); }
-.solar-hud-copy { max-width: 520px; }
+.solar-hud-copy { max-width: 560px; }
 .solar-hud-sub {
     margin-top: 10px;
     color: var(--ss-dim);
@@ -1086,11 +1083,12 @@ body::after {
 }
 
 .solar-stage {
-    position: absolute;
-    inset: 0;
+    position: relative;
     z-index: 2;
     width: 100%;
-    height: 100%;
+    height: calc(100vh - 190px);
+    height: calc(100dvh - 190px);
+    min-height: 420px;
 }
 .solar-stage[data-active="false"],
 .solar-grid-wrap[data-active="false"] { display: none; }
@@ -1183,51 +1181,40 @@ body::after {
 }
 
 .orbit-ring {
-    --size: 40vmin;
+    --rx: 50vmin;
+    --ry: 22vmin;
     --dur: 40s;
     --delay: 0s;
     position: absolute;
-    width: var(--size);
-    height: var(--size);
+    width: var(--rx);
+    height: var(--ry);
     border-radius: 50%;
     border: 1.5px solid var(--ss-ring);
-    background: radial-gradient(circle, transparent 68%, var(--ss-ring-soft) 100%);
-    animation: orbitSpin var(--dur) linear infinite;
-    animation-delay: var(--delay);
+    background: radial-gradient(ellipse at center, transparent 62%, var(--ss-ring-soft) 100%);
     box-shadow: 0 0 40px rgba(46, 230, 168, 0.04);
+    /* Static elliptical track — planets travel along it */
 }
-.solar-system.is-paused .orbit-ring,
-.solar-system.reduce-motion .orbit-ring {
-    animation-play-state: paused;
-}
-.solar-system.is-paused .planet-spin,
-.solar-system.reduce-motion .planet-spin {
-    animation-play-state: paused;
-}
-@keyframes orbitSpin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-@keyframes planetCounter {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(-360deg); }
+
+@keyframes moveOrbit {
+    from { offset-distance: 0%; }
+    to { offset-distance: 100%; }
 }
 
 .planet {
-    --start: 0deg;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: auto;
+    inset: 0;
+    width: max-content;
+    height: max-content;
     margin: 0;
     padding: 0;
     border: 0;
     background: transparent;
     color: var(--ss-text);
-    transform:
-        rotate(var(--start))
-        translateY(calc(var(--size) / -2))
-        rotate(calc(var(--start) * -1));
+    offset-path: ellipse(50% 50% at 50% 50%);
+    offset-rotate: 0deg;
+    offset-anchor: center;
+    animation: moveOrbit var(--dur) linear infinite;
+    animation-delay: var(--delay);
     z-index: 3;
 }
 .planet-spin {
@@ -1235,8 +1222,6 @@ body::after {
     justify-items: center;
     gap: 10px;
     position: relative;
-    animation: planetCounter var(--dur) linear infinite;
-    animation-delay: var(--delay);
 }
 
 .planet-body {
@@ -1298,56 +1283,6 @@ body::after {
 .planet-mars    { --p-size: 20px; --p-grad: radial-gradient(circle at 30% 30%, #ffd0c2, #ff6b4a 60%, #b8321a); --p-glow: rgba(255,107,74,0.6); }
 .planet-jupiter { --p-size: 34px; --p-grad: radial-gradient(circle at 30% 30%, #ffe6c2, #e8a54b 45%, #c47a2a 80%); --p-glow: rgba(232,165,75,0.55); }
 .planet-saturn  { --p-size: 28px; --p-grad: radial-gradient(circle at 30% 30%, #f5ecd0, #d4c08a 55%, #9a8650); --p-glow: rgba(212,192,138,0.55); }
-
-.solar-panel {
-    position: absolute;
-    right: var(--gutter);
-    bottom: 28px;
-    z-index: 9;
-    width: min(360px, calc(100% - (var(--gutter) * 2)));
-    border: 1px solid rgba(46, 230, 168, 0.28);
-    border-radius: 18px;
-    padding: 24px;
-    background: rgba(8, 12, 18, 0.82);
-    color: var(--ss-text);
-    backdrop-filter: blur(16px);
-    display: grid;
-    gap: 12px;
-    box-shadow: 0 24px 70px rgba(0,0,0,0.45);
-}
-.solar-panel .stack-level,
-.solar-panel .meter-label,
-.solar-panel .detail-hint { color: var(--ss-dim); }
-.solar-panel .chip {
-    border-color: rgba(46, 230, 168, 0.22);
-    background: rgba(46, 230, 168, 0.06);
-    color: var(--ss-text);
-}
-.detail-num {
-    font-family: var(--font-display);
-    font-size: 28px;
-    color: var(--jade);
-}
-.detail-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 12px;
-}
-.detail-head h3 {
-    font-family: var(--font-display);
-    font-size: 28px;
-    font-weight: 400;
-    color: var(--ss-text);
-}
-.detail-hint {
-    margin-top: 4px;
-    font-size: 12px;
-    letter-spacing: 0.04em;
-}
-.solar-panel .meter span {
-    width: var(--p);
-}
 
 .solar-section .view-toggle {
     background: rgba(8, 12, 18, 0.75);
@@ -1551,14 +1486,9 @@ footer {
     .about-side { position: static; }
     .stack-grid { grid-template-columns: repeat(2, 1fr); }
     .term-preview { border-left: 0; border-top: 1px solid var(--border); }
-    .solar-section { min-height: 120vh; }
-    .solar-panel {
-        left: var(--gutter);
-        right: var(--gutter);
-        bottom: 20px;
-        width: auto;
-    }
+    .solar-section { min-height: 100vh; }
     .solar-hud { padding-top: 88px; }
+    .solar-stage { height: calc(100vh - 220px); min-height: 360px; }
 }
 
 @media (max-width: 768px) {
@@ -1590,6 +1520,5 @@ footer {
         scroll-behavior: auto !important;
     }
     .marquee-track { animation: none; }
-    .orbit-ring,
-    .planet-spin { animation: none !important; }
+    .planet { animation: none !important; }
 }
