@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/style.css?v=20260731-1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=20260731-3">
 </head>
 <body data-api-base="https://aashish-portfolio-backend.onrender.com">
 
@@ -354,11 +354,71 @@
             <!-- STACK -->
             <section id="stack" class="section">
                 <div class="container">
-                    <div class="section-head reveal">
-                        <span class="section-kicker">Technical Expertise</span>
-                        <h2 class="section-title">Tools of the Trade</h2>
+                    <div class="section-head reveal section-head-row">
+                        <div>
+                            <span class="section-kicker">Technical Expertise</span>
+                            <h2 class="section-title">Tools of the Trade</h2>
+                        </div>
+                        <div class="view-toggle" role="group" aria-label="Stack view mode">
+                            <button type="button" class="view-toggle-btn active" data-view="orbit" aria-pressed="true">Orbit</button>
+                            <button type="button" class="view-toggle-btn" data-view="grid" aria-pressed="false">Grid</button>
+                        </div>
                     </div>
-                    <div class="stack-grid">
+
+                    <!-- Constellation orbit view -->
+                    <div id="stack-orbit" class="stack-orbit reveal" data-active="true">
+                        <div class="constellation" id="constellation">
+                            <div class="constellation-glow" aria-hidden="true"></div>
+                            <div class="constellation-ring" id="constellation-ring">
+                                <svg class="constellation-svg" id="constellation-svg" viewBox="0 0 100 100" aria-hidden="true"></svg>
+                                <button type="button" class="c-node" data-id="languages" style="--i:0" aria-pressed="true">
+                                    <span class="c-node-orb"></span>
+                                    <span class="c-node-label">Languages</span>
+                                </button>
+                                <button type="button" class="c-node" data-id="frameworks" style="--i:1" aria-pressed="false">
+                                    <span class="c-node-orb"></span>
+                                    <span class="c-node-label">Frameworks</span>
+                                </button>
+                                <button type="button" class="c-node" data-id="databases" style="--i:2" aria-pressed="false">
+                                    <span class="c-node-orb"></span>
+                                    <span class="c-node-label">Databases</span>
+                                </button>
+                                <button type="button" class="c-node" data-id="ai" style="--i:3" aria-pressed="false">
+                                    <span class="c-node-orb"></span>
+                                    <span class="c-node-label">AI &amp; Product</span>
+                                </button>
+                                <button type="button" class="c-node" data-id="engineering" style="--i:4" aria-pressed="false">
+                                    <span class="c-node-orb"></span>
+                                    <span class="c-node-label">Engineering</span>
+                                </button>
+                                <button type="button" class="c-node" data-id="craft" style="--i:5" aria-pressed="false">
+                                    <span class="c-node-orb"></span>
+                                    <span class="c-node-label">Craft</span>
+                                </button>
+                            </div>
+                            <div class="constellation-core" aria-hidden="true">
+                                <span class="core-ring"></span>
+                                <span class="core-ring core-ring-2"></span>
+                                <strong>AJ</strong>
+                                <span class="core-sub">Stack</span>
+                            </div>
+                        </div>
+
+                        <aside class="constellation-detail" id="constellation-detail" aria-live="polite">
+                            <span class="detail-num">01</span>
+                            <div class="detail-head">
+                                <h3 id="detail-title">Languages</h3>
+                                <span class="stack-level" id="detail-level">Expert</span>
+                            </div>
+                            <div class="chip-row" id="detail-chips"></div>
+                            <div class="meter"><span id="detail-meter" style="--p:88%"></span></div>
+                            <span class="meter-label" id="detail-meter-label">Proficiency 88%</span>
+                            <p class="detail-hint">Click a node on the constellation to explore each domain.</p>
+                        </aside>
+                    </div>
+
+                    <!-- Grid view -->
+                    <div id="stack-grid" class="stack-grid" data-active="false" hidden>
                         <article class="stack-card reveal">
                             <span class="stack-num">01</span>
                             <div class="stack-head">
@@ -529,6 +589,6 @@
         </footer>
     </div>
 
-    <script type="module" src="/assets/js/script.js?v=20260731-2"></script>
+    <script type="module" src="/assets/js/script.js?v=20260731-3"></script>
 </body>
 </html>

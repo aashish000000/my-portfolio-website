@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initReveals();
     initMetrics();
     initTerminal();
+    initConstellation();
     updateFooterYear();
     setupLazyInit();
 });
@@ -300,6 +301,190 @@ function initTerminal() {
         tab.addEventListener('click', () => setLang(tab.dataset.lang));
     });
     setLang('html');
+}
+
+// ─────────────────────────────────────────────
+// Constellation orbit (Tools of the Trade)
+// ─────────────────────────────────────────────
+
+const STACK_DOMAINS = {
+    languages: {
+        num: '01',
+        title: 'Languages',
+        level: 'Expert',
+        chips: ['Python', 'Java', 'JavaScript', 'TypeScript', 'C++', 'SQL', 'PHP'],
+        pct: 88,
+    },
+    frameworks: {
+        num: '02',
+        title: 'Frameworks',
+        level: 'Advanced',
+        chips: ['Next.js', 'Node.js', 'Express', 'ASP.NET Core', 'Tkinter'],
+        pct: 84,
+    },
+    databases: {
+        num: '03',
+        title: 'Databases',
+        level: 'Proficient',
+        chips: ['MySQL', 'MongoDB', 'NeDB'],
+        pct: 78,
+    },
+    ai: {
+        num: '04',
+        title: 'AI & Product',
+        level: 'Advanced',
+        chips: ['OpenAI API', 'Chatbots', 'Photo Recognition', 'Analytics'],
+        pct: 80,
+    },
+    engineering: {
+        num: '05',
+        title: 'Engineering',
+        level: 'Expert',
+        chips: ['REST APIs', 'WebSockets', 'System Design', 'Accessibility'],
+        pct: 86,
+    },
+    craft: {
+        num: '06',
+        title: 'Craft',
+        level: 'Advanced',
+        chips: ['UI/UX', 'Design Systems', 'Performance', 'Docs'],
+        pct: 82,
+    },
+};
+
+function initConstellation() {
+    const constellation = document.getElementById('constellation');
+    const svg = document.getElementById('constellation-svg');
+    const nodes = [...document.querySelectorAll('.c-node')];
+    const orbit = document.getElementById('stack-orbit');
+    const grid = document.getElementById('stack-grid');
+    const toggleBtns = document.querySelectorAll('.view-toggle-btn');
+    if (!constellation || !svg || !nodes.length) return;
+
+    if (prefs.reduceMotion) constellation.classList.add('reduce-motion');
+
+    // Draw constellation network once (SVG lives inside the rotating ring)
+    const NS = 'http://www.w3.org/2000/svg';
+    const cx = 50;
+    const cy = 50;
+    const radius = 42;
+    const points = nodes.map((_, i) => {
+        const angle = ((i * 60) - 90) * (Math.PI / 180);
+        return {
+            x: cx + radius * Math.cos(angle),
+            y: cy + radius * Math.sin(angle),
+        };
+    });
+
+    const frag = document.createDocumentFragment();
+    points.forEach((p, i) => {
+        const spoke = document.createElementNS(NS, 'line');
+        spoke.setAttribute('x1', String(cx));
+        spoke.setAttribute('y1', String(cy));
+        spoke.setAttribute('x2', String(p.x));
+        spoke.setAttribute('y2', String(p.y));
+        spoke.classList.add('trail');
+        frag.appendChild(spoke);
+
+        const next = points[(i + 1) % points.length];
+        const rim = document.createElementNS(NS, 'line');
+        rim.setAttribute('x1', String(p.x));
+        rim.setAttribute('y1', String(p.y));
+        rim.setAttribute('x2', String(next.x));
+        rim.setAttribute('y2', String(next.y));
+        frag.appendChild(rim);
+
+        // Chord to +2 for denser constellation feel
+        const skip = points[(i + 2) % points.length];
+        const chord = document.createElementNS(NS, 'line');
+        chord.setAttribute('x1', String(p.x));
+        chord.setAttribute('y1', String(p.y));
+        chord.setAttribute('x2', String(skip.x));
+        chord.setAttribute('y2', String(skip.y));
+        chord.style.strokeOpacity = '0.14';
+        frag.appendChild(chord);
+
+        const dot = document.createElementNS(NS, 'circle');
+        dot.setAttribute('cx', String(p.x));
+        dot.setAttribute('cy', String(p.y));
+        dot.setAttribute('r', '1.2');
+        dot.classList.add('hub-dot');
+        frag.appendChild(dot);
+    });
+
+    const hub = document.createElementNS(NS, 'circle');
+    hub.setAttribute('cx', String(cx));
+    hub.setAttribute('cy', String(cy));
+    hub.setAttribute('r', '1.6');
+    hub.classList.add('hub-dot');
+    frag.appendChild(hub);
+    svg.appendChild(frag);
+
+    const showDetail = (id) => {
+        const data = STACK_DOMAINS[id];
+        if (!data) return;
+        const title = document.getElementById('detail-title');
+        const level = document.getElementById('detail-level');
+        const chips = document.getElementById('detail-chips');
+        const meter = document.getElementById('detail-meter');
+        const meterLabel = document.getElementById('detail-meter-label');
+        const num = document.querySelector('.constellation-detail .detail-num');
+        if (num) num.textContent = data.num;
+        if (title) title.textContent = data.title;
+        if (level) level.textContent = data.level;
+        if (chips) {
+            chips.innerHTML = data.chips
+                .map((c) => `<span class="chip">${escapeHtml(c)}</span>`)
+                .join('');
+        }
+        if (meter) {
+            meter.style.setProperty('--p', `${data.pct}%`);
+            // retrigger width transition
+            meter.style.width = '0';
+            requestAnimationFrame(() => {
+                meter.style.width = `${data.pct}%`;
+            });
+        }
+        if (meterLabel) meterLabel.textContent = `Proficiency ${data.pct}%`;
+
+        nodes.forEach((n) => {
+            n.setAttribute('aria-pressed', String(n.dataset.id === id));
+        });
+    };
+
+    nodes.forEach((node) => {
+        node.addEventListener('click', () => showDetail(node.dataset.id));
+    });
+
+    constellation.addEventListener('mouseenter', () => constellation.classList.add('is-paused'));
+    constellation.addEventListener('mouseleave', () => constellation.classList.remove('is-paused'));
+
+    const setView = (view) => {
+        const isOrbit = view === 'orbit';
+        if (orbit) {
+            orbit.hidden = !isOrbit;
+            orbit.dataset.active = String(isOrbit);
+        }
+        if (grid) {
+            grid.hidden = isOrbit;
+            grid.dataset.active = String(!isOrbit);
+            if (!isOrbit) {
+                grid.querySelectorAll('.reveal').forEach((el) => el.classList.add('visible'));
+            }
+        }
+        toggleBtns.forEach((btn) => {
+            const active = btn.dataset.view === view;
+            btn.classList.toggle('active', active);
+            btn.setAttribute('aria-pressed', String(active));
+        });
+    };
+
+    toggleBtns.forEach((btn) => {
+        btn.addEventListener('click', () => setView(btn.dataset.view));
+    });
+
+    showDetail('languages');
+    setView('orbit');
 }
 
 function setupLazyInit() {
