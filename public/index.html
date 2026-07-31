@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/style.css?v=20260731-13">
+    <link rel="stylesheet" href="/assets/css/style.css?v=20260731-14">
 </head>
 <body>
 
@@ -439,37 +439,72 @@
             </section>
 
             <!-- PERSONAL -->
-            <section id="favorites" class="section">
+            <section id="favorites" class="section fuel-section">
                 <div class="container">
                     <div class="section-head reveal">
                         <span class="section-kicker">Beyond the code</span>
-                        <h2 class="section-title">What fuels me</h2>
+                        <h2 class="section-title">What <em>fuels</em> me</h2>
+                        <p class="section-sub">Out of everything I do off the keyboard, <strong>reading</strong> sits at the top — MMA nights and great series keep the fire going too.</p>
                     </div>
-                    <div class="favorites-grid">
-                        <article class="favorite-card reveal">
-                            <img src="/assets/img/Lin_Dan.jpg" alt="Lin Dan playing badminton" loading="lazy">
-                            <div class="favorite-overlay">
-                                <span class="fav-tag">Sport</span>
-                                <h3>Badminton</h3>
-                                <p>Favorite player: Lin Dan — a true legend of the sport.</p>
+
+                    <div class="fuel-layout">
+                        <article class="fuel-hero reveal" aria-label="Reading — primary fuel">
+                            <div class="fuel-hero-visual" aria-hidden="true">
+                                <div class="fuel-book">
+                                    <span class="fuel-book-spine"></span>
+                                    <span class="fuel-book-page">
+                                        <i></i><i></i><i></i><i></i>
+                                    </span>
+                                    <span class="fuel-book-page fuel-book-page-r">
+                                        <i></i><i></i><i></i>
+                                    </span>
+                                </div>
+                                <div class="fuel-hero-glow"></div>
+                            </div>
+                            <div class="fuel-hero-copy">
+                                <span class="fuel-rank">01 · Primary fuel</span>
+                                <h3>Reading</h3>
+                                <p class="fuel-lead">Pages first. Stories, systems, biographies — anything that stretches how I think before I write another line of code.</p>
+                                <ul class="fuel-notes">
+                                    <li>Quiet focus that recharges deeper than scrolling</li>
+                                    <li>New mental models I bring back into product work</li>
+                                    <li>The habit I protect when everything else gets loud</li>
+                                </ul>
+                                <div class="fuel-chips">
+                                    <span>Fiction</span><span>Non-fiction</span><span>Long-form</span>
+                                </div>
                             </div>
                         </article>
-                        <article class="favorite-card reveal">
-                            <img src="/assets/img/jon_jones.png" alt="Jon Jones in the octagon" loading="lazy">
-                            <div class="favorite-overlay">
-                                <span class="fav-tag">Combat Sport</span>
-                                <h3>MMA</h3>
-                                <p>Favorite fighter: Jon Jones — skill and dominance personified.</p>
-                            </div>
-                        </article>
-                        <article class="favorite-card reveal">
-                            <img src="/assets/img/Walter_white.jpg" alt="Bryan Cranston as Walter White" loading="lazy">
-                            <div class="favorite-overlay">
-                                <span class="fav-tag">TV Series</span>
-                                <h3>Breaking Bad</h3>
-                                <p>A masterpiece of storytelling. Favorite actor: Bryan Cranston.</p>
-                            </div>
-                        </article>
+
+                        <div class="fuel-side">
+                            <article class="fuel-card reveal">
+                                <div class="fuel-card-media">
+                                    <img src="/assets/img/jon_jones.png" alt="Jon Jones in the octagon" loading="lazy">
+                                </div>
+                                <div class="fuel-card-body">
+                                    <span class="fuel-rank">02 · Spectacle</span>
+                                    <h3>MMA</h3>
+                                    <p>Octagon nights for timing, grit, and chess under pressure. Favorite to watch: <strong>Jon Jones</strong>.</p>
+                                    <div class="fuel-chips">
+                                        <span>UFC</span><span>Strategy</span><span>Intensity</span>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article class="fuel-card reveal">
+                                <div class="fuel-card-media">
+                                    <img src="/assets/img/Walter_white.jpg" alt="Bryan Cranston as Walter White" loading="lazy">
+                                </div>
+                                <div class="fuel-card-body">
+                                    <span class="fuel-rank">03 · Stories</span>
+                                    <h3>Series</h3>
+                                    <p>Long arcs, sharp dialogue, characters that mutate. All-timer: <strong>Breaking Bad</strong> — Bryan Cranston owns the screen.</p>
+                                    <div class="fuel-chips">
+                                        <span>Drama</span><span>Character study</span><span>Binge-worthy</span>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -527,6 +562,6 @@
         </footer>
     </div>
 
-    <script type="module" src="/assets/js/script.js?v=20260731-13"></script>
+    <script type="module" src="/assets/js/script.js?v=20260731-14"></script>
 </body>
 </html>

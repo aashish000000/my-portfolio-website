@@ -132,7 +132,7 @@ function initCursor() {
     };
     loop();
 
-    const hoverables = 'a, button, input, textarea, .project-card, .exp-rail-item, .stack-card, .term-tab';
+    const hoverables = 'a, button, input, textarea, .project-card, .exp-rail-item, .stack-card, .fuel-card, .fuel-hero, .term-tab, .planet';
     document.addEventListener('mouseover', (e) => {
         if (e.target.closest(hoverables)) {
             dot.classList.add('hover');
@@ -663,6 +663,7 @@ const STACK_DOMAINS = {
 };
 
 function initSolarSystem() {
+    const section = document.getElementById('stack');
     const system = document.getElementById('solar-system');
     const planets = [...document.querySelectorAll('.planet')];
     const orbit = document.getElementById('stack-orbit');
@@ -677,7 +678,19 @@ function initSolarSystem() {
     const popClose = document.getElementById('planet-pop-close');
     if (!system || !planets.length) return;
 
-    if (prefs.reduceMotion) system.classList.add('reduce-motion');
+    if (prefs.reduceMotion) {
+        system.classList.add('reduce-motion');
+        section?.classList.add('is-lit');
+    } else if (section) {
+        const io = new IntersectionObserver((entries, o) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                section.classList.add('is-lit');
+                o.unobserve(entry.target);
+            });
+        }, { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
+        io.observe(section);
+    }
 
     const PLANET_PAYLOAD = {
         languages: {
