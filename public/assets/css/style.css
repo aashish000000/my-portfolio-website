@@ -376,6 +376,7 @@ body::after {
 /* Hero */
 .hero {
     min-height: 100vh;
+    min-height: 100dvh;
     max-width: 1400px;
     margin: 0 auto;
     padding: 120px var(--gutter) 60px;
@@ -385,6 +386,7 @@ body::after {
     gap: 48px;
     position: relative;
 }
+body.nav-open { overflow: hidden; }
 .hero-text {
     flex: 1;
     max-width: 760px;
@@ -2301,38 +2303,177 @@ footer {
     .stack-grid { grid-template-columns: repeat(2, 1fr); }
     .fuel-grid { grid-template-columns: 1fr; }
     .exp-deck { grid-template-columns: 1fr; min-height: 0; }
+    .exp-dossier { min-height: 0; }
     .exp-rail { border-right: 0; border-bottom: 1px solid var(--border); }
     .exp-rail::before { display: none; }
-    .exp-rail-list { flex-direction: row; overflow-x: auto; max-height: none; padding-bottom: 14px; gap: 8px; }
-    .exp-rail-item { min-width: 200px; }
+    .exp-rail-list {
+        flex-direction: row;
+        overflow-x: auto;
+        max-height: none;
+        padding-bottom: 14px;
+        gap: 8px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+    .exp-rail-item { min-width: 180px; scroll-snap-align: start; }
     .term-preview { border-left: 0; border-top: 1px solid var(--border); }
-    .solar-section { min-height: 100vh; }
+    .solar-section { min-height: 100vh; min-height: 100dvh; }
     .solar-hud { padding-top: 88px; }
-    .solar-stage { height: calc(100vh - 220px); min-height: 360px; }
+    .solar-stage { height: calc(100dvh - 220px); min-height: 360px; }
+    .solar-grid-wrap[data-active="true"] { padding: 48px var(--gutter) 64px; }
+    .nav-links { gap: 18px; }
+    .nav-links a { letter-spacing: 0.16em; font-size: 10px; }
 }
 
 @media (max-width: 768px) {
+    :root { --gutter: 16px; }
+
     .nav-links { display: none; }
     .hamburger,
     .mobile-nav { display: flex; }
+    #nav {
+        padding: 16px var(--gutter);
+        padding-top: max(16px, env(safe-area-inset-top));
+    }
+    #nav.scrolled { padding: 12px var(--gutter); }
+    .mobile-nav {
+        padding: max(80px, calc(env(safe-area-inset-top) + 72px)) 24px max(40px, env(safe-area-inset-bottom));
+        gap: 28px;
+    }
+    .mobile-link { font-size: clamp(28px, 9vw, 40px); }
+
+    .section { padding: 64px 0; }
+    .section-title { font-size: clamp(36px, 12vw, 56px); }
+    .section-sub { font-size: 14px; }
+
     .projects-grid,
     .stack-grid { grid-template-columns: 1fr; }
     .fuel-grid { grid-template-columns: 1fr; }
-    .fuel-svc { min-height: 0; padding: 32px 22px 28px; }
-    .fuel-svc-num { font-size: 56px; margin-bottom: 18px; }
+    .fuel-svc { min-height: 0; padding: 28px 20px 24px; }
+    .fuel-svc-num { font-size: 48px; margin-bottom: 14px; }
     .fuel-svc-cta { opacity: 1; transform: none; }
+
     .exp-telemetry { grid-template-columns: 1fr; }
-    .exp-signal { grid-template-columns: 1fr; gap: 6px; }
-    .exp-doss-body { padding: 22px 18px 26px; }
-    .hero-terminal-bar,
-    .hero-terminal-body { min-width: 0; width: 100%; }
-    .hero-metrics { flex-direction: column; }
-    .hero-metric-divider { width: 100%; height: 1px; }
+    .exp-signal {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 8px 12px;
+        align-items: center;
+    }
+    .exp-signal-track { grid-column: 1 / -1; }
+    .exp-doss-body { padding: 18px 14px 22px; }
+    .exp-doss-chrome { gap: 8px; padding: 10px 12px; }
+    .exp-doss-path { font-size: 10px; }
+    .exp-rail-item { min-width: 156px; }
+
+    .hero {
+        min-height: 0;
+        padding: 96px var(--gutter) 40px;
+        gap: 28px;
+    }
+    .hero-terminal-bar {
+        flex-wrap: wrap;
+        min-width: 0;
+        width: 100%;
+        gap: 8px 12px;
+        padding: 10px 12px;
+    }
+    .hero-terminal-path {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 10px;
+    }
+    .hero-terminal-body {
+        min-width: 0;
+        width: 100%;
+        padding: 22px 16px 26px;
+        border-radius: 0 0 12px 12px;
+    }
+    .hero-name { font-size: clamp(42px, 14vw, 64px); }
+    .hero-metrics {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+    .hero-metric-divider { display: none; }
+    .hero-metric-item {
+        min-width: 0;
+        padding: 14px 12px;
+        box-shadow: inset -1px -1px 0 var(--border);
+    }
+    .hero-cta { flex-wrap: wrap; gap: 10px; }
+    .hero-cta .btn-primary,
+    .hero-cta .btn-ghost { flex: 1 1 auto; justify-content: center; }
+
+    .live-shell { min-height: 280px; }
+    .term-tab { padding: 10px 12px; font-size: 11px; }
+    .contact-form-wrap { padding: 18px; }
+    .contact-form input,
+    .contact-form textarea { font-size: 16px; }
+
+    /* Stack Orbit — shrink system so rings/labels fit the phone stage */
+    .solar-section {
+        min-height: 0;
+        padding-bottom: 24px;
+    }
+    .solar-hud {
+        padding: 84px var(--gutter) 4px;
+        gap: 14px;
+    }
+    .solar-hud .section-title { font-size: clamp(32px, 10vw, 44px); }
+    .solar-hud-sub { font-size: 13px; max-width: none; }
+    .solar-stage {
+        height: min(58dvh, 420px);
+        min-height: 280px;
+        overflow: hidden;
+    }
+    .solar-system {
+        transform: scale(0.62);
+        transform-origin: center center;
+    }
+    .solar-system::before {
+        width: 70vmin;
+        height: 70vmin;
+    }
+    .sun {
+        width: clamp(72px, 20vmin, 100px);
+        height: clamp(72px, 20vmin, 100px);
+    }
+    .sun strong { font-size: clamp(18px, 5vmin, 26px); }
+    .planet-label {
+        font-size: 9px;
+        letter-spacing: 0.1em;
+        padding: 5px 8px;
+    }
+    .planet-pop {
+        width: calc(100% - 20px);
+        bottom: 10px;
+        padding: 14px 14px 12px;
+        max-height: min(46vh, 280px);
+        overflow-y: auto;
+    }
+    .planet-pop-title { font-size: 18px; }
+    .solar-grid-wrap[data-active="true"] { padding: 20px var(--gutter) 40px; }
+    .solar-section .view-toggle { align-self: flex-start; }
+    .view-toggle-btn { padding: 8px 14px; font-size: 10px; }
+
     body.has-custom-cursor,
     body.has-custom-cursor a,
     body.has-custom-cursor button { cursor: auto; }
     .cursor,
     .cursor-ring { display: none; }
+}
+
+@media (max-width: 420px) {
+    .solar-system { transform: scale(0.52); }
+    .solar-stage {
+        height: min(54dvh, 360px);
+        min-height: 250px;
+    }
+    .hero-terminal-path { display: none; }
+    .exp-rail-item { min-width: 140px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

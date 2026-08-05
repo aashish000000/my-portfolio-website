@@ -183,18 +183,26 @@ function initNav() {
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
+    const setMobileNav = (open) => {
+        mobileNav?.classList.toggle('open', open);
+        hamburger?.classList.toggle('open', open);
+        hamburger?.setAttribute('aria-expanded', String(open));
+        document.body.classList.toggle('nav-open', open);
+    };
+
     hamburger?.addEventListener('click', () => {
-        const open = mobileNav?.classList.toggle('open');
-        hamburger.classList.toggle('open', open);
-        hamburger.setAttribute('aria-expanded', String(!!open));
+        const open = !mobileNav?.classList.contains('open');
+        setMobileNav(open);
     });
 
     mobileNav?.querySelectorAll('a').forEach((a) => {
-        a.addEventListener('click', () => {
-            mobileNav.classList.remove('open');
-            hamburger?.classList.remove('open');
-            hamburger?.setAttribute('aria-expanded', 'false');
-        });
+        a.addEventListener('click', () => setMobileNav(false));
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mobileNav?.classList.contains('open')) {
+            setMobileNav(false);
+        }
     });
 
     if (!links.length || !sections.length) return;
