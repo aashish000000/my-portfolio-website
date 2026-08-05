@@ -29,14 +29,17 @@ document.addEventListener('DOMContentLoaded', () => {
     initResumeLinks();
     initReveals();
     initMetrics();
+    initExperience();
+    initFuelTilt();
     initTerminal();
+    initLiveShell();
     initSolarSystem();
     updateFooterYear();
     setupLazyInit();
 });
 
 // ─────────────────────────────────────────────
-// Page loader
+// Page loader — cycle greetings over ~4s
 // ─────────────────────────────────────────────
 
 function initLoader() {
@@ -50,34 +53,55 @@ function initLoader() {
     const greetings = [
         { text: 'नमस्ते', lang: 'Nepali' },
         { text: 'Hello', lang: 'English' },
-        { text: 'Namaste', lang: 'Hindi' },
-        { text: 'Welcome', lang: 'English' },
+        { text: 'नमस्कार', lang: 'Hindi' },
+        { text: 'Hola', lang: 'Spanish' },
+        { text: '你好', lang: 'Chinese' },
+        { text: 'سلام', lang: 'Urdu' },
+        { text: 'Bonjour', lang: 'French' },
+        { text: 'Ciao', lang: 'Italian' },
+        { text: 'こんにちは', lang: 'Japanese' },
+        { text: '안녕하세요', lang: 'Korean' },
+        { text: 'Olá', lang: 'Portuguese' },
+        { text: 'مرحبا', lang: 'Arabic' },
     ];
 
-    let progress = 0;
+    const DURATION = prefs.reduceMotion ? 400 : 4000;
+    const stepMs = DURATION / greetings.length;
     let greetIdx = 0;
+    const started = performance.now();
+
+    if (hello) hello.textContent = greetings[0].text;
+    if (lang) lang.textContent = greetings[0].lang;
 
     const greetTimer = setInterval(() => {
-        greetIdx = (greetIdx + 1) % greetings.length;
-        if (hello) hello.textContent = greetings[greetIdx].text;
+        greetIdx = Math.min(greetIdx + 1, greetings.length - 1);
+        if (hello) {
+            hello.style.opacity = '0';
+            requestAnimationFrame(() => {
+                hello.textContent = greetings[greetIdx].text;
+                hello.style.opacity = '1';
+            });
+        }
         if (lang) lang.textContent = greetings[greetIdx].lang;
-    }, 450);
+        if (greetIdx >= greetings.length - 1) clearInterval(greetTimer);
+    }, stepMs);
 
-    const tick = () => {
-        progress = Math.min(100, progress + (prefs.reduceMotion ? 20 : Math.random() * 14 + 4));
+    const tick = (now) => {
+        const elapsed = now - started;
+        const progress = Math.min(100, (elapsed / DURATION) * 100);
         fill.style.width = `${progress}%`;
         num.textContent = `${Math.floor(progress)}%`;
         if (progress < 100) {
-            requestAnimationFrame(() => setTimeout(tick, prefs.reduceMotion ? 20 : 60));
+            requestAnimationFrame(tick);
         } else {
             clearInterval(greetTimer);
             setTimeout(() => {
                 loader.classList.add('hidden');
                 document.body.classList.add('loaded');
-            }, prefs.reduceMotion ? 50 : 350);
+            }, prefs.reduceMotion ? 40 : 280);
         }
     };
-    tick();
+    requestAnimationFrame(tick);
 }
 
 // ─────────────────────────────────────────────
@@ -110,7 +134,7 @@ function initCursor() {
     };
     loop();
 
-    const hoverables = 'a, button, input, textarea, .project-card, .exp-card, .stack-card, .term-tab';
+    const hoverables = 'a, button, input, textarea, .project-card, .exp-rail-item, .stack-card, .fuel-svc, .term-tab, .planet, .live-shell-hints button';
     document.addEventListener('mouseover', (e) => {
         if (e.target.closest(hoverables)) {
             dot.classList.add('hover');
@@ -159,18 +183,26 @@ function initNav() {
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
+    const setMobileNav = (open) => {
+        mobileNav?.classList.toggle('open', open);
+        hamburger?.classList.toggle('open', open);
+        hamburger?.setAttribute('aria-expanded', String(open));
+        document.body.classList.toggle('nav-open', open);
+    };
+
     hamburger?.addEventListener('click', () => {
-        const open = mobileNav?.classList.toggle('open');
-        hamburger.classList.toggle('open', open);
-        hamburger.setAttribute('aria-expanded', String(!!open));
+        const open = !mobileNav?.classList.contains('open');
+        setMobileNav(open);
     });
 
     mobileNav?.querySelectorAll('a').forEach((a) => {
-        a.addEventListener('click', () => {
-            mobileNav.classList.remove('open');
-            hamburger?.classList.remove('open');
-            hamburger?.setAttribute('aria-expanded', 'false');
-        });
+        a.addEventListener('click', () => setMobileNav(false));
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mobileNav?.classList.contains('open')) {
+            setMobileNav(false);
+        }
     });
 
     if (!links.length || !sections.length) return;
@@ -250,6 +282,312 @@ function initMetrics() {
 }
 
 // ─────────────────────────────────────────────
+// Experience — Mission Log / Signal Deck
+// ─────────────────────────────────────────────
+
+const EXPERIENCE = [
+    {
+        id: 'intern',
+        year: '2026',
+        short: 'Summer Intern',
+        org: 'Kean University',
+        title: 'Undergraduate Summer Intern',
+        meta: 'Kean University · Jersey City, NJ · May–Jul 2026',
+        file: 'kean-intern',
+        summary: 'Selected for a paid summer cohort: workshops, faculty mentorship, and a capstone presentation that ties research to shipped work.',
+        telemetry: [
+            { label: 'Duration', value: '10 wks' },
+            { label: 'Mode', value: 'Paid' },
+            { label: 'Output', value: 'Capstone' },
+        ],
+        log: [
+            { tag: 'SELECT', text: 'Accepted into the Undergraduate Summer Internship Program.' },
+            { tag: 'BUILD', text: 'Workshops + mentorship folded into hands-on product work.' },
+            { tag: 'SHIP', text: 'Presented capstone work with the summer cohort.' },
+            { tag: 'NEXT', text: 'Carry systems thinking into full-time engineering.' },
+        ],
+        signals: [
+            { name: 'Workshops', pct: 35 },
+            { name: 'Mentorship', pct: 30 },
+            { name: 'Capstone', pct: 35 },
+        ],
+        tags: ['Internship', 'Mentorship', 'Workshops', 'Presentation'],
+    },
+    {
+        id: 'ta',
+        year: '23–24',
+        short: 'Teaching Assistant',
+        org: 'Caldwell University',
+        title: 'Teaching Assistant',
+        meta: 'Caldwell University · Caldwell, NJ · Sep 2023 – May 2024',
+        file: 'ta-labs',
+        summary: 'Tutored full-stack fundamentals, kept CS labs healthy, and turned confusing bugs into teachable moments.',
+        telemetry: [
+            { label: 'Reach', value: '40+' },
+            { label: 'Terms', value: '2' },
+            { label: 'Domain', value: 'CS Labs' },
+        ],
+        log: [
+            { tag: 'TUTOR', text: 'Guided peers through full-stack fundamentals.' },
+            { tag: 'OPS', text: 'Set up and troubleshot lab technology under load.' },
+            { tag: 'CLEAR', text: 'Kept sessions moving when tooling failed.' },
+            { tag: 'CRAFT', text: 'Leveled up debugging + explanation skills.' },
+        ],
+        signals: [
+            { name: 'Tutoring', pct: 50 },
+            { name: 'Lab Ops', pct: 30 },
+            { name: 'Prep', pct: 20 },
+        ],
+        tags: ['Teaching', 'Full Stack', 'Labs', 'Debugging'],
+    },
+    {
+        id: 'ra',
+        year: '2024',
+        short: 'Resident Assistant',
+        org: 'Caldwell University',
+        title: 'Resident Assistant',
+        meta: 'Caldwell University · Caldwell, NJ · 2024',
+        file: 'ra-floor',
+        summary: 'Ran community on the floor — engagement, conflict resolution, and a safe inclusive living culture.',
+        telemetry: [
+            { label: 'Residents', value: '60+' },
+            { label: 'Duty', value: 'On-call' },
+            { label: 'Focus', value: 'Community' },
+        ],
+        log: [
+            { tag: 'ENGAGE', text: 'Programmed inclusive community events.' },
+            { tag: 'RESOLVE', text: 'Mediated conflicts with clear policy guidance.' },
+            { tag: 'LEAD', text: 'Modeled accountability and care on the floor.' },
+            { tag: 'TRANSFER', text: 'Leadership habits that map to product teams.' },
+        ],
+        signals: [
+            { name: 'Community', pct: 40 },
+            { name: 'Conflict', pct: 25 },
+            { name: 'Ops', pct: 35 },
+        ],
+        tags: ['Leadership', 'Community', 'Policy', 'Empathy'],
+    },
+    {
+        id: 'mentor',
+        year: '2024',
+        short: 'Tech Mentor',
+        org: 'Robotics Club',
+        title: 'Technical Mentor, Robotics',
+        meta: 'Caldwell University · Spring 2024',
+        file: 'robotics-mentor',
+        summary: 'Mentored juniors on Raspberry Pi and STM32 — from blinky boards to competition-ready robots.',
+        telemetry: [
+            { label: 'Stack', value: 'Pi/STM' },
+            { label: 'Mode', value: 'Hands-on' },
+            { label: 'Goal', value: 'Compete' },
+        ],
+        log: [
+            { tag: 'TEACH', text: 'Introduced Pi + STM32 bring-up workflows.' },
+            { tag: 'ASSEMBLE', text: 'Guided mechanical + electrical assembly.' },
+            { tag: 'DEBUG', text: 'Pair-debugged sensors, power, and firmware.' },
+            { tag: 'SHIP', text: 'Helped juniors hit competition milestones.' },
+        ],
+        signals: [
+            { name: 'Embedded', pct: 45 },
+            { name: 'Hardware', pct: 30 },
+            { name: 'Mentoring', pct: 25 },
+        ],
+        tags: ['Raspberry Pi', 'STM32', 'C/C++', 'Robotics'],
+    },
+    {
+        id: 'redcross',
+        year: '20–21',
+        short: 'Disaster Response',
+        org: 'Red Cross Society',
+        title: 'Disaster Response Team',
+        meta: 'Red Cross Society · Kathmandu, Nepal · Jul 2020 – Dec 2021',
+        file: 'red-cross',
+        summary: 'Field relief during floods and earthquakes — logistics, distribution, and calm under pressure.',
+        telemetry: [
+            { label: 'Active', value: '18 mo' },
+            { label: 'Theater', value: 'Field' },
+            { label: 'Mission', value: 'Aid' },
+        ],
+        log: [
+            { tag: 'TRAIN', text: 'Prepared for flood and earthquake response.' },
+            { tag: 'RESPOND', text: 'Supported relief during active disasters.' },
+            { tag: 'DISTRIBUTE', text: 'Moved emergency aid to communities in need.' },
+            { tag: 'LEARN', text: 'Systems thinking under real-world pressure.' },
+        ],
+        signals: [
+            { name: 'Relief', pct: 45 },
+            { name: 'Logistics', pct: 35 },
+            { name: 'Support', pct: 20 },
+        ],
+        tags: ['Volunteer', 'Crisis', 'Logistics', 'Service'],
+    },
+    {
+        id: 'aiclub',
+        year: '21–22',
+        short: 'AI Club President',
+        org: 'Liverpool College',
+        title: 'President, AI Club',
+        meta: 'Liverpool College · Kathmandu, Nepal · Jan 2021 – Dec 2022',
+        file: 'ai-club',
+        summary: 'Led a student robotics/AI team from fuzzy briefs to competition-ready builds on hard deadlines.',
+        telemetry: [
+            { label: 'Tenure', value: '2 yrs' },
+            { label: 'Unit', value: 'Team' },
+            { label: 'Bias', value: 'Ship' },
+        ],
+        log: [
+            { tag: 'FOUND', text: 'Organized peers around AI + robotics goals.' },
+            { tag: 'SCOPE', text: 'Turned competition requirements into a plan.' },
+            { tag: 'DELIVER', text: 'Shipped builds against hard deadlines.' },
+            { tag: 'HANDOFF', text: 'Left playbooks for the next officers.' },
+        ],
+        signals: [
+            { name: 'Leadership', pct: 35 },
+            { name: 'Engineering', pct: 40 },
+            { name: 'Competition', pct: 25 },
+        ],
+        tags: ['AI', 'Robotics', 'Leadership', 'Deadlines'],
+    },
+];
+
+function initExperience() {
+    const rail = document.getElementById('exp-rail');
+    const body = document.getElementById('exp-doss-body');
+    const pathEl = document.getElementById('exp-path');
+    const statusEl = document.getElementById('exp-status');
+    if (!rail || !body) return;
+
+    rail.innerHTML = EXPERIENCE.map((item, i) => `
+        <button type="button" class="exp-rail-item${i === 0 ? ' is-active' : ''}"
+            role="option" aria-selected="${i === 0 ? 'true' : 'false'}"
+            data-exp-id="${item.id}" id="exp-opt-${item.id}">
+            <span class="exp-rail-year">${item.year}</span>
+            <span>
+                <span class="exp-rail-role">${item.short}</span>
+                <span class="exp-rail-org">${item.org}</span>
+            </span>
+        </button>
+    `).join('');
+
+    const select = (id) => {
+        const item = EXPERIENCE.find((e) => e.id === id);
+        if (!item) return;
+
+        rail.querySelectorAll('.exp-rail-item').forEach((btn) => {
+            const on = btn.dataset.expId === id;
+            btn.classList.toggle('is-active', on);
+            btn.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+
+        if (pathEl) pathEl.innerHTML = `~/career/<span>${item.file}</span>.log`;
+        if (statusEl) statusEl.textContent = 'LOCKED';
+
+        const render = () => {
+            body.innerHTML = `
+                <header>
+                    <div class="exp-doss-kicker">Transmission // ${item.year}</div>
+                    <h3 class="exp-doss-title">${item.title}</h3>
+                    <p class="exp-doss-meta">${item.meta}</p>
+                </header>
+                <p class="exp-doss-summary">${item.summary}</p>
+                <div class="exp-telemetry">
+                    ${item.telemetry.map((t) => `
+                        <div class="exp-tel">
+                            <span class="exp-tel-label">${t.label}</span>
+                            <span class="exp-tel-value">${t.value}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                <div>
+                    <div class="exp-block-label">Mission Log</div>
+                    <ul class="exp-log">
+                        ${item.log.map((l) => `<li><span><strong>${l.tag}</strong> — ${l.text}</span></li>`).join('')}
+                    </ul>
+                </div>
+                <div>
+                    <div class="exp-block-label">Signal Strength</div>
+                    <div class="exp-signals">
+                        ${item.signals.map((s) => `
+                            <div class="exp-signal">
+                                <span class="exp-signal-name">${s.name}</span>
+                                <div class="exp-signal-track"><div class="exp-signal-fill" data-pct="${s.pct}"></div></div>
+                                <span class="exp-signal-pct">${s.pct}%</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <div>
+                    <div class="exp-block-label">Tags</div>
+                    <div class="exp-chips">${item.tags.map((t) => `<span>${t}</span>`).join('')}</div>
+                </div>
+            `;
+            body.classList.remove('is-swapping');
+            // restart enter animation
+            body.style.animation = 'none';
+            // eslint-disable-next-line no-unused-expressions
+            body.offsetHeight;
+            body.style.animation = '';
+            requestAnimationFrame(() => {
+                body.querySelectorAll('.exp-signal-fill').forEach((fill) => {
+                    fill.style.width = prefs.reduceMotion ? `${fill.dataset.pct}%` : '0%';
+                    requestAnimationFrame(() => {
+                        fill.style.width = `${fill.dataset.pct}%`;
+                    });
+                });
+            });
+        };
+
+        if (prefs.reduceMotion) {
+            render();
+            return;
+        }
+        body.classList.add('is-swapping');
+        setTimeout(render, 160);
+    };
+
+    rail.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-exp-id]');
+        if (btn) select(btn.dataset.expId);
+    });
+
+    rail.addEventListener('keydown', (e) => {
+        const items = [...rail.querySelectorAll('.exp-rail-item')];
+        const idx = items.findIndex((el) => el.classList.contains('is-active'));
+        if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+            e.preventDefault();
+            const next = items[(idx + 1) % items.length];
+            next.focus();
+            select(next.dataset.expId);
+        } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+            e.preventDefault();
+            const prev = items[(idx - 1 + items.length) % items.length];
+            prev.focus();
+            select(prev.dataset.expId);
+        }
+    });
+
+    select(EXPERIENCE[0].id);
+}
+
+function initFuelTilt() {
+    const cards = document.querySelectorAll('.fuel-svc');
+    if (!cards.length || prefs.reduceMotion) return;
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+
+    cards.forEach((card) => {
+        card.addEventListener('mousemove', (e) => {
+            const r = card.getBoundingClientRect();
+            const x = (e.clientX - r.left) / r.width - 0.5;
+            const y = (e.clientY - r.top) / r.height - 0.5;
+            card.style.transform = `perspective(700px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) translateZ(6px)`;
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+        });
+    });
+}
+
+// ─────────────────────────────────────────────
 // Terminal demo
 // ─────────────────────────────────────────────
 
@@ -303,6 +641,155 @@ function initTerminal() {
     setLang('html');
 }
 
+function initLiveShell() {
+    const out = document.getElementById('shell-out');
+    const form = document.getElementById('shell-form');
+    const input = document.getElementById('shell-input');
+    const hints = document.getElementById('shell-hints');
+    if (!out || !form || !input) return;
+
+    const history = [];
+    let histIdx = -1;
+
+    const print = (html, cls = 'ok') => {
+        const line = document.createElement('p');
+        line.className = `shell-line ${cls}`;
+        line.innerHTML = html;
+        out.appendChild(line);
+        out.scrollTop = out.scrollHeight;
+    };
+
+    const run = (raw) => {
+        const cmd = String(raw || '').trim();
+        if (!cmd) return;
+        history.push(cmd);
+        histIdx = history.length;
+        print(`<span>➜</span>${escapeHtml(cmd)}`, 'cmd');
+
+        const lower = cmd.toLowerCase();
+        const getMatch = cmd.match(/^get\s+(\/\S*)/i);
+
+        if (lower === 'help' || lower === '?') {
+            print(`commands:
+  whoami          — identity dump
+  stack           — core tools
+  projects        — shipped work
+  hire / contact  — next step
+  GET /skills     — JSON skills
+  GET /projects   — JSON projects
+  clear           — wipe screen
+  help            — this list`);
+            return;
+        }
+        if (lower === 'clear' || lower === 'cls') {
+            out.innerHTML = '';
+            return;
+        }
+        if (lower === 'whoami') {
+            print(`Aashish Joshi
+CS @ Kean University · Full Stack Developer
+Jersey City, NJ · summer '26 intern
+status: open to opportunities`);
+            return;
+        }
+        if (lower === 'stack' || lower === 'ls') {
+            print(`languages/   frameworks/   databases/
+ai/          engineering/  craft/
+tip: open Stack Orbit below and click a planet`);
+            return;
+        }
+        if (lower === 'projects') {
+            print(`01  AI Calorie Calculator
+02  MoodRing
+03  Collaborative Expense Splitter
+→ https://github.com/aashish000000`);
+            return;
+        }
+        if (lower === 'hire' || lower === 'contact') {
+            print(`ready when you are.
+calendly → https://calendly.com/aa-aashish2023/
+or jump to #contact and send a note.`);
+            return;
+        }
+        if (getMatch) {
+            const path = getMatch[1].toLowerCase();
+            if (path === '/skills' || path === '/stack') {
+                print(JSON.stringify({
+                    status: 200,
+                    languages: ['Python', 'Java', 'JavaScript', 'TypeScript', 'C++', 'SQL'],
+                    frameworks: ['Next.js', 'Node.js', 'Express', 'ASP.NET Core'],
+                    focus: ['REST', 'AI product features', 'clean UX'],
+                }, null, 2), 'json');
+                return;
+            }
+            if (path === '/projects') {
+                print(JSON.stringify({
+                    status: 200,
+                    data: [
+                        { id: 1, title: 'AI Calorie Calculator' },
+                        { id: 2, title: 'MoodRing' },
+                        { id: 3, title: 'Collaborative Expense Splitter' },
+                    ],
+                }, null, 2), 'json');
+                return;
+            }
+            if (path === '/whoami' || path === '/me') {
+                print(JSON.stringify({
+                    status: 200,
+                    name: 'Aashish Joshi',
+                    role: 'Full Stack Developer',
+                    school: 'Kean University',
+                }, null, 2), 'json');
+                return;
+            }
+            print(`404  unknown route ${escapeHtml(path)}
+try GET /skills or GET /projects`, 'err');
+            return;
+        }
+
+        print(`command not found: ${escapeHtml(cmd)}
+type <span style="color:var(--jade)">help</span> for available commands`, 'err');
+    };
+
+    print(`aj portfolio shell v1.0
+type help to begin — or click a chip below.`);
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const value = input.value;
+        input.value = '';
+        run(value);
+    });
+
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (!history.length) return;
+            histIdx = Math.max(0, histIdx - 1);
+            input.value = history[histIdx] || '';
+        } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            histIdx = Math.min(history.length, histIdx + 1);
+            input.value = histIdx >= history.length ? '' : history[histIdx];
+        }
+    });
+
+    hints?.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-cmd]');
+        if (!btn) return;
+        run(btn.dataset.cmd);
+        input.focus();
+    });
+}
+
+function escapeHtml(str) {
+    return String(str)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;');
+}
+
 // ─────────────────────────────────────────────
 // Constellation orbit (Tools of the Trade)
 // ─────────────────────────────────────────────
@@ -353,22 +840,147 @@ const STACK_DOMAINS = {
 };
 
 function initSolarSystem() {
+    const section = document.getElementById('stack');
     const system = document.getElementById('solar-system');
     const planets = [...document.querySelectorAll('.planet')];
     const orbit = document.getElementById('stack-orbit');
     const grid = document.getElementById('stack-grid');
     const toggleBtns = document.querySelectorAll('.view-toggle-btn');
+    const pop = document.getElementById('planet-pop');
+    const popTitle = document.getElementById('planet-pop-title');
+    const popKicker = document.getElementById('planet-pop-kicker');
+    const popLevel = document.getElementById('planet-pop-level');
+    const popChips = document.getElementById('planet-pop-chips');
+    const popMeter = document.getElementById('planet-pop-meter');
+    const popClose = document.getElementById('planet-pop-close');
     if (!system || !planets.length) return;
 
-    if (prefs.reduceMotion) system.classList.add('reduce-motion');
-
-    // Highlight only — no side panel; orbits never pause on hover
-    planets.forEach((planet) => {
-        planet.addEventListener('click', () => {
-            planets.forEach((p) => {
-                p.setAttribute('aria-pressed', String(p === planet));
+    if (prefs.reduceMotion) {
+        system.classList.add('reduce-motion');
+        section?.classList.add('is-lit');
+    } else if (section) {
+        const io = new IntersectionObserver((entries, o) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                section.classList.add('is-lit');
+                o.unobserve(entry.target);
             });
+        }, { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
+        io.observe(section);
+    }
+
+    const PLANET_PAYLOAD = {
+        languages: {
+            title: 'Languages',
+            level: 'Expert · 88%',
+            pct: 88,
+            items: ['Python', 'Java', 'JavaScript', 'TypeScript', 'C++', 'SQL', 'PHP'],
+        },
+        frameworks: {
+            title: 'Frameworks',
+            level: 'Advanced · 84%',
+            pct: 84,
+            items: ['Next.js', 'Node.js', 'Express', 'ASP.NET Core', 'Tkinter'],
+        },
+        databases: {
+            title: 'Databases',
+            level: 'Proficient · 78%',
+            pct: 78,
+            items: ['MySQL', 'MongoDB', 'NeDB'],
+        },
+        ai: {
+            title: 'AI & Product',
+            level: 'Advanced · 80%',
+            pct: 80,
+            items: ['OpenAI API', 'Chatbots', 'Photo Recognition', 'Analytics'],
+        },
+        engineering: {
+            title: 'Engineering',
+            level: 'Expert · 86%',
+            pct: 86,
+            items: ['REST APIs', 'WebSockets', 'System Design', 'Accessibility'],
+        },
+        craft: {
+            title: 'Craft',
+            level: 'Advanced · 82%',
+            pct: 82,
+            items: ['UI/UX', 'Design Systems', 'Performance', 'Docs'],
+        },
+    };
+
+    const closePop = () => {
+        if (!pop) return;
+        pop.classList.remove('is-open');
+        pop.hidden = true;
+        planets.forEach((p) => {
+            p.setAttribute('aria-pressed', 'false');
+            p.classList.remove('is-paused');
+            p.closest('.orbit-ring')?.classList.remove('is-hot');
         });
+    };
+
+    const openPop = (id) => {
+        const data = PLANET_PAYLOAD[id];
+        if (!data || !pop) return;
+        planets.forEach((p) => {
+            const on = p.dataset.id === id;
+            p.setAttribute('aria-pressed', String(on));
+            p.classList.toggle('is-paused', on);
+            p.closest('.orbit-ring')?.classList.toggle('is-hot', on);
+        });
+        if (popKicker) popKicker.textContent = 'Planet payload';
+        if (popTitle) popTitle.textContent = data.title;
+        if (popLevel) popLevel.textContent = data.level;
+        if (popChips) {
+            popChips.innerHTML = data.items.map((item) => `<span class="chip">${item}</span>`).join('');
+        }
+        if (popMeter) {
+            popMeter.style.width = '0%';
+            requestAnimationFrame(() => {
+                popMeter.style.width = `${data.pct}%`;
+            });
+        }
+        pop.hidden = false;
+        // eslint-disable-next-line no-unused-expressions
+        pop.offsetHeight;
+        pop.classList.add('is-open');
+    };
+
+    planets.forEach((planet) => {
+        const ring = planet.closest('.orbit-ring');
+        planet.addEventListener('mouseenter', () => {
+            if (prefs.reduceMotion) return;
+            planet.classList.add('is-paused');
+            ring?.classList.add('is-hot');
+        });
+        planet.addEventListener('mouseleave', () => {
+            if (planet.getAttribute('aria-pressed') === 'true') return;
+            planet.classList.remove('is-paused');
+            ring?.classList.remove('is-hot');
+        });
+        planet.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = planet.dataset.id;
+            if (planet.getAttribute('aria-pressed') === 'true' && pop && !pop.hidden) {
+                closePop();
+                return;
+            }
+            openPop(id);
+        });
+    });
+
+    popClose?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closePop();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && pop && !pop.hidden) closePop();
+    });
+
+    orbit?.addEventListener('click', (e) => {
+        if (e.target.closest('.planet') || e.target.closest('#planet-pop')) return;
+        if (pop && !pop.hidden) closePop();
     });
 
     const setView = (view) => {
@@ -386,6 +998,7 @@ function initSolarSystem() {
             btn.classList.toggle('active', active);
             btn.setAttribute('aria-pressed', String(active));
         });
+        if (!isOrbit) closePop();
     };
 
     toggleBtns.forEach((btn) => {
@@ -616,12 +1229,3 @@ async function jsonFetch(path, options = {}) {
     throw lastErr ?? new Error('Request failed.');
 }
 
-function escapeHtml(str) {
-    if (typeof str !== 'string') return '';
-    return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-}

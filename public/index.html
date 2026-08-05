@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/style.css?v=20260731-10">
+    <link rel="stylesheet" href="/assets/css/style.css?v=20260805-01">
 </head>
 <body>
 
@@ -53,7 +53,7 @@
                         <svg class="theme-toggle-icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
                     </span>
                 </button>
-                <button class="hamburger" id="hamburger" type="button" aria-label="Open menu" aria-expanded="false">
+                <button class="hamburger" id="hamburger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
                     <span></span><span></span><span></span>
                 </button>
             </div>
@@ -176,10 +176,9 @@
                             <div class="profile-block">
                                 <span class="profile-label">hobbies</span>
                                 <div class="chip-row">
-                                    <span class="chip">Badminton</span>
-                                    <span class="chip">MMA</span>
-                                    <span class="chip">Film</span>
                                     <span class="chip">Reading</span>
+                                    <span class="chip">MMA</span>
+                                    <span class="chip">Series</span>
                                 </div>
                             </div>
                             <div class="profile-block">
@@ -206,104 +205,34 @@
                 </div>
             </section>
 
-            <!-- EXPERIENCE -->
-            <section id="experience" class="section">
+            <!-- EXPERIENCE — Mission Log (unique split deck, not Sabin cards/modal) -->
+            <section id="experience" class="section exp-section">
                 <div class="container">
                     <div class="section-head reveal">
-                        <span class="section-kicker">02 — Experience</span>
-                        <h2 class="section-title">Where I've Worked</h2>
+                        <span class="section-kicker">02 — Mission Log</span>
+                        <h2 class="section-title">Career <em>Signal</em> Deck</h2>
+                        <p class="section-sub">Select a transmission. The dossier updates live — no popup, no card grid.</p>
                     </div>
 
-                    <div class="exp-list">
-                        <article class="exp-card reveal">
-                            <span class="exp-num">01</span>
-                            <div class="exp-body">
-                                <div class="exp-top">
-                                    <h3>Undergraduate Summer Intern</h3>
-                                    <span class="exp-meta">Kean University · May–Jul 2026</span>
-                                </div>
-                                <p>Selected for the Undergraduate Summer Internship Program: orientation, workshops, mentorship, and a final project presentation with the cohort.</p>
-                                <div class="exp-foot">
-                                    <span class="exp-loc">Jersey City, NJ →</span>
-                                    <span class="exp-metric">Paid Cohort</span>
-                                </div>
+                    <div class="exp-deck reveal" id="exp-deck">
+                        <aside class="exp-rail" aria-label="Experience timeline">
+                            <div class="exp-rail-head">
+                                <span class="exp-rail-dot" aria-hidden="true"></span>
+                                <span>ACTIVE CHANNELS</span>
                             </div>
-                        </article>
+                            <div class="exp-rail-list" id="exp-rail" role="listbox" aria-label="Roles" aria-controls="exp-dossier"></div>
+                        </aside>
 
-                        <article class="exp-card reveal">
-                            <span class="exp-num">02</span>
-                            <div class="exp-body">
-                                <div class="exp-top">
-                                    <h3>Teaching Assistant</h3>
-                                    <span class="exp-meta">Caldwell University · Sep 2023 – May 2024</span>
-                                </div>
-                                <p>Tutored full-stack fundamentals, assisted with lab technology setup and troubleshooting, and kept CS department labs running smoothly.</p>
-                                <div class="exp-foot">
-                                    <span class="exp-loc">Caldwell, NJ →</span>
-                                    <span class="exp-metric">CS Labs</span>
-                                </div>
+                        <div class="exp-dossier" id="exp-dossier" role="region" aria-live="polite" aria-atomic="true">
+                            <div class="exp-doss-chrome">
+                                <span class="exp-doss-lights" aria-hidden="true"><i></i><i></i><i></i></span>
+                                <span class="exp-doss-path" id="exp-path">~/career/<span>select</span>.log</span>
+                                <span class="exp-doss-status" id="exp-status">STANDBY</span>
                             </div>
-                        </article>
-
-                        <article class="exp-card reveal">
-                            <span class="exp-num">03</span>
-                            <div class="exp-body">
-                                <div class="exp-top">
-                                    <h3>Resident Assistant</h3>
-                                    <span class="exp-meta">Caldwell University · 2024</span>
-                                </div>
-                                <p>Supported residents through community engagement, conflict resolution, and policy guidance while maintaining a safe, inclusive living environment.</p>
-                                <div class="exp-foot">
-                                    <span class="exp-loc">Caldwell, NJ →</span>
-                                    <span class="exp-metric">Leadership</span>
-                                </div>
+                            <div class="exp-doss-body" id="exp-doss-body">
+                                <!-- filled by JS -->
                             </div>
-                        </article>
-
-                        <article class="exp-card reveal">
-                            <span class="exp-num">04</span>
-                            <div class="exp-body">
-                                <div class="exp-top">
-                                    <h3>Technical Mentor, Robotics Club</h3>
-                                    <span class="exp-meta">Caldwell University · Spring 2024</span>
-                                </div>
-                                <p>Mentored junior members on Raspberry Pi and STM32 microcontroller programming and robot assembly.</p>
-                                <div class="exp-foot">
-                                    <span class="exp-loc">Caldwell →</span>
-                                    <span class="exp-metric">Embedded</span>
-                                </div>
-                            </div>
-                        </article>
-
-                        <article class="exp-card reveal">
-                            <span class="exp-num">05</span>
-                            <div class="exp-body">
-                                <div class="exp-top">
-                                    <h3>Disaster Response Team Member</h3>
-                                    <span class="exp-meta">Red Cross Society · Jul 2020 – Dec 2021</span>
-                                </div>
-                                <p>Provided disaster relief and supported emergency aid distribution during floods and earthquakes.</p>
-                                <div class="exp-foot">
-                                    <span class="exp-loc">Kathmandu, Nepal →</span>
-                                    <span class="exp-metric">Volunteer</span>
-                                </div>
-                            </div>
-                        </article>
-
-                        <article class="exp-card reveal">
-                            <span class="exp-num">06</span>
-                            <div class="exp-body">
-                                <div class="exp-top">
-                                    <h3>President, AI Club</h3>
-                                    <span class="exp-meta">Liverpool College · Jan 2021 – Dec 2022</span>
-                                </div>
-                                <p>Led a student robotics project team to meet competition requirements and ship under deadlines.</p>
-                                <div class="exp-foot">
-                                    <span class="exp-loc">Kathmandu, Nepal →</span>
-                                    <span class="exp-metric">AI / Robotics</span>
-                                </div>
-                            </div>
-                        </article>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -324,42 +253,65 @@
                 </div>
             </section>
 
-            <!-- TERMINAL -->
+            <!-- TERMINAL + LIVE SHELL -->
             <section id="terminal" class="section terminal-section">
                 <div class="container">
                     <div class="section-head reveal">
                         <span class="section-kicker">04 — Terminal</span>
                         <h2 class="section-title">One Developer,<br><em>Different Languages</em></h2>
+                        <p class="section-sub">Code tabs on the left. Talk to the portfolio on the right — try <code>whoami</code>, <code>hire</code>, or <code>GET /projects</code>.</p>
                     </div>
-                    <div class="term-panel reveal">
-                        <div class="term-tabs" role="tablist">
-                            <button type="button" class="term-tab active" data-lang="html" role="tab" aria-selected="true">&lt;&gt; index.html</button>
-                            <button type="button" class="term-tab" data-lang="js" role="tab" aria-selected="false">JS app.js</button>
-                            <button type="button" class="term-tab" data-lang="py" role="tab" aria-selected="false">PY main.py</button>
-                            <button type="button" class="term-tab" data-lang="sql" role="tab" aria-selected="false">SQL query.sql</button>
-                        </div>
-                        <div class="term-body">
-                            <pre class="term-code" id="term-code" aria-live="polite"></pre>
-                            <div class="term-preview">
-                                <div class="term-preview-bar">🌐 Browser Preview</div>
-                                <div class="term-preview-content" id="term-preview">
-                                    <h3>Hello World!</h3>
+
+                    <div class="dev-toys reveal">
+                        <div class="term-panel">
+                            <div class="term-tabs" role="tablist">
+                                <button type="button" class="term-tab active" data-lang="html" role="tab" aria-selected="true">&lt;&gt; index.html</button>
+                                <button type="button" class="term-tab" data-lang="js" role="tab" aria-selected="false">JS app.js</button>
+                                <button type="button" class="term-tab" data-lang="py" role="tab" aria-selected="false">PY main.py</button>
+                                <button type="button" class="term-tab" data-lang="sql" role="tab" aria-selected="false">SQL query.sql</button>
+                            </div>
+                            <div class="term-body">
+                                <pre class="term-code" id="term-code" aria-live="polite"></pre>
+                                <div class="term-preview">
+                                    <div class="term-preview-bar">🌐 Browser Preview</div>
+                                    <div class="term-preview-content" id="term-preview">
+                                        <h3>Hello World!</h3>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
+                        <aside class="live-shell" aria-label="Interactive portfolio shell">
+                            <div class="live-shell-bar">
+                                <span class="live-shell-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                                <span class="live-shell-title">aj@portfolio — zsh</span>
+                                <span class="live-shell-badge">LIVE</span>
+                            </div>
+                            <div class="live-shell-out" id="shell-out" aria-live="polite"></div>
+                            <form class="live-shell-form" id="shell-form" autocomplete="off">
+                                <label class="live-shell-prompt" for="shell-input"><span>➜</span> ~</label>
+                                <input id="shell-input" name="cmd" type="text" spellcheck="false" placeholder="try help, whoami, hire…" aria-label="Shell command">
+                            </form>
+                            <div class="live-shell-hints" id="shell-hints">
+                                <button type="button" data-cmd="help">help</button>
+                                <button type="button" data-cmd="whoami">whoami</button>
+                                <button type="button" data-cmd="GET /projects">GET /projects</button>
+                                <button type="button" data-cmd="hire">hire</button>
+                            </div>
+                        </aside>
                     </div>
                 </div>
             </section>
 
             <!-- STACK — full-screen solar system -->
-            <section id="stack" class="solar-section" aria-label="Tools of the Trade">
+            <section id="stack" class="solar-section" aria-label="Stack Orbit">
                 <div class="solar-stars" id="solar-stars" aria-hidden="true"></div>
 
                 <header class="solar-hud">
                     <div class="solar-hud-copy">
-                        <span class="section-kicker">Technical Expertise</span>
-                        <h2 class="section-title">Tools of the Trade</h2>
-                        <p class="solar-hud-sub">A living solar system of my stack — planets keep orbiting as you explore.</p>
+                        <span class="section-kicker">Skill System</span>
+                        <h2 class="section-title">Stack <em>Orbit</em></h2>
+                        <p class="solar-hud-sub">Click any planet to inspect what it carries — orbits keep moving.</p>
                     </div>
                     <div class="view-toggle" role="group" aria-label="Stack view mode">
                         <button type="button" class="view-toggle-btn active" data-view="orbit" aria-pressed="true">Solar</button>
@@ -378,7 +330,8 @@
                         </div>
 
                         <div class="orbit-ring" style="--rx:18vmin; --ry:8vmin; --dur:16s; --delay:-2s;" data-orbit="1">
-                            <button type="button" class="planet planet-mercury" data-id="languages" aria-pressed="true">
+                            <svg class="orbit-svg" viewBox="0 0 200 200" preserveAspectRatio="none" aria-hidden="true"><ellipse class="orbit-glow-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-dash-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-tick-path" cx="100" cy="100" rx="99" ry="99"/></svg>
+                            <button type="button" class="planet planet-mercury" data-id="languages" aria-pressed="false" aria-haspopup="dialog" aria-controls="planet-pop">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
                                     <span class="planet-label">Languages</span>
@@ -386,7 +339,8 @@
                             </button>
                         </div>
                         <div class="orbit-ring" style="--rx:34vmin; --ry:15vmin; --dur:24s; --delay:-7s;" data-orbit="2">
-                            <button type="button" class="planet planet-venus" data-id="frameworks" aria-pressed="false">
+                            <svg class="orbit-svg" viewBox="0 0 200 200" preserveAspectRatio="none" aria-hidden="true"><ellipse class="orbit-glow-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-dash-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-tick-path" cx="100" cy="100" rx="99" ry="99"/></svg>
+                            <button type="button" class="planet planet-venus" data-id="frameworks" aria-pressed="false" aria-haspopup="dialog" aria-controls="planet-pop">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
                                     <span class="planet-label">Frameworks</span>
@@ -394,7 +348,8 @@
                             </button>
                         </div>
                         <div class="orbit-ring" style="--rx:50vmin; --ry:22vmin; --dur:32s; --delay:-12s;" data-orbit="3">
-                            <button type="button" class="planet planet-earth" data-id="databases" aria-pressed="false">
+                            <svg class="orbit-svg" viewBox="0 0 200 200" preserveAspectRatio="none" aria-hidden="true"><ellipse class="orbit-glow-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-dash-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-tick-path" cx="100" cy="100" rx="99" ry="99"/></svg>
+                            <button type="button" class="planet planet-earth" data-id="databases" aria-pressed="false" aria-haspopup="dialog" aria-controls="planet-pop">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
                                     <span class="planet-label">Databases</span>
@@ -402,7 +357,8 @@
                             </button>
                         </div>
                         <div class="orbit-ring" style="--rx:66vmin; --ry:29vmin; --dur:42s; --delay:-4s;" data-orbit="4">
-                            <button type="button" class="planet planet-mars" data-id="ai" aria-pressed="false">
+                            <svg class="orbit-svg" viewBox="0 0 200 200" preserveAspectRatio="none" aria-hidden="true"><ellipse class="orbit-glow-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-dash-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-tick-path" cx="100" cy="100" rx="99" ry="99"/></svg>
+                            <button type="button" class="planet planet-mars" data-id="ai" aria-pressed="false" aria-haspopup="dialog" aria-controls="planet-pop">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
                                     <span class="planet-label">AI &amp; Product</span>
@@ -410,7 +366,8 @@
                             </button>
                         </div>
                         <div class="orbit-ring" style="--rx:82vmin; --ry:36vmin; --dur:54s; --delay:-18s;" data-orbit="5">
-                            <button type="button" class="planet planet-jupiter" data-id="engineering" aria-pressed="false">
+                            <svg class="orbit-svg" viewBox="0 0 200 200" preserveAspectRatio="none" aria-hidden="true"><ellipse class="orbit-glow-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-dash-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-tick-path" cx="100" cy="100" rx="99" ry="99"/></svg>
+                            <button type="button" class="planet planet-jupiter" data-id="engineering" aria-pressed="false" aria-haspopup="dialog" aria-controls="planet-pop">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
                                     <span class="planet-label">Engineering</span>
@@ -418,7 +375,8 @@
                             </button>
                         </div>
                         <div class="orbit-ring" style="--rx:98vmin; --ry:44vmin; --dur:70s; --delay:-28s;" data-orbit="6">
-                            <button type="button" class="planet planet-saturn" data-id="craft" aria-pressed="false">
+                            <svg class="orbit-svg" viewBox="0 0 200 200" preserveAspectRatio="none" aria-hidden="true"><ellipse class="orbit-glow-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-dash-path" cx="100" cy="100" rx="99" ry="99"/><ellipse class="orbit-tick-path" cx="100" cy="100" rx="99" ry="99"/></svg>
+                            <button type="button" class="planet planet-saturn" data-id="craft" aria-pressed="false" aria-haspopup="dialog" aria-controls="planet-pop">
                                 <span class="planet-spin">
                                     <span class="planet-body"></span>
                                     <span class="planet-ringlet" aria-hidden="true"></span>
@@ -426,6 +384,20 @@
                                 </span>
                             </button>
                         </div>
+                    </div>
+
+                    <div class="planet-pop" id="planet-pop" hidden role="dialog" aria-modal="false" aria-labelledby="planet-pop-title">
+                        <div class="planet-pop-head">
+                            <div>
+                                <p class="planet-pop-kicker" id="planet-pop-kicker">Payload</p>
+                                <h3 class="planet-pop-title" id="planet-pop-title">—</h3>
+                            </div>
+                            <button type="button" class="planet-pop-close" id="planet-pop-close" aria-label="Close planet details">✕</button>
+                        </div>
+                        <p class="planet-pop-level" id="planet-pop-level"></p>
+                        <div class="planet-pop-chips" id="planet-pop-chips"></div>
+                        <div class="planet-pop-meter"><span id="planet-pop-meter"></span></div>
+                        <p class="planet-pop-hint">Click another planet or press Esc</p>
                     </div>
                 </div>
 
@@ -494,36 +466,61 @@
                 </div>
             </section>
 
-            <!-- PERSONAL -->
-            <section id="favorites" class="section">
+            <!-- PERSONAL — Sabin-style experience cards -->
+            <section id="favorites" class="section fuel-section">
                 <div class="container">
                     <div class="section-head reveal">
                         <span class="section-kicker">Beyond the code</span>
-                        <h2 class="section-title">What fuels me</h2>
+                        <h2 class="section-title">What <em>fuels</em> me</h2>
+                        <p class="section-sub">Reading leads. MMA and series keep the voltage high.</p>
                     </div>
-                    <div class="favorites-grid">
-                        <article class="favorite-card reveal">
-                            <img src="/assets/img/Lin_Dan.jpg" alt="Lin Dan playing badminton" loading="lazy">
-                            <div class="favorite-overlay">
-                                <span class="fav-tag">Sport</span>
-                                <h3>Badminton</h3>
-                                <p>Favorite player: Lin Dan — a true legend of the sport.</p>
+
+                    <div class="fuel-grid">
+                        <article class="fuel-svc reveal">
+                            <span class="fuel-svc-num" aria-hidden="true">01</span>
+                            <div class="fuel-svc-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5h7a3 3 0 0 1 3 3v11H7a3 3 0 0 0-3 3V5z"/><path d="M20 5h-7a3 3 0 0 0-3 3v11h7a3 3 0 0 1 3 3V5z"/></svg>
+                            </div>
+                            <h3 class="fuel-svc-title">Reading</h3>
+                            <p class="fuel-svc-sub">Primary fuel · Pages over noise</p>
+                            <p class="fuel-svc-desc">Stories, systems, biographies — anything that stretches how I think before I ship another line of code. The habit I protect when everything else gets loud.</p>
+                            <div class="fuel-svc-foot">
+                                <span>Fiction · Non-fiction · Long-form</span>
+                                <span class="fuel-svc-cta">Top pick</span>
                             </div>
                         </article>
-                        <article class="favorite-card reveal">
-                            <img src="/assets/img/jon_jones.png" alt="Jon Jones in the octagon" loading="lazy">
-                            <div class="favorite-overlay">
-                                <span class="fav-tag">Combat Sport</span>
-                                <h3>MMA</h3>
-                                <p>Favorite fighter: Jon Jones — skill and dominance personified.</p>
+
+                        <article class="fuel-svc reveal">
+                            <span class="fuel-svc-num" aria-hidden="true">02</span>
+                            <div class="fuel-svc-media" aria-hidden="true">
+                                <img src="/assets/img/jon_jones.png" alt="" loading="lazy">
+                            </div>
+                            <div class="fuel-svc-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><path d="M8 12h8"/></svg>
+                            </div>
+                            <h3 class="fuel-svc-title">MMA</h3>
+                            <p class="fuel-svc-sub">Spectacle · Octagon nights</p>
+                            <p class="fuel-svc-desc">Timing, grit, and chess under pressure. Favorite to watch: Jon Jones — composure and control when the pace spikes.</p>
+                            <div class="fuel-svc-foot">
+                                <span>UFC · Strategy · Intensity</span>
+                                <span class="fuel-svc-cta">Watch →</span>
                             </div>
                         </article>
-                        <article class="favorite-card reveal">
-                            <img src="/assets/img/Walter_white.jpg" alt="Bryan Cranston as Walter White" loading="lazy">
-                            <div class="favorite-overlay">
-                                <span class="fav-tag">TV Series</span>
-                                <h3>Breaking Bad</h3>
-                                <p>A masterpiece of storytelling. Favorite actor: Bryan Cranston.</p>
+
+                        <article class="fuel-svc reveal">
+                            <span class="fuel-svc-num" aria-hidden="true">03</span>
+                            <div class="fuel-svc-media" aria-hidden="true">
+                                <img src="/assets/img/Walter_white.jpg" alt="" loading="lazy">
+                            </div>
+                            <div class="fuel-svc-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M8 6V4h8v2M12 10v4"/></svg>
+                            </div>
+                            <h3 class="fuel-svc-title">Series</h3>
+                            <p class="fuel-svc-sub">Stories · Long arcs</p>
+                            <p class="fuel-svc-desc">Sharp dialogue and characters that mutate. All-timer: Breaking Bad — Bryan Cranston turning every scene into a pressure cooker.</p>
+                            <div class="fuel-svc-foot">
+                                <span>Drama · Character · Binge</span>
+                                <span class="fuel-svc-cta">Watch →</span>
                             </div>
                         </article>
                     </div>
@@ -583,6 +580,6 @@
         </footer>
     </div>
 
-    <script type="module" src="/assets/js/script.js?v=20260731-10"></script>
+    <script type="module" src="/assets/js/script.js?v=20260805-01"></script>
 </body>
 </html>
