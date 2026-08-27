@@ -22,86 +22,120 @@ let contactFormReady = false;
 
 document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add('js-ready');
-    initLoader();
-    initCursor();
-    initTheme();
-    initNav();
-    initResumeLinks();
-    initReveals();
-    initMetrics();
-    initExperience();
-    initFuelTilt();
-    initTerminal();
-    initLiveShell();
-    initSolarSystem();
-    updateFooterYear();
-    setupLazyInit();
+    try {
+        initLoader();
+    } catch (err) {
+        console.error('[loader]', err);
+        dismissLoader(document.getElementById('page-loader'));
+    }
+
+    const boot = [
+        initCursor,
+        initTheme,
+        initNav,
+        initResumeLinks,
+        initReveals,
+        initMetrics,
+        initExperience,
+        initFuelTilt,
+        initTerminal,
+        initLiveShell,
+        initSolarSystem,
+        updateFooterYear,
+        setupLazyInit,
+    ];
+    boot.forEach((fn) => {
+        try {
+            fn();
+        } catch (err) {
+            console.error(`[boot] ${fn.name}`, err);
+        }
+    });
 });
 
 // ─────────────────────────────────────────────
-// Page loader — cycle greetings over ~4s
+// Page loader — short intro; always dismisses
 // ─────────────────────────────────────────────
+
+function dismissLoader(loader) {
+    if (!loader || loader.dataset.dismissed === '1') return;
+    loader.dataset.dismissed = '1';
+    loader.classList.add('is-done', 'hidden');
+    loader.setAttribute('aria-hidden', 'true');
+    document.body.classList.add('loaded');
+    try {
+        sessionStorage.setItem('aj-loader-seen', '1');
+    } catch {
+        /* private mode */
+    }
+    window.setTimeout(() => {
+        loader.style.display = 'none';
+    }, 480);
+}
 
 function initLoader() {
     const loader = document.getElementById('page-loader');
+    if (!loader) return;
+
     const fill = document.getElementById('loader-fill');
     const num = document.getElementById('loader-num');
     const hello = document.getElementById('loader-hello');
     const lang = document.getElementById('loader-lang');
-    if (!loader || !fill || !num) return;
+
+    let seen = false;
+    try {
+        seen = sessionStorage.getItem('aj-loader-seen') === '1';
+    } catch {
+        seen = false;
+    }
+
+    if (seen || prefs.reduceMotion || document.documentElement.classList.contains('loader-skip')) {
+        dismissLoader(loader);
+        return;
+    }
 
     const greetings = [
         { text: 'नमस्ते', lang: 'Nepali' },
         { text: 'Hello', lang: 'English' },
         { text: 'नमस्कार', lang: 'Hindi' },
         { text: 'Hola', lang: 'Spanish' },
-        { text: '你好', lang: 'Chinese' },
-        { text: 'سلام', lang: 'Urdu' },
-        { text: 'Bonjour', lang: 'French' },
-        { text: 'Ciao', lang: 'Italian' },
         { text: 'こんにちは', lang: 'Japanese' },
-        { text: '안녕하세요', lang: 'Korean' },
-        { text: 'Olá', lang: 'Portuguese' },
-        { text: 'مرحبا', lang: 'Arabic' },
+        { text: 'Bonjour', lang: 'French' },
     ];
 
-    const DURATION = prefs.reduceMotion ? 400 : 4000;
+    const DURATION = 1200;
     const stepMs = DURATION / greetings.length;
     let greetIdx = 0;
-    const started = performance.now();
+    const started = Date.now();
 
     if (hello) hello.textContent = greetings[0].text;
     if (lang) lang.textContent = greetings[0].lang;
 
-    const greetTimer = setInterval(() => {
+    const greetTimer = window.setInterval(() => {
         greetIdx = Math.min(greetIdx + 1, greetings.length - 1);
         if (hello) {
-            hello.style.opacity = '0';
-            requestAnimationFrame(() => {
-                hello.textContent = greetings[greetIdx].text;
-                hello.style.opacity = '1';
-            });
+            hello.textContent = greetings[greetIdx].text;
+            hello.style.opacity = '1';
         }
         if (lang) lang.textContent = greetings[greetIdx].lang;
-        if (greetIdx >= greetings.length - 1) clearInterval(greetTimer);
+        if (greetIdx >= greetings.length - 1) window.clearInterval(greetTimer);
     }, stepMs);
 
-    const tick = (now) => {
-        const elapsed = now - started;
-        const progress = Math.min(100, (elapsed / DURATION) * 100);
-        fill.style.width = `${progress}%`;
-        num.textContent = `${Math.floor(progress)}%`;
-        if (progress < 100) {
-            requestAnimationFrame(tick);
-        } else {
-            clearInterval(greetTimer);
-            setTimeout(() => {
-                loader.classList.add('hidden');
-                document.body.classList.add('loaded');
-            }, prefs.reduceMotion ? 40 : 280);
-        }
-    };
-    requestAnimationFrame(tick);
+    const progTimer = window.setInterval(() => {
+        const progress = Math.min(100, ((Date.now() - started) / DURATION) * 100);
+        if (fill) fill.style.width = `${progress}%`;
+        if (num) num.textContent = `${Math.floor(progress)}%`;
+        if (progress >= 100) window.clearInterval(progTimer);
+    }, 40);
+
+    // setTimeout is the source of truth — rAF pauses in background tabs.
+    window.setTimeout(() => {
+        window.clearInterval(greetTimer);
+        window.clearInterval(progTimer);
+        if (fill) fill.style.width = '100%';
+        if (num) num.textContent = '100%';
+        dismissLoader(loader);
+    }, DURATION);
 }
 
 // ─────────────────────────────────────────────

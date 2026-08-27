@@ -146,6 +146,12 @@ body::after {
 .cursor.hover { transform: scale(1.8); }
 .cursor-ring.hover { transform: scale(1.45); opacity: 0.9; }
 
+/* Page loader — never trap the page if JS is off, skipped, or failed */
+html:not(.js) .page-loader,
+html.loader-skip .page-loader {
+    display: none !important;
+}
+
 /* Page loader */
 .page-loader {
     position: fixed;
@@ -157,9 +163,10 @@ body::after {
     align-items: center;
     justify-content: center;
     gap: 28px;
-    transition: opacity 0.9s, visibility 0.9s;
+    transition: opacity 0.45s ease, visibility 0.45s ease;
 }
-.page-loader.hidden {
+.page-loader.hidden,
+.page-loader.is-done {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
