@@ -2309,7 +2309,14 @@ footer {
     .about-side { position: static; }
     .stack-grid { grid-template-columns: repeat(2, 1fr); }
     .fuel-grid { grid-template-columns: 1fr; }
-    .exp-deck { grid-template-columns: 1fr; min-height: 0; }
+    /* minmax(0, …) stops the horizontally-scrolling rail from widening the column past the screen */
+    .exp-deck { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+    .exp-rail,
+    .exp-dossier { min-width: 0; }
+    .exp-doss-body > * { min-width: 0; }
+    .exp-doss-title,
+    .exp-doss-summary,
+    .exp-log li { overflow-wrap: anywhere; }
     .exp-dossier { min-height: 0; }
     .exp-rail { border-right: 0; border-bottom: 1px solid var(--border); }
     .exp-rail::before { display: none; }
@@ -2431,29 +2438,42 @@ footer {
     }
     .solar-hud .section-title { font-size: clamp(32px, 10vw, 44px); }
     .solar-hud-sub { font-size: 13px; max-width: none; }
+    /* Size orbits from the screen width (not a scale transform) so the system fills the phone */
+    /* Leaves room at the screen edge for the outer planets' labels */
+    .solar-section { --orb: min(80vw, 420px); }
     .solar-stage {
-        height: min(58dvh, 420px);
-        min-height: 280px;
+        height: calc(var(--orb) * 0.82 + 72px);
+        min-height: 0;
         overflow: hidden;
     }
-    .solar-system {
-        transform: scale(0.62);
-        transform-origin: center center;
-    }
     .solar-system::before {
-        width: 70vmin;
-        height: 70vmin;
+        width: var(--orb);
+        height: var(--orb);
     }
+    /* Delays start the planets at evenly spread angles so labels don't begin stacked */
+    .orbit-ring[data-orbit="1"] { --rx: calc(var(--orb) * 0.30) !important; --ry: calc(var(--orb) * 0.24) !important; --delay: 0s !important; }
+    .orbit-ring[data-orbit="2"] { --rx: calc(var(--orb) * 0.44) !important; --ry: calc(var(--orb) * 0.36) !important; --delay: -8s !important; }
+    .orbit-ring[data-orbit="3"] { --rx: calc(var(--orb) * 0.58) !important; --ry: calc(var(--orb) * 0.47) !important; --delay: -21s !important; }
+    .orbit-ring[data-orbit="4"] { --rx: calc(var(--orb) * 0.72) !important; --ry: calc(var(--orb) * 0.59) !important; --delay: -7s !important; }
+    .orbit-ring[data-orbit="5"] { --rx: calc(var(--orb) * 0.86) !important; --ry: calc(var(--orb) * 0.70) !important; --delay: -27s !important; }
+    .orbit-ring[data-orbit="6"] { --rx: calc(var(--orb) * 1.00) !important; --ry: calc(var(--orb) * 0.82) !important; --delay: -58s !important; }
     .sun {
-        width: clamp(72px, 20vmin, 100px);
-        height: clamp(72px, 20vmin, 100px);
+        width: calc(var(--orb) * 0.18);
+        height: calc(var(--orb) * 0.18);
     }
-    .sun strong { font-size: clamp(18px, 5vmin, 26px); }
+    .sun strong { font-size: calc(var(--orb) * 0.05); }
+    .sun em { font-size: 7px; letter-spacing: 0.24em; }
+    .planet { padding: 6px; }
+    .planet-spin { gap: 5px; }
+    .planet-body { width: calc(var(--p-size, 18px) * 0.75); height: calc(var(--p-size, 18px) * 0.75); }
     .planet-label {
-        font-size: 9px;
-        letter-spacing: 0.1em;
-        padding: 5px 8px;
+        font-size: 8.5px;
+        letter-spacing: 0.08em;
+        padding: 4px 7px;
     }
+
+    .scroll-hint { display: none; }
+    .fuel-svc-cta { white-space: nowrap; }
     .planet-pop {
         width: calc(100% - 20px);
         bottom: 10px;
@@ -2474,11 +2494,6 @@ footer {
 }
 
 @media (max-width: 420px) {
-    .solar-system { transform: scale(0.52); }
-    .solar-stage {
-        height: min(54dvh, 360px);
-        min-height: 250px;
-    }
     .hero-terminal-path { display: none; }
     .exp-rail-item { min-width: 140px; }
 }
